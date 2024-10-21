@@ -33,7 +33,10 @@
             ],
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
-            ]
+            ],
+            "server": "src/main.server.ts",
+            "prerender": true,
+            "ssr": false
           },
           "configurations": {
             "production": {
