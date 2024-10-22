@@ -7,11 +7,12 @@
     <div class="row">
         <div class="col-md-6">
             <label for="csharp-code" class="form-label">C# class fields:</label>
-            <textarea class="form-control" id="csharp-code" rows="10" (input)="inputDebouncer.next(csModel)" [(ngModel)]="csModel"></textarea>
+            <textarea class="form-control" id="csharp-code" rows="10" (input)="inputDebouncer.next(csModel)"
+                [(ngModel)]="csModel"></textarea>
         </div>
         <div class="col-md-6">
             <label for="ts-code" class="form-label">TS interface fields:</label>
-            <textarea disabled="true" class="form-control" id="ts-code" rows="10" [ngModel]="tsModel"></textarea>
+            <textarea class="form-control" id="ts-code" rows="10" disabled="true" [ngModel]="tsModel"></textarea>
         </div>
     </div>
 
@@ -20,6 +21,19 @@
     <div class="row">
         <div class="col-12 d-flex justify-content-center">
             <button class="btn btn-success" (click)="convert()">Convert <i class="bi bi-caret-right"></i></button>
+        </div>
+    </div>
+
+    <br />
+
+    <div class="row">
+        <div class="col-md-6">
+            <label class="form-label">Regex:</label>
+            <textarea class="form-control" rows="10" [(ngModel)]="regex"></textarea>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Replace:</label>
+            <textarea class="form-control" rows="10" [(ngModel)]="replace"></textarea>
         </div>
     </div>
 </div>
