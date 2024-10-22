@@ -1,1 +1,25 @@
-<p>cs2ts Works!</p>
+<div class="container-fluid p-4">
+    <div class="row">
+        <h1>C# to TS Convertor</h1>
+        <p>Convert C# class fields to TypeScript interface fields.</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <label for="csharp-code" class="form-label">C# class fields:</label>
+            <textarea class="form-control" id="csharp-code" rows="10" (input)="inputDebouncer.next(csModel)" [(ngModel)]="csModel"></textarea>
+        </div>
+        <div class="col-md-6">
+            <label for="ts-code" class="form-label">TS interface fields:</label>
+            <textarea disabled="true" class="form-control" id="ts-code" rows="10" [ngModel]="tsModel"></textarea>
+        </div>
+    </div>
+
+    <br />
+
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center">
+            <button class="btn btn-success" (click)="convert()">Convert <i class="bi bi-caret-right"></i></button>
+        </div>
+    </div>
+</div>
