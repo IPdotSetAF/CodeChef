@@ -1,6 +1,6 @@
 <div class="container-fluid p-4">
     <div class="row">
-        <h1>C# to TS Convertor</h1>
+        <h1>C# to TS Converter</h1>
         <p>Convert C# class fields to TypeScript interface fields.</p>
     </div>
 
@@ -8,7 +8,7 @@
         <div class="col-md-6">
             <label for="csharp-code" class="form-label">C# class fields:</label>
             <code>
-                <textarea class="form-control" id="csharp-code" rows="16" (input)="inputDebouncer.next(csModel)"
+                <textarea #csCode class="form-control" id="csharp-code" rows="16" code-area language="clike" (input)="onInput()"
                 [(ngModel)]="csModel"></textarea>
             </code>
             <br />
@@ -16,7 +16,7 @@
         <div class="col-md-6">
             <label for="ts-code" class="form-label">TS interface fields:</label>
             <code>
-                <textarea class="form-control" id="ts-code" rows="16" disabled="true" [ngModel]="tsModel"></textarea>
+                <textarea #tsCode class="form-control" id="ts-code" rows="16" disabled="true" [ngModel]="tsModel"></textarea>
             </code>
             <br />
         </div>

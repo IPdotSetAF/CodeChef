@@ -1,0 +1,6 @@
+@import "../../../node_modules/prismjs/themes/prism-dark.min.css";
+
+:host.dark {
+    background: #333;
+    color: #FFF;
+}

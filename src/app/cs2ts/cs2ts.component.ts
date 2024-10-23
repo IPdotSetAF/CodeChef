@@ -1,16 +1,21 @@
-import { AfterContentInit, Component } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { log } from 'console';
 import { debounceTime, Subject, takeLast, tap } from 'rxjs';
+import { CodeAreaComponent } from '../code-area/code-area.component';
 
 @Component({
   selector: 'app-cs2ts',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CodeAreaComponent],
   templateUrl: './cs2ts.component.html',
   styleUrl: './cs2ts.component.css'
 })
 export class Cs2tsComponent implements AfterContentInit {
+  @ViewChild("csCode", { read: ElementRef })
+  protected csCode!: ElementRef<HTMLInputElement>;
+  @ViewChild("tsCode", { read: ElementRef })
+  protected tsCode!: ElementRef<HTMLInputElement>;
+
   protected csModel !: string;
   protected tsModel !: string;
 
@@ -25,6 +30,14 @@ export class Cs2tsComponent implements AfterContentInit {
       tap(value => this.convert(value)),
       takeLast(1),
     ).subscribe();
+  }
+
+  protected onInput() {
+    this.inputDebouncer.next(this.csModel);
+    this.csCode.nativeElement.style.height = "auto";
+    this.csCode.nativeElement.style.height = `${this.csCode.nativeElement.scrollHeight + 5}px`;
+    this.tsCode.nativeElement.style.height = "auto";
+    this.tsCode.nativeElement.style.height = `${this.csCode.nativeElement.scrollHeight + 5}px`;
   }
 
   protected convert(csCode?: string) {
