@@ -27,7 +27,7 @@ export class Cs2tsComponent implements AfterContentInit {
 
   protected placeholder1: string = `public class a : b {
   public int x1 { get; set; }
-  public float x2 { get; set; }
+  public float? x2 { get; set; }
   public string x3 { get; set; }
   public bool[] x8 { get; set; }
   public long[] x9 { get; set; }
