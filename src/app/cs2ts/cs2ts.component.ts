@@ -71,7 +71,12 @@ public Hello<float>[] x16 {get;set;}`;
   protected convert(csCode?: string) {
     let value = csCode ? csCode : this.csModel;
 
-    this.tsModel = value.replaceAll(/public (?<type>\w+)(?<gen1><(?<gen2>\w+)(?<arr1>\[\])*>)*(?<arr2>\[\])*(?<nul>\?)* (?<name>\w+) (.*)/gm,
+    value = value.replace(/public class (?<name>\w+)(?<ext1> : (?<ext2>.+))* \{/gm,
+      (match, name, ext1, ext2) => {
+        return `export interface ${name} ${ext1 ? "extends " + ext2 : ""} {`;
+      });
+
+    value = value.replaceAll(/public (?<type>\w+)(?<gen1><(?<gen2>\w+)(?<arr1>\[\])*>)*(?<arr2>\[\])*(?<nul>\?)* (?<name>\w+) (.*)/gm,
       (match, type, gen1, gen2, arr1, arr2, nul, name) => {
         switch (type) {
           case "List":
@@ -86,7 +91,7 @@ public Hello<float>[] x16 {get;set;}`;
         type = Cs2tsComponent.convertTypes(type);
         gen2 = Cs2tsComponent.convertTypes(gen2);
 
-        return `${name} ${nul?nul:""}: ${type}${gen2 ? "<" + gen2 + (arr1 ? arr1 : "") + ">" : ""}${arr2 ? arr2 : ""}${nul?" | null":""} ;`;
+        return `${name} ${nul ? nul : ""}: ${type}${gen2 ? "<" + gen2 + (arr1 ? arr1 : "") + ">" : ""}${arr2 ? arr2 : ""}${nul ? " | null" : ""} ;`;
       });
 
     // try {
@@ -99,10 +104,11 @@ public Hello<float>[] x16 {get;set;}`;
     //   this.tsModel = "";
     // }
 
+    this.tsModel = value;
     this.status = !this.status;
   }
 
-  private static convertTypes(a :string|undefined): string|undefined{
+  private static convertTypes(a: string | undefined): string | undefined {
     if (a === "bool")
       return "boolean";
 
