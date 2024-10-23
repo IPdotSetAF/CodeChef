@@ -3,8 +3,6 @@ import { FormsModule } from '@angular/forms';
 import { debounceTime, Subject, takeLast, tap } from 'rxjs';
 import { CodeAreaComponent } from '../code-area/code-area.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { BrowserModule } from '@angular/platform-browser';
-import { query } from 'express';
 
 @Component({
   selector: 'app-cs2ts',
@@ -28,22 +26,15 @@ export class Cs2tsComponent implements AfterContentInit {
   @ViewChild("tsCode", { read: ElementRef })
   protected tsCode!: ElementRef<HTMLInputElement>;
 
-  protected csModel: string = `public int x1 {get;set;}
-public float x2 {get;set;}
-public double x3 {get;set;}
-public decimal x4 {get;set;}
-public string x5 {get;set;}
-public bool x6 {get;set;}
-public Hello x7 {get;set;}
-public int[] x8 {get;set;}
-public long[] x9 {get;set;}
-public IEnumerable<string> x10 {get;set;}
-public List<bool> x11 {get;set;}
-public ICollection<Hello> x12 {get;set;}
-public Hello<Hello> x13 {get;set;}
-public Hello<int> x14 {get;set;}
-public Hello<long[]> x15 {get;set;}
-public Hello<float>[] x16 {get;set;}`;
+  protected placeholder: string = `public class a : b {
+  public int x1 { get; set; }
+  public float x2 { get; set; }
+  public string x3 { get; set; }
+  public bool[] x8 { get; set; }
+  public long[] x9 { get; set; }
+  public IEnumerable<string> x10 { get; set; }
+}`;
+  protected csModel: string = "";
   protected tsModel !: string;
   protected regexModel !: string;
   protected status: boolean = false;

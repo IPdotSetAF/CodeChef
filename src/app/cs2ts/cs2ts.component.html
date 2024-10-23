@@ -19,7 +19,7 @@
             <label for="csharp-code" class="form-label">C# class fields:</label>
             <code>
                 <textarea #csCode class="form-control" id="csharp-code" rows="16" code-area language="clike" (input)="onInput()"
-                [(ngModel)]="csModel"></textarea>
+                [(ngModel)]="csModel" [placeholder]="placeholder"></textarea>
             </code>
             <br />
         </div>
