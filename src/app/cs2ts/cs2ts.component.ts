@@ -26,7 +26,7 @@ export class Cs2tsComponent implements AfterContentInit {
   @ViewChild("tsCode", { read: ElementRef })
   protected tsCode!: ElementRef<HTMLInputElement>;
 
-  protected placeholder: string = `public class a : b {
+  protected placeholder1: string = `public class a : b {
   public int x1 { get; set; }
   public float x2 { get; set; }
   public string x3 { get; set; }
@@ -34,9 +34,16 @@ export class Cs2tsComponent implements AfterContentInit {
   public long[] x9 { get; set; }
   public IEnumerable<string> x10 { get; set; }
 }`;
+protected placeholder2: string = `export interface a extends b {
+  x1 : number ;
+  x2 : number ;
+  x3 : string ;
+  x8 : boolean[] ;
+  x9 : number[] ;
+  x10 : string[] ;
+}`;
   protected csModel: string = "";
   protected tsModel !: string;
-  protected regexModel !: string;
   protected status: boolean = false;
 
   protected inputDebouncer = new Subject<string>();
@@ -84,16 +91,6 @@ export class Cs2tsComponent implements AfterContentInit {
 
         return `${name} ${nul ? nul : ""}: ${type}${gen2 ? "<" + gen2 + (arr1 ? arr1 : "") + ">" : ""}${arr2 ? arr2 : ""}${nul ? " | null" : ""} ;`;
       });
-
-    // try {
-    //   this.tsModel = value.replaceAll(RegExp(this.regexModel, "gm"),
-    //     (match, type, gen1, gen2, arr1, arr2, name) => {
-    //       debugger;
-    //       return `${type} : ${gen1} : ${gen2} : ${arr1} : ${arr2} : ${name}`;
-    //     });
-    // } catch {
-    //   this.tsModel = "";
-    // }
 
     this.tsModel = value;
     this.status = !this.status;

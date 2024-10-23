@@ -4,29 +4,19 @@
         <p>Convert C# class fields to TypeScript interface fields.</p>
     </div>
 
-    <!-- <div class="row">
-        <div class="col-12">
-            <label for="regex" class="form-label">Regex:</label>
-            <code>
-                <textarea class="form-control" id="regex" rows="4" (input)="onInput()" [(ngModel)]="regexModel"></textarea>
-            </code>
-            <br />
-        </div>
-    </div> -->
-
     <div class="row">
         <div class="col-md-6">
             <label for="csharp-code" class="form-label">C# class fields:</label>
             <code>
                 <textarea #csCode class="form-control" id="csharp-code" rows="16" code-area language="clike" (input)="onInput()"
-                [(ngModel)]="csModel" [placeholder]="placeholder"></textarea>
+                [(ngModel)]="csModel" [placeholder]="placeholder1"></textarea>
             </code>
             <br />
         </div>
         <div class="col-md-6">
             <label for="ts-code" class="form-label">TS interface fields:</label>
             <code>
-                <textarea #tsCode [@valueChangeAnim]="status" class="form-control" id="ts-code" rows="16" disabled="true" [ngModel]="tsModel"></textarea>
+                <textarea #tsCode [@valueChangeAnim]="status" class="form-control" id="ts-code" rows="16" disabled="true" [ngModel]="tsModel"  [placeholder]="placeholder2"></textarea>
             </code>
             <br />
         </div>
