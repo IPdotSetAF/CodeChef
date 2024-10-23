@@ -19,9 +19,6 @@ export class Cs2tsComponent implements AfterContentInit {
   protected csModel !: string;
   protected tsModel !: string;
 
-  protected regex !: RegExp;
-  protected replace !: string;
-
   protected inputDebouncer = new Subject<string>();
 
   ngAfterContentInit(): void {
@@ -42,7 +39,14 @@ export class Cs2tsComponent implements AfterContentInit {
 
   protected convert(csCode?: string) {
     let value = csCode ? csCode : this.csModel;
+
     //$<name> : $<gen:+$<gen><<$<num:+number:>$<str>$<bool:+boolean:>$<type>$<arr2:+[]>>>:$<num:+number:>$<str>$<bool:+boolean:>$<type>$<arr2:+[]>>$<arr1:+[]>$<arr3:+[]> ;
-    this.tsModel = value.replaceAll(/public ((?<arr1>IEnumerable<|List<|ICollection<)|(?<gen>\w+)<)*((?<num>int|float|double|decimal|long)|(?<str>string)|(?<bool>bool)|(?<type>\w+))(?<arr2>\[\])?(>)?(?<arr3>\[\])? (?<name>\w+) (.+)/gm, this.replace);
+    this.tsModel = value.replaceAll(/public ((?<arr1>IEnumerable<|List<|ICollection<)|(?<gen>\w+)<)*((?<num>int|float|double|decimal|long)|(?<str>string)|(?<bool>bool)|(?<type>\w+))(?<arr2>\[\])?(>)?(?<arr3>\[\])? (?<name>\w+) (.+)/gm, "");
+
+    // this.tsModel = value.replace(/public ((?<arr1>IEnumerable<|List<|ICollection<)|(?<gen>\w+)<)*((?<num>int|float|double|decimal|long)|(?<str>string)|(?<bool>bool)|(?<type>\w+))(?<arr2>\[\])?(>)?(?<arr3>\[\])? (?<name>\w+) (.+)/gm,
+    //   (match, $arr1, $gen, $num, $str, $bool, $type, $arr2, $arr3, $name) => {
+    //     debugger;
+    //     return ""
+    //   });
   }
 }
