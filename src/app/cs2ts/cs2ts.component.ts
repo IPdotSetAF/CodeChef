@@ -9,12 +9,11 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
   standalone: true,
   imports: [FormsModule, CodeAreaComponent],
   templateUrl: './cs2ts.component.html',
-  styleUrl: './cs2ts.component.css',
   animations: [
     trigger('valueChangeAnim', [
       state('*', style({ "border-width": "3px" })),
       transition('* <=> *', [
-        animate('0.15s ease-in', style({ "border-color": "green" })),
+        animate('0.15s ease-in', style({ "border-color": "var(--bs-success)" })),
         animate('0.15s ease-out', style({ "border-color": "transparent" }))
       ]),
     ])
