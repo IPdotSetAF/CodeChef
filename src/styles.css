@@ -1,0 +1,23 @@
+.btn-hover{
+    transition: box-shadow 0.1s ease-in-out;
+    box-shadow: none;
+}
+
+.btn-hover:hover{
+    box-shadow: inset 0 0 0 999999px #FFFFFF20;
+}
+
+.btn-hover:active{
+    box-shadow: inset 0 0 0 999999px #FFFFFF30;
+}
+
+.btn-circle{
+    --btn-size: 100%;
+    width: var(--btn-size);
+    height: var(--btn-size);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
