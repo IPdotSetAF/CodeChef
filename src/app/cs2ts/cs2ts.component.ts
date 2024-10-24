@@ -13,8 +13,8 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
     trigger('valueChangeAnim', [
       state('*', style({ "border-width": "3px" })),
       transition('* <=> *', [
-        animate('0.15s ease-in', style({ "border-color": "var(--bs-success)" })),
-        animate('0.15s ease-out', style({ "border-color": "transparent" }))
+        animate('0.1s ease-out', style({ "border-color": "var(--bs-success)" })),
+        animate('0.1s ease-in', style({ "border-color": "none" }))
       ]),
     ])
   ]
