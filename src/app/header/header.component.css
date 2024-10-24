@@ -11,7 +11,7 @@
 }
 
 img {
-    height: 65%;
+    height: 60%;
 }
 
 a {
@@ -20,5 +20,9 @@ a {
 }
 
 .btn-header-round {
-    --btn-size: calc(var(--height) - 5px) !important;
+    --btn-size: calc(var(--height) - 10px) !important;
+}
+
+#ipaf{
+    filter: brightness(0%) invert();
 }
