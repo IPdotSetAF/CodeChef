@@ -6,7 +6,7 @@ import { HomeComponent } from './home/home.component';
 export const routes: Routes = [
     { path: '', redirectTo: "home", pathMatch: "full" },
 
-    { path: 'home', title: "CodeChef", component: HomeComponent },
+    { path: 'home', title: "Home • CodeChef", component: HomeComponent },
     { path: 'cs2ts', title: "C# to TS • CodeChef", component: Cs2tsComponent },
 
     { path: '**', title: "Not Found • CodeChef", component: NotFoundComponent },

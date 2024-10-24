@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { debounceTime, Subject, takeLast, tap } from 'rxjs';
 import { CodeAreaComponent } from '../code-area/code-area.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-cs2ts',
@@ -40,8 +41,13 @@ export class Cs2tsComponent implements AfterContentInit {
   protected status: boolean = false;
 
   protected inputDebouncer = new Subject<string>();
+  
+  constructor(meta:Meta){
+    meta.addTags([
+      {name: "description", content:"Converts C# model to TS model, converts fields, types, arrays and generics."},
+      {name: "keywords", content:"C#, TS, CSharp, TypeScript, script, type, generic, array, converter, model, fields, string, number, int, class, code, language, long, float, boolean, bool"},
+    ]);
 
-  constructor() {
     this.placeholder2 = Cs2tsComponent.convert(this.placeholder1);
   }
 
