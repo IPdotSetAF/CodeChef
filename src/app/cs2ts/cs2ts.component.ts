@@ -14,8 +14,8 @@ import { Meta } from '@angular/platform-browser';
     trigger('valueChangeAnim', [
       state('*', style({ "border-width": "3px" })),
       transition('* <=> *', [
-        animate('0.1s ease-out', style({ "border-color": "var(--bs-success)" })),
-        animate('0.1s ease-in', style({ "border-color": "none" }))
+        animate('0.07s ease-out', style({ "border-color": "limegreen" })),
+        animate('0.07s ease-in', style({ "border-color": "var(--bs-border-color)" }))
       ]),
     ])
   ]
