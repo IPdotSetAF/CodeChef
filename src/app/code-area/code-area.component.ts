@@ -1,49 +1,46 @@
-import { AfterViewInit, Component, ElementRef, HostListener, Input, Output, EventEmitter } from '@angular/core';
+import { AfterViewInit, Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
 import Prism from 'prismjs';
-import { debounceTime, Subject, takeLast, tap } from 'rxjs';
+import 'prismjs/plugins/line-numbers/prism-line-numbers';
+import 'prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard';
+import 'prismjs/components/prism-csharp';
+import 'prismjs/plugins/toolbar/prism-toolbar';
 
 @Component({
-  selector: 'code-area, [code-area]',
+  selector: 'code-area',
   standalone: true,
-  imports: [],
-  template: '<ng-content></ng-content>',
-  styleUrl: './code-area.component.css'
+  imports: [FormsModule],
+  templateUrl: './code-area.component.html',
+  styleUrl: './code-area.component.css',
+  encapsulation: ViewEncapsulation.None,
 })
 export class CodeAreaComponent implements AfterViewInit {
-  @Input()
-  code!: string;
+  @Input() public code!: string;
+  @Output() public codeChange = new EventEmitter<string>();
 
-  @Output()
-  codeChange = new EventEmitter<string>();
+  @Input() public placeholder!: string;
+  @Input() public language = 'csharp';
 
-  @Input()
-  language = 'javascript';
+  protected codeHtml!: string;
+  private grammar!: Prism.Grammar;
 
-  constructor(private el: ElementRef) { }
+  constructor() { }
 
   ngAfterViewInit() {
-    this.highlight(this.code || this.el.nativeElement.value)
+    this.grammar = Prism.languages[this.language];
 
-    this.inputDebouncer.pipe(
-      debounceTime(500),
-      tap(value => this.highlight(value)),
-      takeLast(1),
-    ).subscribe();
-
-    this.codeChange.subscribe(v => this.highlight(v));
+    if (this.code)
+      this.highlight(this.code)
   }
 
-  private inputDebouncer = new Subject<string>();
-
-  @HostListener("input")
   protected onInput() {
-    this.inputDebouncer.next(this.el.nativeElement.value);
+    this.codeHtml = this.highlight(this.code);
+    Prism.highlightAll();
+    this.codeChange.emit(this.code);
   }
 
-  private highlight(code: string) {
-    const grammar = Prism.languages[this.language];
-    const html = Prism.highlight(code, grammar, this.language);
-    this.el.nativeElement.innerHTML = html;
-    console.log(html);
+  private highlight(code: string): string {
+    return Prism.highlight(code, this.grammar, this.language);
   }
 }

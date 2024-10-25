@@ -1,4 +1,89 @@
-:host.dark {
-    background: #333;
-    color: #FFF;
+@import "../../../node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css";
+@import "../../../node_modules/prismjs/themes/prism-okaidia.css";
+@import "../../../node_modules/prismjs/plugins/toolbar/prism-toolbar.css";
+
+.code-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    min-height: 150px;
+}
+
+.text-area-code-editor &,
+.text-area-code-editor &:focus {
+    box-shadow: none;
+    outline: 0;
+    border: 0;
+}
+
+
+.text-area-code-editor,
+.pre,
+.code {
+    tab-size: 4;
+    margin: 0;
+    padding: 0;
+    font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+.pre {
+    height: 100%;
+    min-height: inherit;
+    z-index: 1;
+    overflow: auto;
+    padding: 15px 0 0 70px;
+}
+
+.pre .code {
+    min-height: inherit;
+    overflow: hidden;
+    height: 100%;
+}
+
+.text-area-code-editor {
+    caret-color: rgb(255, 255, 255);
+    white-space: nowrap;
+    overflow: auto;
+    text-align: left;
+    display: block;
+    resize: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    color: transparent;
+    background: transparent;
+    z-index: 2;
+    padding: 15px 0 0 70px;
+}
+
+
+
+
+.line-numbers .line-numbers-rows {
+    position: absolute;
+    pointer-events: none;
+    top: 15px;
+    font-size: 100%;
+    left: 0;
+    width: 3em;
+    letter-spacing: -1px;
+    border-right: 1px solid rgb(179, 179, 179);
+    user-select: none;
+}
+
+.line-numbers-rows>span {
+    display: block;
+    counter-increment: linenumber;
+}
+
+.line-numbers-rows>span:before {
+    content: counter(linenumber);
+    color: rgb(219, 219, 219);
+    display: block;
+    padding-right: 0.8em;
+    text-align: right;
 }

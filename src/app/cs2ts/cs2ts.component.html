@@ -5,20 +5,24 @@
     </div>
 
     <div class="row">
+        <div class="col-12">
+            <code-area />
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-md-6">
             <label for="csharp-code" class="form-label">C# class fields:</label>
             <code>
                 <textarea #csCode class="form-control" id="csharp-code" rows="16" [(ngModel)]="csModel" (input)="onInput()"
                 [placeholder]="placeholder1"></textarea>
-                <!-- <textarea #csCode class="form-control" id="csharp-code" rows="16" code-area language="clike" [(code)]="csModel" 
-                (input)="onInput()" [placeholder]="placeholder1"></textarea> -->
             </code>
             <br />
         </div>
         <div class="col-md-6">
             <label for="ts-code" class="form-label">TS interface fields:</label>
             <code>
-                <textarea #tsCode [@valueChangeAnim]="status" class="form-control" id="ts-code" rows="16" disabled="true" code-area [code]="tsModel" [placeholder]="placeholder2"></textarea>
+                <textarea #tsCode [@valueChangeAnim]="status" class="form-control" id="ts-code" rows="16" disabled="true" [(ngModel)]="tsModel" [placeholder]="placeholder2"></textarea>
             </code>
             <br />
         </div>

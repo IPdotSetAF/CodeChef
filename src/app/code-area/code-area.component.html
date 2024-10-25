@@ -1,0 +1,5 @@
+<div class="code-container line-numbers">
+    <textarea #textArea placeholder="{{placeholder}}" class="text-area-code-editor"
+        [(ngModel)]="code" spellcheck="false" (input)="onInput()"></textarea>
+    <pre data-start="0" data-src="../../../node_modules/prismjs/plugins/toolbar/prism-toolbar.js" #pre aria-hidden="true" class="pre"><code class="code language-{{language}}" #codeContent [innerHTML]="codeHtml"></code></pre>
+</div>
