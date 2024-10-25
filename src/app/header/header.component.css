@@ -7,7 +7,6 @@
     height: var(--height);
     background-color: #212529b0;
     backdrop-filter: blur(2px);
-    border-bottom: #FFFFFF30 1px solid;
 }
 
 img {
