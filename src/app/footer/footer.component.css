@@ -18,6 +18,14 @@ a {
     height: 20px;
 }
 
+.fs-md{
+    font-size: smaller;
+}
+
+.fs-sm{
+    font-size: small;
+}
+
 @keyframes gradient-move {
     0%{background-position:0% 50%}
     50%{background-position:100% 50%}
