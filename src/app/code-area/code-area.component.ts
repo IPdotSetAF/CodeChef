@@ -11,7 +11,7 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from "@angular/core";
-import { createEditor, PrismEditor } from "prism-code-editor";
+import { createEditor, languageMap, PrismEditor } from "prism-code-editor";
 import { matchBrackets } from "prism-code-editor/match-brackets";
 import { highlightBracketPairs } from "prism-code-editor/highlight-brackets";
 import { editHistory } from "prism-code-editor/commands";
@@ -73,8 +73,8 @@ export class CodeAreaComponent implements AfterViewInit, OnChanges {
     const editor = createEditor(this.editorContainer.nativeElement, {
       value: this.code(),
       language: this.language(),
-      lineNumbers: false,
-      wordWrap: true,
+      lineNumbers: true,
+      wordWrap: false,
       readOnly: this.readonly(),
 
       onUpdate: (code: string) => {
@@ -85,7 +85,7 @@ export class CodeAreaComponent implements AfterViewInit, OnChanges {
       copyButton(),
       matchBrackets(true),
       highlightBracketPairs(),
-      editHistory()
+      editHistory(),
     );
 
     this.code.subscribe(() => {

@@ -32,7 +32,8 @@
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "node_modules/prism-code-editor/dist/layout.css",
               "node_modules/prism-code-editor/dist/themes/prism.css",
-              "node_modules/prism-code-editor/dist/themes/prism-okaidia.css",
+              "node_modules/prism-code-editor/dist/themes/github-dark.css",
+              "node_modules/prism-code-editor/dist/copy.css"
             ],
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
