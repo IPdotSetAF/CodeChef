@@ -24,7 +24,6 @@ import "prism-code-editor/prism/languages/kotlin";
 import "prism-code-editor/prism/languages/markdown";
 import "prism-code-editor/prism/languages/xml";
 import { isPlatformBrowser } from "@angular/common";
-import { noop } from "rxjs";
 
 @Component({
   selector: 'code-area',
