@@ -9,8 +9,6 @@ import { RouterLink } from '@angular/router';
   templateUrl: './home.component.html'
 })
 export class HomeComponent {
-  title = 'CodeChef';
-
   constructor(meta:Meta){
     meta.addTags([
       {name: "description", content:"Developer utilities that automate simple and boring tasks, converts codes and more."},

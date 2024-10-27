@@ -1,7 +1,7 @@
 on:
   push:
-    branches:
-      - "main" # change to the branch you wish to deploy from
+    tags:
+      - "v*"
 
 permissions:
   contents: read
@@ -9,7 +9,10 @@ permissions:
   id-token: write
 
 jobs:
+  tests:
+    uses: ./.github/workflows/main.yml
   deploy:
+    needs: [tests]
     environment:
       name: "github-pages"
       url: ${{ steps.build-publish.outputs.page_url }}

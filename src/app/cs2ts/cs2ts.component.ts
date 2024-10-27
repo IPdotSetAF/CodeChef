@@ -41,7 +41,7 @@ export class Cs2tsComponent implements AfterContentInit {
   constructor(meta: Meta) {
     meta.addTags([
       { name: "description", content: "Converts C# model to TS model, converts fields, types, arrays and generics." },
-      { name: "keywords", content: "C#, TS, CSharp, TypeScript, script, type, generic, array, converter, model, fields, string, number, int, class, code, language, long, float, boolean, bool" },
+      { name: "keywords", content: "C#, TS, CSharp, TypeScript, script, type, generic, array, converter, model, DTO, DataTransferObject, POCO, fields, string, number, int, class, code, language, long, float, boolean, bool" },
     ]);
   }
 
@@ -88,19 +88,40 @@ export class Cs2tsComponent implements AfterContentInit {
     return code;
   }
 
-  private static convertTypes(a: string | undefined): string | undefined {
-    if (a === "bool")
-      return "boolean";
+  private static convertTypes(t: string | undefined): string | undefined {
+    if (!t)
+      return t;
 
-    switch (a) {
+    switch (t!.toLowerCase()) {
+      case "bool":
+        return "boolean";
+      case "byte":
+      case "sbyte":
+      case "short":
+      case "ushort":
       case "int":
+      case "uint":
       case "float":
       case "double":
       case "decimal":
-      case "long":
         return "number";
+      case "long":
+      case "ulong":
+        return "bigint";
+      case "char":
+      case "string":
+        return "string";
+      case "datetime":
+      case "dateonly":
+      case "timeonly":
+        return "Date";
+      case "object":
+      case "dynamic":
+        return "any";
+      case "void":
+        return "void";
+      default:
+        return t;
     }
-
-    return a;
   }
 }

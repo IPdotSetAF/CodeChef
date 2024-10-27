@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Cs2tsComponent } from './cs2ts.component';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 describe('Cs2tsComponent', () => {
   let component: Cs2tsComponent;
@@ -8,7 +9,10 @@ describe('Cs2tsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Cs2tsComponent]
+      imports: [Cs2tsComponent],
+      providers:[
+        provideAnimations()
+      ]
     })
     .compileComponents();
 
