@@ -1,0 +1,24 @@
+#footer-base {
+    height: 5px;
+}
+
+a {
+    color: inherit !important;
+}
+
+.btn-footer {
+    --btn-size: 30px !important;
+}
+
+#logo {
+    filter: brightness(0%) invert() brightness(40%);
+    height: 20px;
+}
+
+.fs-md{
+    font-size: smaller;
+}
+
+.fs-sm{
+    font-size: small;
+}

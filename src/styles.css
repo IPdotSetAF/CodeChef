@@ -1,0 +1,36 @@
+.btn-hover{
+    transition: box-shadow 0.1s ease-in-out;
+    box-shadow: none;
+}
+
+.btn-hover:hover{
+    box-shadow: inset 0 0 0 999999px #FFFFFF20;
+}
+
+.btn-hover:active{
+    box-shadow: inset 0 0 0 999999px #FFFFFF30;
+}
+
+.btn-circle{
+    --btn-size: 100%;
+    width: var(--btn-size);
+    height: var(--btn-size);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+
+.divider{
+    height: 1px;
+    background: linear-gradient(135deg, #ff0340 0%, 57.99%, #163af7 100%);
+    background-size: 200% 200%;
+    animation: gradient-move 30s ease infinite;
+}
+
+@keyframes gradient-move {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}

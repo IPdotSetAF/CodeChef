@@ -1,0 +1,27 @@
+#header {
+    --height: 55px;
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--height);
+    background-color: #212529b0;
+    backdrop-filter: blur(2px);
+}
+
+img {
+    height: 60%;
+}
+
+a {
+    text-decoration: none;
+    color: inherit !important;
+}
+
+.btn-header-round {
+    --btn-size: calc(var(--height) - 10px) !important;
+}
+
+#ipaf{
+    filter: brightness(0%) invert();
+}
