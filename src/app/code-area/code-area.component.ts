@@ -1,44 +1,94 @@
-import { AfterViewInit, Component, ElementRef, HostListener, input, Input } from '@angular/core';
-import Prism from 'prismjs';
-import { debounceTime, Subject, takeLast, tap } from 'rxjs';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Inject,
+  Input,
+  input,
+  model,
+  OnChanges,
+  PLATFORM_ID,
+  SimpleChanges,
+  ViewChild,
+  ViewEncapsulation,
+} from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
+import { createEditor, PrismEditor } from "prism-code-editor";
+import { matchBrackets } from "prism-code-editor/match-brackets";
+import { highlightBracketPairs } from "prism-code-editor/highlight-brackets";
+import { editHistory } from "prism-code-editor/commands";
+import { copyButton } from "prism-code-editor/copy-button";
+import "prism-code-editor/prism/languages/json";
+import "prism-code-editor/prism/languages/yaml";
+import "prism-code-editor/prism/languages/toml";
+import "prism-code-editor/prism/languages/java";
+import "prism-code-editor/prism/languages/xml";
+import "prism-code-editor/prism/languages/csharp";
+import "prism-code-editor/prism/languages/typescript";
 
 @Component({
-  selector: 'code-area, [code-area]',
+  selector: 'code-area',
   standalone: true,
   imports: [],
-  template: '<ng-content></ng-content>',
-  styleUrl: './code-area.component.css'
+  template: '<div style="display: grid; {{innerStyle}}" class="{{innerClass}}" #editorContainer></div>',
+  styleUrl: './code-area.component.css',
+  encapsulation: ViewEncapsulation.ShadowDom
 })
-export class CodeAreaComponent implements AfterViewInit {
-  @Input()
-  code!: string;
+export class CodeAreaComponent implements AfterViewInit, OnChanges {
+  code = model<string>("");
+  language = input<string>("typescript");
+  readonly = input<boolean, string>(false, {
+    transform: (value: string) => value == "true",
+  });
+  @Input() innerStyle!: string;
+  @Input() innerClass!: string;
+  editor: PrismEditor | undefined = undefined;
 
-  @Input()
-  language = 'javascript';
+  @ViewChild("editorContainer") editorContainer!: ElementRef;
 
-  constructor(private el: ElementRef) { }
-
-  ngAfterViewInit() {
-    this.highlight(this.code || this.el.nativeElement.innerText)
-
-    this.inputDebouncer.pipe(
-      debounceTime(500),
-      tap(value => this.highlight(value)),
-      takeLast(1),
-    ).subscribe();
-  }
-  
-  private inputDebouncer = new Subject<string>();
-  
-  @HostListener("input")
-  protected onInput(){
-    this.inputDebouncer.next(this.el.nativeElement.innerText);
+  isBrowser = false;
+  constructor(@Inject(PLATFORM_ID) private platformId: any) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
-  private highlight(code: string){
-    const grammar = Prism.languages[this.language];
-    const html = Prism.highlight(code, grammar, this.language);
-    this.el.nativeElement.innerHTML = html;
-    console.log(code);
+  ngAfterViewInit(): void {
+    if (!this.isBrowser)
+      return;
+
+    if (this.editorContainer.nativeElement) {
+      this.editor = this.initEditor();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["code"].previousValue !== changes["code"].currentValue) {
+      this.editor?.setOptions({ value: changes["code"].currentValue });
+    }
+  }
+
+  initEditor(): PrismEditor {
+    const editor = createEditor(this.editorContainer.nativeElement, {
+      value: this.code(),
+      language: this.language(),
+      lineNumbers: true,
+      wordWrap: false,
+      readOnly: this.readonly(),
+
+      onUpdate: (code: string) => {
+        this.code.set(code);
+      },
+    });
+    editor.addExtensions(
+      copyButton(),
+      matchBrackets(true),
+      highlightBracketPairs(),
+      editHistory(),
+    );
+
+    this.code.subscribe(() => {
+      this.editor?.update();
+    });
+
+    return editor;
   }
 }

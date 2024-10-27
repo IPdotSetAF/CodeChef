@@ -12,21 +12,20 @@ import { Meta } from '@angular/platform-browser';
   templateUrl: './cs2ts.component.html',
   animations: [
     trigger('valueChangeAnim', [
-      state('*', style({ "border-width": "3px" })),
       transition('* <=> *', [
-        animate('0.1s ease-out', style({ "border-color": "var(--bs-success)" })),
-        animate('0.1s ease-in', style({ "border-color": "none" }))
+        animate('0.07s ease-out', style({ "border-color": "limegreen" })),
+        animate('0.07s ease-in', style({ "border-color": "var(--bs-border-color)" }))
       ]),
     ])
-  ]
+  ],
+  styles: `
+  .code-border{
+    border: 3px solid var(--bs-border-color);
+  }
+  `
 })
 export class Cs2tsComponent implements AfterContentInit {
-  @ViewChild("csCode", { read: ElementRef })
-  protected csCode!: ElementRef<HTMLInputElement>;
-  @ViewChild("tsCode", { read: ElementRef })
-  protected tsCode!: ElementRef<HTMLInputElement>;
-
-  protected placeholder1: string = `public class a : b {
+  protected csCode: string = `public class a : b {
   public int x1 { get; set; }
   public float? x2 { get; set; }
   public string x3 { get; set; }
@@ -34,10 +33,7 @@ export class Cs2tsComponent implements AfterContentInit {
   public long[] x9 { get; set; }
   public IEnumerable<string> x10 { get; set; }
 }`;
-  protected placeholder2!: string;
-
-  protected csModel: string = "";
-  protected tsModel !: string;
+  protected tsCode !: string;
   protected status: boolean = false;
 
   protected inputDebouncer = new Subject<string>();
@@ -47,8 +43,6 @@ export class Cs2tsComponent implements AfterContentInit {
       { name: "description", content: "Converts C# model to TS model, converts fields, types, arrays and generics." },
       { name: "keywords", content: "C#, TS, CSharp, TypeScript, script, type, generic, array, converter, model, DTO, DataTransferObject, POCO, fields, string, number, int, class, code, language, long, float, boolean, bool" },
     ]);
-
-    this.placeholder2 = Cs2tsComponent.convert(this.placeholder1);
   }
 
   ngAfterContentInit(): void {
@@ -58,20 +52,12 @@ export class Cs2tsComponent implements AfterContentInit {
       takeLast(1),
     ).subscribe();
 
-    this.convert(this.csModel);
-  }
-
-  protected onInput() {
-    this.inputDebouncer.next(this.csModel);
-    this.csCode.nativeElement.style.height = "auto";
-    this.csCode.nativeElement.style.height = `${this.csCode.nativeElement.scrollHeight + 5}px`;
-    this.tsCode.nativeElement.style.height = "auto";
-    this.tsCode.nativeElement.style.height = `${this.csCode.nativeElement.scrollHeight + 5}px`;
+    this.convert(this.csCode);
   }
 
   protected convert(csCode?: string) {
-    let code = csCode ? csCode : this.csModel;
-    this.tsModel = Cs2tsComponent.convert(code);
+    let code = csCode ? csCode : this.csCode;
+    this.tsCode = Cs2tsComponent.convert(code);
     this.status = !this.status;
   }
 

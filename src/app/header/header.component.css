@@ -7,6 +7,7 @@
     height: var(--height);
     background-color: #212529b0;
     backdrop-filter: blur(2px);
+    z-index: 2;
 }
 
 img {

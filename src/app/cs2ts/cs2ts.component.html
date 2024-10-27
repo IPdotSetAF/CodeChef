@@ -7,17 +7,17 @@
     <div class="row">
         <div class="col-md-6">
             <label for="csharp-code" class="form-label">C# class fields:</label>
-            <code>
-                <textarea #csCode class="form-control" id="csharp-code" rows="16" code-area language="clike" (input)="onInput()"
-                [(ngModel)]="csModel" [placeholder]="placeholder1"></textarea>
-            </code>
+            <div class="code-border" >
+                <code-area innerStyle="min-height:500px;" [(code)]="csCode" (codeChange)="inputDebouncer.next(csCode)"
+                    language="csharp" />
+            </div>
             <br />
         </div>
         <div class="col-md-6">
             <label for="ts-code" class="form-label">TS interface fields:</label>
-            <code>
-                <textarea #tsCode [@valueChangeAnim]="status" class="form-control" id="ts-code" rows="16" disabled="true" [ngModel]="tsModel"  [placeholder]="placeholder2"></textarea>
-            </code>
+            <div class="code-border" [@valueChangeAnim]="status">
+                <code-area innerStyle="min-height:500px;" [(code)]="tsCode" language="typescript" readonly="true" />
+            </div>
             <br />
         </div>
     </div>
