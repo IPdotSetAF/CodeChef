@@ -11,37 +11,31 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from "@angular/core";
-import { createEditor, languageMap, PrismEditor } from "prism-code-editor";
+import { isPlatformBrowser } from "@angular/common";
+import { createEditor, PrismEditor } from "prism-code-editor";
 import { matchBrackets } from "prism-code-editor/match-brackets";
 import { highlightBracketPairs } from "prism-code-editor/highlight-brackets";
 import { editHistory } from "prism-code-editor/commands";
 import { copyButton } from "prism-code-editor/copy-button";
 import "prism-code-editor/prism/languages/json";
 import "prism-code-editor/prism/languages/yaml";
-import "prism-code-editor/prism/languages/http";
+import "prism-code-editor/prism/languages/toml";
 import "prism-code-editor/prism/languages/java";
-import "prism-code-editor/prism/languages/kotlin";
-import "prism-code-editor/prism/languages/markdown";
 import "prism-code-editor/prism/languages/xml";
-import { isPlatformBrowser } from "@angular/common";
+import "prism-code-editor/prism/languages/csharp";
+import "prism-code-editor/prism/languages/typescript";
 
 @Component({
   selector: 'code-area',
   standalone: true,
   imports: [],
   template: "<div #editorContainer></div>",
-  styles: [
-    `
-      :host > div {
-        margin-bottom: 0.5em;
-      }
-    `,
-  ],
-  encapsulation: ViewEncapsulation.None
+  styleUrl: './code-area.component.css',
+  encapsulation: ViewEncapsulation.ShadowDom
 })
 export class CodeAreaComponent implements AfterViewInit, OnChanges {
   code = model<string>("");
-  language = input<string>("markdown");
+  language = input<string>("typescript");
   readonly = input<boolean, string>(false, {
     transform: (value: string) => value == "true",
   });
