@@ -2,7 +2,3 @@
 @import '../../../node_modules/prism-code-editor/dist/themes/prism.css';
 @import '../../../node_modules/prism-code-editor/dist/themes/github-dark.css';
 @import '../../../node_modules/prism-code-editor/dist/copy.css';
-
-:host > div {
-    margin-bottom: 0.5em;
-  }

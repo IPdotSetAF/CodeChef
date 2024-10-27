@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   Inject,
+  Input,
   input,
   model,
   OnChanges,
@@ -29,7 +30,7 @@ import "prism-code-editor/prism/languages/typescript";
   selector: 'code-area',
   standalone: true,
   imports: [],
-  template: "<div #editorContainer></div>",
+  template: '<div style="display: grid; {{innerStyle}}" class="{{innerClass}}" #editorContainer></div>',
   styleUrl: './code-area.component.css',
   encapsulation: ViewEncapsulation.ShadowDom
 })
@@ -39,6 +40,8 @@ export class CodeAreaComponent implements AfterViewInit, OnChanges {
   readonly = input<boolean, string>(false, {
     transform: (value: string) => value == "true",
   });
+  @Input() innerStyle!: string;
+  @Input() innerClass!: string;
   editor: PrismEditor | undefined = undefined;
 
   @ViewChild("editorContainer") editorContainer!: ElementRef;
