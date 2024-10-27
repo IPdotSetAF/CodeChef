@@ -25,7 +25,7 @@ import { Meta } from '@angular/platform-browser';
   `
 })
 export class Cs2tsComponent implements AfterContentInit {
-  protected placeholder1: string = `public class a : b {
+  protected csCode: string = `public class a : b {
   public int x1 { get; set; }
   public float? x2 { get; set; }
   public string x3 { get; set; }
@@ -33,9 +33,6 @@ export class Cs2tsComponent implements AfterContentInit {
   public long[] x9 { get; set; }
   public IEnumerable<string> x10 { get; set; }
 }`;
-  protected placeholder2!: string;
-
-  protected csCode: string = "";
   protected tsCode !: string;
   protected status: boolean = false;
 
@@ -46,8 +43,6 @@ export class Cs2tsComponent implements AfterContentInit {
       { name: "description", content: "Converts C# model to TS model, converts fields, types, arrays and generics." },
       { name: "keywords", content: "C#, TS, CSharp, TypeScript, script, type, generic, array, converter, model, fields, string, number, int, class, code, language, long, float, boolean, bool" },
     ]);
-
-    this.placeholder2 = Cs2tsComponent.convert(this.placeholder1);
   }
 
   ngAfterContentInit(): void {
