@@ -25,6 +25,7 @@ import "prism-code-editor/prism/languages/java";
 import "prism-code-editor/prism/languages/xml";
 import "prism-code-editor/prism/languages/csharp";
 import "prism-code-editor/prism/languages/typescript";
+import "prism-code-editor/prism/languages/markup";
 
 @Component({
   selector: 'code-area',

@@ -1,8 +1,8 @@
-import { AfterContentInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterContentInit, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, Subject, takeLast, tap } from 'rxjs';
 import { CodeAreaComponent } from '../code-area/code-area.component';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Meta } from '@angular/platform-browser';
 
 @Component({
