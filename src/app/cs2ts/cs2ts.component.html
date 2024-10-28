@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-md-6">
             <label for="csharp-code" class="form-label">C# class fields:</label>
-            <div class="code-border" >
+            <div class="code-border">
                 <code-area innerStyle="min-height:500px;" [(code)]="csCode" (codeChange)="inputDebouncer.next(csCode)"
                     language="csharp" />
             </div>
@@ -32,8 +32,25 @@
 
     <div class="row">
         <div class="col-12">
-            <h3 class="row">Supports:</h3>
-            <ul class="row">
+            <p><strong>C# and TypeScript</strong> are both powerful, strongly-typed languages, but they serve different
+                ecosystems. C# is a mature, object-oriented programming language commonly used on the server side,
+                particularly within the .NET ecosystem, where it handles backend logic, data processing, and
+                interactions with databases. TypeScript, on the other hand, is a superset of JavaScript that adds static
+                typing and is primarily used in the frontend world, providing type safety and improved tooling for
+                JavaScript applications. In full-stack applications that use both languages, it&#39;s common to need
+                shared data structures for seamless communication between the backend (C#) and the frontend
+                (TypeScript). This is where DTOs (Data Transfer Objects) become critical, as they allow structured,
+                consistent data to move between different parts of an application.</p>
+            <p>However, defining DTOs in both C# and TypeScript is often a tedious and repetitive task, as the same data
+                structure needs to be duplicated in two languages, often with only minor differences. For instance, a
+                UserDTO defined in C# with properties for <code>id</code>, <code>name</code>, and <code>email</code>
+                must be recreated in TypeScript with the same fields and types to ensure consistency across the backend
+                and frontend. This manual repetition increases the likelihood of errors and maintenance issues, as any
+                change in one language requires a matching update in the other. Automating this process or using tools
+                to generate DTOs in both languages can save time and reduce errors, but without such tooling, the task
+                remains one of the more repetitive and labor-intensive aspects of full-stack development.</p>
+            <h3>Supports:</h3>
+            <ul>
                 <li>Primary data types:
                     <ul>
                         <li>boolean</li>
