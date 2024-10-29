@@ -33,7 +33,7 @@ export class SerializedToolComponent implements AfterContentInit {
 }`;
   protected toCode !: string;
   protected fromLang: string = "json";
-  protected toLang: string = "toml";
+  protected toLang: string = "xml";
   protected status: boolean = false;
 
   protected inputDebouncer = new Subject<string>();

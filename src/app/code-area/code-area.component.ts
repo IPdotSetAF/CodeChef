@@ -21,11 +21,11 @@ import { copyButton } from "prism-code-editor/copy-button";
 import "prism-code-editor/prism/languages/json";
 import "prism-code-editor/prism/languages/yaml";
 import "prism-code-editor/prism/languages/toml";
-import "prism-code-editor/prism/languages/java";
 import "prism-code-editor/prism/languages/xml";
 import "prism-code-editor/prism/languages/csharp";
 import "prism-code-editor/prism/languages/typescript";
 import "prism-code-editor/prism/languages/markup";
+import "prism-code-editor/prism/languages/markdown";
 
 @Component({
   selector: 'code-area',
@@ -62,9 +62,13 @@ export class CodeAreaComponent implements AfterViewInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes["code"].previousValue !== changes["code"].currentValue) {
-      this.editor?.setOptions({ value: changes["code"].currentValue });
-    }
+    if (changes["code"])
+      if (changes["code"].previousValue !== changes["code"].currentValue)
+        this.editor?.setOptions({ value: changes["code"].currentValue });
+
+    if (changes["language"])
+      if (changes["language"].previousValue !== changes["language"].currentValue)
+        this.editor?.setOptions({ language: changes["language"].currentValue });
   }
 
   initEditor(): PrismEditor {
