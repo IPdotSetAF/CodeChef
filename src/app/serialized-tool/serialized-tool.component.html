@@ -1,0 +1,52 @@
+<div class="container-fluid p-4">
+    <div class="row">
+        <h2>Serialized Tool</h2>
+        <p>Convert JSON, XML, YAML or TOML serialized objects/data to each other.</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <label for="csharp-code" class="form-label">From :</label>
+            <div class="code-border">
+                <code-area innerStyle="min-height:500px;" [(code)]="fromCode" (codeChange)="inputDebouncer.next(fromCode)"
+                   [language]="fromLang" />
+            </div>
+            <br />
+        </div>
+        <div class="col-md-6">
+            <label for="ts-code" class="form-label">To:</label>
+            <div class="code-border" [@valueChangeAnim]="status">
+                <code-area innerStyle="min-height:500px;" [(code)]="toCode" [language]="toLang" readonly="true" />
+            </div>
+            <br />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center">
+            <button class="btn btn-success" (click)="convert()">Convert <i class="bi bi-caret-right"></i></button>
+        </div>
+    </div>
+
+    <br />
+
+    <div class="row">
+        <div class="col-12">
+            <p><strong>JSON, XML, YAML, and TOML</strong> are known as <strong>data serialization formats</strong>. They
+                are used to structure, store, and exchange data between systems or components. These formats allow data
+                to be saved in a consistent, machine-readable form that can also be parsed and understood by humans to
+                some extent. Each has unique characteristics: <strong>JSON</strong> (JavaScript Object Notation) is
+                widely used in web APIs and JavaScript applications; <strong>XML</strong> (eXtensible Markup Language)
+                is common in configurations, document storage, and enterprise software; <strong>YAML</strong> (YAML
+                Ain&#39;t Markup Language) is favored for its readability and is often used in configuration files; and
+                <strong>TOML</strong> (Tom&#39;s Obvious, Minimal Language) is designed for easy readability and is
+                frequently used in project configurations.</p>
+            <p>When data is structured or saved using these formats, it’s referred to as <strong>serialized
+                    objects</strong> or simply <strong>serialized data</strong>. Serialization is the process of
+                converting complex data structures, like objects in code, into a format that can be easily stored,
+                transferred, and then deserialized (or reconstructed) back into the original format when needed.
+                Serialized objects in JSON, XML, YAML, or TOML allow systems to communicate by sharing data in an
+                interpretable and standardized way.</p>
+        </div>
+    </div>
+</div>
