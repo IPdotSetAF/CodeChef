@@ -4,7 +4,7 @@ import { debounceTime, Subject, takeLast, tap } from 'rxjs';
 import { CodeAreaComponent } from '../code-area/code-area.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Meta } from '@angular/platform-browser';
-import { parse as tomlParse, stringify as tomlStringify } from '@iarna/toml';
+import { parse as tomlParse, stringify as tomlStringify } from 'smol-toml';
 import { parseString as xmlParse, Builder as xmlStringify } from 'xml2js';
 import YAML from 'yamljs';
 
