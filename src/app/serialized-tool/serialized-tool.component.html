@@ -33,7 +33,7 @@
                     </label>
                 </div>
             </div>
-            <div class="code-border">
+            <div class="code-border" [@hasError]="hasError">
                 <code-area innerStyle="min-height:500px;" [(code)]="fromCode"
                     (codeChange)="inputDebouncer.next(fromCode)" [language]="fromLang" />
             </div>
