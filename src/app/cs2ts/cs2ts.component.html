@@ -6,7 +6,7 @@
 
     <div class="row">
         <div class="col-md-6">
-            <label for="csharp-code" class="form-label">C# class fields:</label>
+            <label class="form-label">C# class fields:</label>
             <div class="code-border">
                 <code-area innerStyle="min-height:500px;" [(code)]="csCode" (codeChange)="inputDebouncer.next(csCode)"
                     language="csharp" />
@@ -14,7 +14,7 @@
             <br />
         </div>
         <div class="col-md-6">
-            <label for="ts-code" class="form-label">TS interface fields:</label>
+            <label class="form-label">TS interface fields:</label>
             <div class="code-border" [@valueChangeAnim]="status">
                 <code-area innerStyle="min-height:500px;" [(code)]="tsCode" language="typescript" readonly="true" />
             </div>
