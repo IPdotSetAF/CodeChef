@@ -5,7 +5,7 @@ import { CodeAreaComponent } from '../code-area/code-area.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Meta } from '@angular/platform-browser';
 import { parse as tomlParse, stringify as tomlStringify } from 'smol-toml';
-import { parseString as xmlParse, Builder as xmlStringify } from 'xml2js';
+import { XMLParser as xmlParse, XMLBuilder as xmlStringify } from 'fast-xml-parser';
 import YAML from 'yamljs';
 
 @Component({
@@ -73,11 +73,7 @@ export class SerializedToolComponent implements AfterContentInit {
           obj = JSON.parse(code);
           break;
         case "xml":
-          xmlParse(code, (err, result) => {
-            if (err)
-              throw new Error("Not Valid XML.");
-            obj = result;
-          });
+          obj = new xmlParse().parse(code);
           break;
         case "yaml":
           obj = YAML.parse(code);
@@ -93,7 +89,7 @@ export class SerializedToolComponent implements AfterContentInit {
           this.toCode = JSON.stringify(obj);
           break;
         case "xml":
-          this.toCode = new xmlStringify().buildObject(obj);
+          this.toCode = new xmlStringify().build(obj);
           break;
         case "yaml":
           this.toCode = YAML.stringify(obj);
