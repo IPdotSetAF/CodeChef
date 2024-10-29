@@ -34,6 +34,10 @@
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
             ],
+            "allowedCommonJsDependencies": [
+              "fast-xml-parser",
+              "yamljs"
+            ],
             "server": "src/main.server.ts",
             "prerender": true,
             "ssr": false
