@@ -6,9 +6,7 @@ import { Md2htmlComponent } from './md2html/md2html.component';
 import { SerializedToolComponent } from './serialized-tool/serialized-tool.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: "home", pathMatch: "full" },
-
-    { path: 'home', title: "Home • CodeChef", component: HomeComponent },
+    { path: '', title: "CodeChef", component: HomeComponent },
     { path: 'cs2ts', title: "C# to TS • CodeChef", component: Cs2tsComponent },
     { path: 'md2html', title: "MD to HTML • CodeChef", component: Md2htmlComponent },
     { path: 'serialized', title: "Serialized Tool • CodeChef", component: SerializedToolComponent },
