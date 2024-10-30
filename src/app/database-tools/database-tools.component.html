@@ -10,15 +10,22 @@
             <br />
         </div>
         <div class="col-md-8">
-            <textarea id="connection-string" class="form-control" rows="2" [@connection]="status" [(ngModel)]="connectionString"></textarea>
+            <textarea id="connection-string" class="form-control" rows="2" [@connection]="status"
+                [(ngModel)]="connectionString" [disabled]="status !== connections.disconnected"></textarea>
             <br />
         </div>
         <div class="col-md-2">
-            @if(status){
+            @switch(status){
+            @case (connections.disconnected) {
+            <button class="btn btn-success" (click)="connect(true)">Connect</button>
+            }
+            @case (connections.connected) {
             <button class="btn btn-danger" (click)="connect(false)">Disconnect</button>
             }
-            @else{
-            <button class="btn btn-success" (click)="connect(true)">Connect</button>
+            @case (connections.connecting) {
+            <button class="btn btn-warning">Connecting <i class="spinner-border spinner-border-sm"
+                    role="status"></i></button>
+            }
             }
             <br />
         </div>

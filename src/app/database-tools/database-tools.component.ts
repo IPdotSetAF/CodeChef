@@ -12,8 +12,9 @@ import { AppComponent } from '../app/app.component';
   templateUrl: './database-tools.component.html',
   animations: [
     trigger('connection', [
-      state("true", style({ "border-width": "3px", "border-color": "limegreen" })),
-      state("false", style({ "border-width": "3px", "border-color": "var(--bs-border-color)" })),
+      state("0", style({ "border-width": "3px", "border-color": "var(--bs-border-color)" })),
+      state("1", style({ "border-width": "3px", "border-color": "var(--bs-warning)" })),
+      state("2", style({ "border-width": "3px", "border-color": "limegreen" })),
       transition('* <=> *', [
         animate('0.1s ease-in-out'),
       ]),
@@ -22,7 +23,8 @@ import { AppComponent } from '../app/app.component';
 })
 export class DatabaseToolsComponent {
   protected connectionString: string = "";
-  protected status: boolean = false;
+  protected status: ConnectionStatus = ConnectionStatus.disconnected;
+  protected connections = ConnectionStatus;
 
   constructor(
     private mssql: MssqlService
@@ -33,10 +35,17 @@ export class DatabaseToolsComponent {
     if (!AppComponent.isBrowser)
       return;
 
-    if (status)
-      await this.mssql.connect(this.connectionString);
-    else
-      await this.mssql.disconnect();
-    this.status = !this.status;
+    // if (status)
+    //   await this.mssql.connect(this.connectionString);
+    // else
+    //   await this.mssql.disconnect();
+    this.status++;
+    this.status = this.status % 3;
   }
+}
+
+enum ConnectionStatus {
+  disconnected,
+  connecting,
+  connected
 }
