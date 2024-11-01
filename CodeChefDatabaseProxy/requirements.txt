@@ -1,0 +1,4 @@
+fastapi==0.95.2
+uvicorn==0.22.0
+pyodbc==4.0.32
+colorama==0.4.4
