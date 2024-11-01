@@ -1,6 +1,7 @@
 import pyodbc
 import uuid
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
 from colorama import Fore, Style, init
@@ -8,8 +9,23 @@ from colorama import Fore, Style, init
 # Initialize colorama
 init(autoreset=True)
 
+from fastapi.middleware.cors import CORSMiddleware
+
 # Initialize FastAPI app
 app = FastAPI()
+
+origins = [
+    "https://codechef.ipdotsetaf.ir",
+    "http://localhost:4200"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # In-memory dictionary to store database connections
 connections = {}
@@ -129,4 +145,4 @@ async def disconnect(request: DisconnectRequest):
 
 # Run the FastAPI server
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=50505, access_log=False)
+    uvicorn.run(app, host="0.0.0.0", port=50505, access_log=True)

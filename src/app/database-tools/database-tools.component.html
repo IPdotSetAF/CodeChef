@@ -1,122 +1,90 @@
 <div class="container-fluid p-4">
     <div class="row">
         <h2>DataBase Tools</h2>
-        <p>Generate code based on database tables or stored procedures.</p>
+        <p>Scaffold C# models code based on database tables or stored procedures.</p>
     </div>
 
     <div class="row">
-        <div class="col-md-2">
-            <label class="form-label" for="connection-string">Connection String:</label>
-            <br />
-        </div>
-        <div class="col-md-8">
-            <textarea id="connection-string" class="form-control" rows="2" [@connection]="status"
-                [(ngModel)]="connectionString" [disabled]="status !== connections.disconnected"></textarea>
-            <br />
-        </div>
-        <div class="col-md-2">
-            @switch(status){
-            @case (connections.disconnected) {
-            <button class="btn btn-success" (click)="connect(true)">Connect</button>
-            }
-            @case (connections.connected) {
-            <button class="btn btn-danger" (click)="connect(false)">Disconnect</button>
-            }
-            @case (connections.connecting) {
-            <button class="btn btn-warning">Connecting <i class="spinner-border spinner-border-sm"
-                    role="status"></i></button>
-            }
-            }
-            <br />
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6">
-            <label for="csharp-code" class="form-label">C# class fields:</label>
-            <div class="code-border">
-                <!-- <code-area innerStyle="min-height:500px;" [(code)]="csCode" (codeChange)="inputDebouncer.next(csCode)"
-                    language="csharp" /> -->
+        <form class="col-md-6" [formGroup]="dbSettings" (submit)="connect()">
+            <div class="row">
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="bi bi-database fs-5 me-1"></div>
+                    <label class="form-label m-0" for="db-server">Server:</label>
+                </div>
+                <div class="col-md-9">
+                    <input id="db-server" type="text" class="form-control" formControlName="server"
+                        [@connection]="status" />
+                </div>
             </div>
             <br />
-        </div>
-        <div class="col-md-6">
-            <label for="ts-code" class="form-label">TS interface fields:</label>
-            <!-- <div class="code-border" [@valueChangeAnim]="status">
-                <code-area innerStyle="min-height:500px;" [(code)]="tsCode" language="typescript" readonly="true" />
-            </div> -->
+            <div class="row">
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="bi bi-person fs-5 me-1"></div>
+                    <label class="form-label m-0" for="db-username">Username:</label>
+                </div>
+                <div class="col-md-9">
+                    <input id="db-username" type="text" class="form-control" formControlName="username"
+                        [@connection]="status" />
+                </div>
+            </div>
             <br />
+            <div class="row">
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="bi bi-key fs-5 me-1"></div>
+                    <label class="form-label m-0" for="db-password">Password:</label>
+                </div>
+                <div class="col-md-9">
+                    <input id="db-password" type="password" class="form-control" formControlName="password"
+                        [@connection]="status" />
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="d-flex justify-content-end">
+                    @switch(status){
+                    @case (connectionStatus.disconnected) {
+                    <button class="btn btn-success">Connect</button>
+                    }
+                    @case (connectionStatus.connected) {
+                    <button class="btn btn-danger">Disconnect</button>
+                    }
+                    @case (connectionStatus.connecting) {
+                    <button type="button" class="btn btn-warning">Connecting <i class="spinner-border spinner-border-sm"
+                            role="status"></i></button>
+                    }
+                    }
+                </div>
+            </div>
+            <br />
+        </form>
+        <div class="col-md-6">
+
+
+            
+            <div class="row">
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-success" (click)="scaffold()">Scaffold <i
+                            class="bi bi-caret-right"></i></button>
+                </div>
+            </div>
+            <br/>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-12 d-flex justify-content-center">
-            <!-- <button class="btn btn-success" (click)="convert()">Convert <i class="bi bi-caret-right"></i></button> -->
+        <div class="col-12">
+            <label for="csharp-code" class="form-label">C# Models:</label>
+            <div class="code-border">
+                <code-area innerStyle="min-height:500px;" [(code)]="csCode" language="csharp" readonly="true" />
+            </div>
+            <br />
         </div>
     </div>
 
     <br />
 
-    <!-- <div class="row">
+    <div class="row">
         <div class="col-12">
-            <h3 class="row">Supports:</h3>
-            <ul class="row">
-                <li>Primary data types:
-                    <ul>
-                        <li>boolean</li>
-                        <li>number:
-                            <ul>
-                                <li>byte</li>
-                                <li>sbyte</li>
-                                <li>short</li>
-                                <li>ushort</li>
-                                <li>int</li>
-                                <li>uint</li>
-                                <li>float</li>
-                                <li>double</li>
-                                <li>decimal</li>
-                            </ul>
-                        </li>
-                        <li>bigint:
-                            <ul>
-                                <li>long</li>
-                                <li>ulong</li>
-                            </ul>
-                        </li>
-                        <li>string:
-                            <ul>
-                                <li>string</li>
-                                <li>char</li>
-                            </ul>
-                        </li>
-                        <li>Date:
-                            <ul>
-                                <li>DateTime</li>
-                                <li>DateOnly</li>
-                                <li>TimeOnly</li>
-                            </ul>
-                        </li>
-                        <li>any:
-                            <ul>
-                                <li>object</li>
-                                <li>dynamic</li>
-                            </ul>
-                        </li>
-                        <li>void</li>
-                    </ul>
-                </li>
-                <li>Custom data types</li>
-                <li>Arrays
-                    <ul>
-                        <li>[]</li>
-                        <li>List&lt;&gt;</li>
-                        <li>IEnumerable&lt;&gt;</li>
-                        <li>ICollection&lt;&gt;</li>
-                    </ul>
-                </li>
-                <li>Generics</li>
-                <li>Nullables</li>
-            </ul>
         </div>
-    </div> -->
+    </div>
 </div>

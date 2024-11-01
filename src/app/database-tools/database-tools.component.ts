@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { CodeAreaComponent } from "../code-area/code-area.component";
-import { FormsModule } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MssqlService } from './mssql.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { AppComponent } from '../app/app.component';
+import { ConnectRequest, ConnectResponse } from './mssql.model';
 
 @Component({
   selector: 'app-database-tools',
   standalone: true,
-  imports: [FormsModule, CodeAreaComponent],
+  imports: [FormsModule, ReactiveFormsModule, CodeAreaComponent],
   templateUrl: './database-tools.component.html',
   animations: [
     trigger('connection', [
@@ -22,25 +23,51 @@ import { AppComponent } from '../app/app.component';
   ]
 })
 export class DatabaseToolsComponent {
-  protected connectionString: string = "";
+  protected dbSettings: FormGroup = new FormGroup<DbSetting>(
+    {
+      server: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    }
+  )
   protected status: ConnectionStatus = ConnectionStatus.disconnected;
-  protected connections = ConnectionStatus;
+  protected connectionStatus = ConnectionStatus;
+  protected csCode: string = "";
 
+  private connectionID !: string;
   constructor(
     private mssql: MssqlService
-  ) {
-  }
+  ) { }
 
-  protected async connect(status: boolean) {
+  protected async connect() {
     if (!AppComponent.isBrowser)
       return;
 
-    // if (status)
-    //   await this.mssql.connect(this.connectionString);
-    // else
-    //   await this.mssql.disconnect();
-    this.status++;
-    this.status = this.status % 3;
+    if (this.status == this.connectionStatus.disconnected) {
+      this.status = this.connectionStatus.connecting;
+      this.dbSettings.disable();
+      this.mssql.connect(this.dbSettings.getRawValue() as ConnectRequest).subscribe({
+        next: (res) => {
+          res = res as ConnectResponse;
+          this.connectionID = res.connection_id;
+          this.status = this.connectionStatus.connected;
+        },
+        error: (err) => {
+          this.status = this.connectionStatus.disconnected;
+          this.dbSettings.enable();
+        }
+      });
+    } else
+      this.mssql.disconnect({
+        connection_id: this.connectionID
+      }).subscribe((res) => {
+        this.status = this.connectionStatus.disconnected;
+        this.dbSettings.enable();
+      });
+  }
+
+  protected scaffold(){
+    
   }
 }
 
@@ -48,4 +75,10 @@ enum ConnectionStatus {
   disconnected,
   connecting,
   connected
+}
+
+interface DbSetting {
+  server: AbstractControl<string>;
+  username: AbstractControl<string>;
+  password: AbstractControl<string>;
 }

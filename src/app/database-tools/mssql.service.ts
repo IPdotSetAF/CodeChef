@@ -1,38 +1,38 @@
 import { Injectable } from '@angular/core';
-import { ConnectionPool } from 'mssql';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { ConnectRequest, ConnectResponse, QueryRequest, ExecuteQueryResponse, DisconnectRequest, DisconnectResponse, ErrorResponse } from './mssql.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MssqlService {
-  private pool: ConnectionPool | null = null;
+  private apiUrl = 'http://localhost:50505'; // Base URL for the proxy server
 
-  async connect(connectionString: string): Promise<boolean> {
-    
-    var sql = await import("mssql");
+  constructor(private http: HttpClient) {}
 
-    if (!this.pool) {
-      this.pool = await sql.connect(connectionString);
-      console.log('Connected to the database.');
-    }
-    return true;
+  // Connect to the database
+  connect(request: ConnectRequest): Observable<ConnectResponse | ErrorResponse> {
+    return this.http.post<ConnectResponse | ErrorResponse>(`${this.apiUrl}/connect`, request);
   }
 
-  async disconnect(): Promise<void> {
-    if (this.pool) {
-      await this.pool.close();
-      this.pool = null;
-      console.log('Disconnected from the database.');
-    }
+  // Execute a SQL query on an active connection
+  executeQuery(request: QueryRequest): Observable<ExecuteQueryResponse | ErrorResponse> {
+    return this.http.post<ExecuteQueryResponse | ErrorResponse>(`${this.apiUrl}/execute-query`, request);
   }
 
-  async getStoredProcedureParams(spName: string, schema: string = 'dbo'): Promise<any> {
-    // const result = await this.pool?.request().execute(`[${schema}].[${spName}]`);
-    // return result.parameters;
+  // Disconnect from the database
+  disconnect(request: DisconnectRequest): Observable<DisconnectResponse | ErrorResponse> {
+    return this.http.post<DisconnectResponse | ErrorResponse>(`${this.apiUrl}/disconnect`, request);
   }
 
-  async getSchemaList(): Promise<any> {
-    // const result = await this.pool?.request().query('SELECT * FROM information_schema.schemata');
-    // return result.recordset;
-  }
+  // async getStoredProcedureParams(spName: string, schema: string = 'dbo'): Promise<any> {
+  //   // const result = await this.pool?.request().execute(`[${schema}].[${spName}]`);
+  //   // return result.parameters;
+  // }
+
+  // async getSchemaList(): Promise<any> {
+  //   // const result = await this.pool?.request().query('SELECT * FROM information_schema.schemata');
+  //   // return result.recordset;
+  // }
 }
