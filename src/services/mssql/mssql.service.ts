@@ -25,14 +25,4 @@ export class MssqlService {
   disconnect(request: DisconnectRequest): Observable<DisconnectResponse | ErrorResponse> {
     return this.http.post<DisconnectResponse | ErrorResponse>(`${this.apiUrl}/disconnect`, request);
   }
-
-  // async getStoredProcedureParams(spName: string, schema: string = 'dbo'): Promise<any> {
-  //   // const result = await this.pool?.request().execute(`[${schema}].[${spName}]`);
-  //   // return result.parameters;
-  // }
-
-  // async getSchemaList(): Promise<any> {
-  //   // const result = await this.pool?.request().query('SELECT * FROM information_schema.schemata');
-  //   // return result.recordset;
-  // }
 }

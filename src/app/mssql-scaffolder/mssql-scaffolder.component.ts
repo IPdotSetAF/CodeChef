@@ -5,6 +5,8 @@ import { MssqlService } from '../../services/mssql/mssql.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { AppComponent } from '../app/app.component';
 import { ConnectRequest, ConnectResponse, ErrorResponse } from '../../services/mssql/mssql.model';
+import { MssqlScaffolderService } from './mssql-scaffolder.service';
+import { Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-database-tools',
@@ -43,8 +45,15 @@ export class MssqlScaffoldComponent {
 
   private connectionID !: string;
   constructor(
-    private mssql: MssqlService
-  ) { }
+    private mssql: MssqlService,
+    private scaffolder: MssqlScaffolderService,
+    meta: Meta
+  ) { 
+    meta.addTags([
+      { name: "description", content: "Scaffolds MSSQL table models and stored procedures input and output models to C# classes." },
+      { name: "keywords", content: "C#, MSSQL, CSharp, microsoft, scaffold, db-first, database, model, DTO, class, table, schema, stored procedure, SQL server, code generator" },
+    ]);
+  }
 
   protected async connect() {
     if (!AppComponent.isBrowser)
@@ -63,7 +72,8 @@ export class MssqlScaffoldComponent {
         error: (err) => {
           this.status = this.connectionStatus.disconnected;
           this.dbSettings.enable();
-          this.connectionError = (err.error as ErrorResponse).detail;        }
+          this.connectionError = (err.error as ErrorResponse).detail;
+        }
       });
     } else
       this.mssql.disconnect({
@@ -78,6 +88,22 @@ export class MssqlScaffoldComponent {
           this.connectionError = (err.error as ErrorResponse).detail;
         }
       });
+  }
+
+  protected getDBs() {
+
+  }
+
+  protected getSchemas() {
+
+  }
+
+  protected getTables() {
+
+  }
+
+  protected getSPs() {
+
   }
 
   protected scaffold() {
