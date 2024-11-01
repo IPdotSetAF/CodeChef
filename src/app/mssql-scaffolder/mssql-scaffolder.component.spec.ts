@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DatabaseToolsComponent } from './database-tools.component';
+import { MssqlScaffoldComponent } from './mssql-scaffolder.component';
 
 describe('DatabaseToolsComponent', () => {
-  let component: DatabaseToolsComponent;
-  let fixture: ComponentFixture<DatabaseToolsComponent>;
+  let component: MssqlScaffoldComponent;
+  let fixture: ComponentFixture<MssqlScaffoldComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DatabaseToolsComponent]
+      imports: [MssqlScaffoldComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DatabaseToolsComponent);
+    fixture = TestBed.createComponent(MssqlScaffoldComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

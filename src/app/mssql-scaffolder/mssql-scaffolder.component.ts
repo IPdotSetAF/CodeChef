@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 import { CodeAreaComponent } from "../code-area/code-area.component";
 import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MssqlService } from './mssql.service';
+import { MssqlService } from '../../services/mssql/mssql.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { AppComponent } from '../app/app.component';
-import { ConnectRequest, ConnectResponse } from './mssql.model';
+import { ConnectRequest, ConnectResponse } from '../../services/mssql/mssql.model';
 
 @Component({
   selector: 'app-database-tools',
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule, CodeAreaComponent],
-  templateUrl: './database-tools.component.html',
+  templateUrl: './mssql-scaffolder.component.html',
   animations: [
     trigger('connection', [
       state("0", style({ "border-width": "3px", "border-color": "var(--bs-border-color)" })),
@@ -22,14 +22,20 @@ import { ConnectRequest, ConnectResponse } from './mssql.model';
     ])
   ]
 })
-export class DatabaseToolsComponent {
+export class MssqlScaffoldComponent {
   protected dbSettings: FormGroup = new FormGroup<DbSetting>(
     {
       server: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
       username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
       password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     }
-  )
+  );
+  protected scaffoldForm: FormGroup = new FormGroup<ScaffoldForm>(
+    {
+      database: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      schema: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    }
+  );
   protected status: ConnectionStatus = ConnectionStatus.disconnected;
   protected connectionStatus = ConnectionStatus;
   protected csCode: string = "";
@@ -67,7 +73,7 @@ export class DatabaseToolsComponent {
   }
 
   protected scaffold(){
-    
+
   }
 }
 
@@ -81,4 +87,9 @@ interface DbSetting {
   server: AbstractControl<string>;
   username: AbstractControl<string>;
   password: AbstractControl<string>;
+}
+
+interface ScaffoldForm{
+  database: AbstractControl<string>;
+  schema: AbstractControl<string>;
 }

@@ -1,6 +1,6 @@
 <div class="container-fluid p-4">
     <div class="row">
-        <h2>DataBase Tools</h2>
+        <h2>MSSQL Scaffolder</h2>
         <p>Scaffold C# models code based on database tables or stored procedures.</p>
     </div>
 
@@ -57,18 +57,48 @@
             </div>
             <br />
         </form>
-        <div class="col-md-6">
-
-
-            
+        <form class="col-md-6" [formGroup]="scaffoldForm" (submit)="scaffold()">
+            <div class="row">
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="bi bi-database fs-5 me-1"></div>
+                    <label class="form-label m-0" for="sc-database">DataBase:</label>
+                </div>
+                <div class="col-md-9">
+                    <input id="sc-database" type="text" class="form-control" formControlName="database"
+                        [@connection]="status" />
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="bi bi-diagram-3 fs-5 me-1"></div>
+                    <label class="form-label m-0" for="sc-schema">Schema:</label>
+                </div>
+                <div class="col-md-9">
+                    <input id="sc-schema" type="text" class="form-control" formControlName="schema"
+                        [@connection]="status" />
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="bi bi-table fs-5 me-1"></div>
+                    <label class="form-label m-0" for="sc-table">Table:</label>
+                </div>
+                <div class="col-md-9">
+                    <input id="sc-table" type="text" class="form-control" formControlName="table"
+                        [@connection]="status" />
+                </div>
+            </div>
+            <br />
             <div class="row">
                 <div class="d-flex justify-content-end">
                     <button class="btn btn-success" (click)="scaffold()">Scaffold <i
-                            class="bi bi-caret-right"></i></button>
+                            class="bi bi-caret-down"></i></button>
                 </div>
             </div>
-            <br/>
-        </div>
+            <br />
+        </form>
     </div>
 
     <div class="row">
