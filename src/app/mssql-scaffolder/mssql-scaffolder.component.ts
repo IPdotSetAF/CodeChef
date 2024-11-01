@@ -4,7 +4,7 @@ import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModu
 import { MssqlService } from '../../services/mssql/mssql.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { AppComponent } from '../app/app.component';
-import { ConnectRequest, ConnectResponse } from '../../services/mssql/mssql.model';
+import { ConnectRequest, ConnectResponse, ErrorResponse } from '../../services/mssql/mssql.model';
 
 @Component({
   selector: 'app-database-tools',
@@ -38,6 +38,7 @@ export class MssqlScaffoldComponent {
   );
   protected status: ConnectionStatus = ConnectionStatus.disconnected;
   protected connectionStatus = ConnectionStatus;
+  protected connectionError!: string | null;
   protected csCode: string = "";
 
   private connectionID !: string;
@@ -57,22 +58,29 @@ export class MssqlScaffoldComponent {
           res = res as ConnectResponse;
           this.connectionID = res.connection_id;
           this.status = this.connectionStatus.connected;
+          this.connectionError = null;
         },
         error: (err) => {
           this.status = this.connectionStatus.disconnected;
           this.dbSettings.enable();
-        }
+          this.connectionError = (err.error as ErrorResponse).detail;        }
       });
     } else
       this.mssql.disconnect({
         connection_id: this.connectionID
-      }).subscribe((res) => {
-        this.status = this.connectionStatus.disconnected;
-        this.dbSettings.enable();
+      }).subscribe({
+        next: (res) => {
+          this.status = this.connectionStatus.disconnected;
+          this.dbSettings.enable();
+          this.connectionError = null;
+        },
+        error: (err) => {
+          this.connectionError = (err.error as ErrorResponse).detail;
+        }
       });
   }
 
-  protected scaffold(){
+  protected scaffold() {
 
   }
 }
@@ -89,7 +97,7 @@ interface DbSetting {
   password: AbstractControl<string>;
 }
 
-interface ScaffoldForm{
+interface ScaffoldForm {
   database: AbstractControl<string>;
   schema: AbstractControl<string>;
 }

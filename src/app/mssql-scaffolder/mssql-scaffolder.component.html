@@ -39,6 +39,12 @@
                 </div>
             </div>
             <br />
+            @if(connectionError){
+            <div class="row">
+                <p class="flex-fill text-danger fs-sm">{{connectionError}}</p>
+                <br />
+            </div>
+            }
             <div class="row">
                 <div class="d-flex justify-content-end">
                     @switch(status){
