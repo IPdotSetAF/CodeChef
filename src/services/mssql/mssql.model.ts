@@ -7,6 +7,7 @@ export interface ConnectRequest {
 
 export interface QueryRequest {
     connection_id: string;
+    catalog: string | null;
     query: string;
 }
 

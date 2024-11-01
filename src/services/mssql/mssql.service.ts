@@ -18,8 +18,8 @@ export class MssqlService {
   }
 
   // Execute a SQL query on an active connection
-  executeQuery<T>(connection_id: string, query: string): Observable<T[] | ErrorResponse> {
-    return this.http.post<ExecuteQueryResponse<T> | ErrorResponse>(`${this.apiUrl}/execute-query`, { connection_id, query }).pipe(
+  executeQuery<T>(connection_id: string, query: string, catalog?: string): Observable<T[] | ErrorResponse> {
+    return this.http.post<ExecuteQueryResponse<T> | ErrorResponse>(`${this.apiUrl}/execute-query`, { connection_id, query, catalog }).pipe(
       map(res => (res as ExecuteQueryResponse<T>).data)
     );
   }

@@ -40,6 +40,7 @@ class ConnectRequest(BaseModel):
 
 class QueryRequest(BaseModel):
     connection_id: str
+    catalog: str = None
     query: str
 
 class DisconnectRequest(BaseModel):
@@ -110,6 +111,9 @@ async def execute_query(request: QueryRequest):
     try:
         # Execute the query and fetch results
         cursor = connection.cursor()
+        if(request.catalog):
+            cursor.execute(f"USE {request.catalog}")
+            cursor.commit()
         cursor.execute(request.query)
         columns = [column[0] for column in cursor.description]
         rows = [dict(zip(columns, row)) for row in cursor.fetchall()]

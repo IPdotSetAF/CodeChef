@@ -7,6 +7,7 @@ import { AppComponent } from '../app/app.component';
 import { ConnectRequest, ConnectResponse, ErrorResponse, GetAllDatabasesResponse, GetAllSchemasResponse, GetStoredProceduresResponse, GetTablesResponse } from '../../services/mssql/mssql.model';
 import { MssqlScaffolderService } from './mssql-scaffolder.service';
 import { Meta } from '@angular/platform-browser';
+import { GetColumnsResponse } from './mssql-scaffolder.model';
 
 @Component({
   selector: 'app-database-tools',
@@ -85,7 +86,9 @@ export class MssqlScaffoldComponent {
         this.scaffoldForm.controls["sp"].enable();
       }
     });
-    this.scaffoldForm.addControl("table", new FormControl("", { nonNullable: true, validators: [Validators.required] }));
+    let c = new FormControl("", { nonNullable: true, validators: [Validators.required] });
+    c.disable();
+    this.scaffoldForm.addControl("table", c);
     this.scaffoldForm.controls["isTable"].valueChanges.subscribe(v => {
       this.isTable = v;
       if (v) {
@@ -126,13 +129,16 @@ export class MssqlScaffoldComponent {
     } else
       this.mssql.disconnect(this.connectionID).subscribe({
         next: (res) => {
+          this.connectionError = null;
           this.status = this.connectionStatus.disconnected;
           this.dbSettings.enable();
-          this.connectionError = null;
           this.scaffoldForm.disable();
         },
         error: (err) => {
           this.connectionError = (err.error as ErrorResponse).detail;
+          this.status = this.connectionStatus.disconnected;
+          this.dbSettings.enable();
+          this.scaffoldForm.disable();
         }
       });
   }
@@ -173,10 +179,84 @@ export class MssqlScaffoldComponent {
   }
 
   protected scaffold() {
-    if (this.scaffoldForm.controls["isTable"]) {
+    if (this.scaffoldForm.controls["isTable"])
+      this.scaffoldTable();
+    else
+      this.scaffoldSP();
+  }
 
-    } else {
+  private scaffoldTable() {
+    const tbl = this.scaffoldForm.controls["table"].value;
+    this.scaffolder.getColumns(
+      this.connectionID, this.scaffoldForm.controls["database"].value, tbl).subscribe(res => {
+        res = res as GetColumnsResponse[];
+        this.csCode =
+          `public class ${tbl} {
+${res.map((p) => `\tpublic ${MssqlScaffoldComponent.convertDataType(p.DataType)}${p.IsNullable ? '?' : ''} ${p.ColumnName} { get; set; }\n`).reduce((a, b) => a + b)}}`;
+      });
+  }
 
+  private scaffoldSP() {
+    this.scaffolder.getSPParameters(
+      this.connectionID,
+      this.scaffoldForm.controls["database"].value,
+      this.scaffoldForm.controls["schema"].value,
+      this.scaffoldForm.controls["sp"].value).subscribe(res => {
+
+      });
+  }
+
+  private static convertDataType(type: string): string {
+    switch (type.toLowerCase()) {
+      case "int":
+        return "int";
+      case "bigint":
+        return "long";
+      case "smallint":
+        return "short";
+      case "tinyint":
+        return "byte";
+      case "bit":
+        return "bool";
+      case "decimal":
+      case "numeric":
+        return "decimal";
+      case "money":
+      case "smallmoney":
+        return "decimal";
+      case "float":
+        return "double";
+      case "real":
+        return "float";
+      case "date":
+      case "datetime":
+      case "datetime2":
+      case "smalldatetime":
+      case "datetimeoffset":
+        return "DateTime";
+      case "time":
+        return "TimeSpan";
+      case "char":
+      case "varchar":
+      case "text":
+      case "nchar":
+      case "nvarchar":
+      case "ntext":
+        return "string";
+      case "binary":
+      case "varbinary":
+      case "image":
+        return "byte[]";
+      case "uniqueidentifier":
+        return "Guid";
+      case "xml":
+        return "XmlDocument";
+      case "geography":
+      case "geometry":
+      case "hierarchyid":
+        return "SqlGeography";
+      default:
+        return type;
     }
   }
 }
