@@ -20,14 +20,35 @@ export interface ConnectResponse {
     connection_id: string;
 }
 
-export interface ExecuteQueryResponse {
+export interface ExecuteQueryResponse<T> {
     status: "success";
-    data: Array<Record<string, any>>; // Array of objects with column name as key and value as column data
+    data: T[];
 }
 
 export interface DisconnectResponse {
     status: "disconnected";
     connection_id: string;
+}
+
+export interface GetAllDatabasesResponse {
+    name: string;
+    database_id: number;
+}
+
+export interface GetAllSchemasResponse {
+    CATALOG_NAME: string;
+    SCHEMA_NAME: string;
+}
+
+export interface GetStoredProceduresResponse {
+    SPECIFIC_CATALOG: string;
+    SPECIFIC_SCHEMA: string;
+    SPECIFIC_NAME: string;
+}
+
+export interface GetTablesResponse {
+    name: string;
+    object_id: number;
 }
 
 // Error response interface
