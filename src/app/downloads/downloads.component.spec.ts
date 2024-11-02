@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MssqlScaffolderComponent } from './mssql-scaffolder.component';
+import { DownloadsComponent } from './downloads.component';
 
-describe('DatabaseToolsComponent', () => {
-  let component: MssqlScaffolderComponent;
-  let fixture: ComponentFixture<MssqlScaffolderComponent>;
+describe('DownloadsComponent', () => {
+  let component: DownloadsComponent;
+  let fixture: ComponentFixture<DownloadsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MssqlScaffolderComponent]
+      imports: [DownloadsComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MssqlScaffolderComponent);
+    fixture = TestBed.createComponent(DownloadsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -2,10 +2,23 @@
     <div class="row">
         <h2>MSSQL Scaffolder</h2>
         <p>Scaffold C# models code based on database tables or stored procedures.</p>
+        <p>This tool needs a proxy server to connect to your SQL server, you should <a [routerLink]="['/downloads']"
+                routerLinkActive="router-link-active">download the proxy server</a> and simply run it.</p>
     </div>
-
+    <br />
     <div class="row">
         <form class="col-md-5" [formGroup]="dbSettings" (submit)="connect()">
+            <div class="row">
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="bi bi-hdd-network fs-5 me-1"></div>
+                    <label class="form-label m-0" for="proxy">Proxy server:</label>
+                </div>
+                <div class="col-md-9">
+                    <input id="proxy" type="text" class="form-control" formControlName="proxy"
+                        [@connection]="status" />
+                </div>
+            </div>
+            <br />
             <div class="row">
                 <div class="col-md-3 d-flex align-items-center">
                     <div class="bi bi-database fs-5 me-1"></div>

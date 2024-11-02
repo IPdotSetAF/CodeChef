@@ -1,32 +1,31 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { ConnectRequest, ConnectResponse, QueryRequest, ExecuteQueryResponse, DisconnectRequest, DisconnectResponse, ErrorResponse, GetAllSchemasResponse, GetAllDatabasesResponse, GetStoredProceduresResponse, GetTablesResponse } from './mssql.model';
-import { error } from 'console';
+import { ConnectRequest, ConnectResponse, ExecuteQueryResponse, DisconnectResponse, ErrorResponse, GetAllSchemasResponse, GetAllDatabasesResponse, GetStoredProceduresResponse, GetTablesResponse } from './mssql.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MssqlService {
-  private apiUrl = 'http://localhost:50505'; // Base URL for the proxy server
+  public static apiUrl = 'http://localhost:50505'; // Base URL for the proxy server
 
   constructor(private http: HttpClient) { }
 
   // Connect to the database
   connect(request: ConnectRequest): Observable<ConnectResponse | ErrorResponse> {
-    return this.http.post<ConnectResponse | ErrorResponse>(`${this.apiUrl}/connect`, request);
+    return this.http.post<ConnectResponse | ErrorResponse>(`${MssqlService.apiUrl}/connect`, request);
   }
 
   // Execute a SQL query on an active connection
   executeQuery<T>(connection_id: string, query: string, catalog?: string): Observable<T[] | ErrorResponse> {
-    return this.http.post<ExecuteQueryResponse<T> | ErrorResponse>(`${this.apiUrl}/execute-query`, { connection_id, query, catalog }).pipe(
+    return this.http.post<ExecuteQueryResponse<T> | ErrorResponse>(`${MssqlService.apiUrl}/execute-query`, { connection_id, query, catalog }).pipe(
       map(res => (res as ExecuteQueryResponse<T>).data)
     );
   }
 
   // Disconnect from the database
   disconnect(connection_id: string): Observable<DisconnectResponse | ErrorResponse> {
-    return this.http.post<DisconnectResponse | ErrorResponse>(`${this.apiUrl}/disconnect`, { connection_id });
+    return this.http.post<DisconnectResponse | ErrorResponse>(`${MssqlService.apiUrl}/disconnect`, { connection_id });
   }
 
   // 1. Get all databases

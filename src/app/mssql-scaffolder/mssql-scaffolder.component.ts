@@ -8,11 +8,12 @@ import { ConnectRequest, ConnectResponse, ErrorResponse, GetAllDatabasesResponse
 import { MssqlScaffolderService } from './mssql-scaffolder.service';
 import { Meta } from '@angular/platform-browser';
 import { GetColumnsResponse, GetSPParametersResponse, GetSPReturnColumnsResponse } from './mssql-scaffolder.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-database-tools',
+  selector: 'app-mssql-scaffolder',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CodeAreaComponent],
+  imports: [FormsModule, ReactiveFormsModule, CodeAreaComponent, RouterLink],
   templateUrl: './mssql-scaffolder.component.html',
   animations: [
     trigger('connection', [
@@ -25,9 +26,10 @@ import { GetColumnsResponse, GetSPParametersResponse, GetSPReturnColumnsResponse
     ])
   ]
 })
-export class MssqlScaffoldComponent {
+export class MssqlScaffolderComponent {
   protected dbSettings: FormGroup = new FormGroup<DbSetting>(
     {
+      proxy: new FormControl('localhost:50505', { nonNullable: true, validators: [Validators.required] }),
       server: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
       username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
       password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -110,6 +112,7 @@ export class MssqlScaffoldComponent {
     if (this.status == this.connectionStatus.disconnected) {
       this.status = this.connectionStatus.connecting;
       this.dbSettings.disable();
+      MssqlService.apiUrl = `http://${this.dbSettings.controls["proxy"].value}`;
       this.mssql.connect(this.dbSettings.getRawValue() as ConnectRequest).subscribe({
         next: (res) => {
           res = res as ConnectResponse;
@@ -191,7 +194,7 @@ export class MssqlScaffoldComponent {
         res = res as GetColumnsResponse[];
         this.csCode =
           `public class ${tbl} {
-${res.map((p) => `\tpublic ${MssqlScaffoldComponent.convertDataType(p.DataType)}${p.IsNullable ? '?' : ''} ${p.ColumnName} { get; set; }\n`).reduce((a, b) => a + b)}}`;
+${res.map((p) => `\tpublic ${MssqlScaffolderComponent.convertDataType(p.DataType)}${p.IsNullable ? '?' : ''} ${p.ColumnName} { get; set; }\n`).reduce((a, b) => a + b)}}`;
       });
   }
 
@@ -205,10 +208,10 @@ ${res.map((p) => `\tpublic ${MssqlScaffoldComponent.convertDataType(p.DataType)}
         rs = rs as GetSPReturnColumnsResponse[];
         this.csCode =
           `public class ${sp}Params {
-${ps.map((p) => `\tpublic ${MssqlScaffoldComponent.convertDataType(p.Type)}${p.Nullable ? '?' : ''} ${p.Parameter_name} { get; set; }\n`).reduce((a, b) => a + b)}}
+${ps.map((p) => `\tpublic ${MssqlScaffolderComponent.convertDataType(p.Type)}${p.Nullable ? '?' : ''} ${p.Parameter_name} { get; set; }\n`).reduce((a, b) => a + b)}}
 
 public class ${sp}Result {
-${rs.map((p) => `\tpublic ${MssqlScaffoldComponent.convertDataType(p.system_type_name)}${p.Nullable ? '?' : ''} ${p.column} { get; set; }\n`).reduce((a, b) => a + b)}}`;
+${rs.map((p) => `\tpublic ${MssqlScaffolderComponent.convertDataType(p.system_type_name)}${p.Nullable ? '?' : ''} ${p.column} { get; set; }\n`).reduce((a, b) => a + b)}}`;
       });
     });
   }
@@ -276,6 +279,7 @@ enum ConnectionStatus {
 }
 
 interface DbSetting {
+  proxy: AbstractControl<string>;
   server: AbstractControl<string>;
   username: AbstractControl<string>;
   password: AbstractControl<string>;
