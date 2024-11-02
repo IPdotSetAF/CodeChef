@@ -23,14 +23,25 @@ import { RouterLink } from '@angular/router';
       transition('* <=> *', [
         animate('0.1s ease-in-out'),
       ]),
+    ]),
+    trigger('valueChangeAnim', [
+      transition('* <=> *', [
+        animate('0.07s ease-out', style({ "border-color": "limegreen" })),
+        animate('0.07s ease-in', style({ "border-color": "var(--bs-border-color)" }))
+      ]),
     ])
-  ]
+  ],
+  styles: `
+  .code-border{
+    border: 3px solid var(--bs-border-color);
+  }
+  `
 })
 export class MssqlScaffolderComponent {
   protected dbSettings: FormGroup = new FormGroup<DbSetting>(
     {
       proxy: new FormControl('localhost:50505', { nonNullable: true, validators: [Validators.required] }),
-      server: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      server: new FormControl('.', { nonNullable: true, validators: [Validators.required] }),
       username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
       password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     }
@@ -46,6 +57,7 @@ export class MssqlScaffolderComponent {
   protected connectionStatus = ConnectionStatus;
   protected connectionError!: string | null;
   protected csCode: string = "";
+  protected codeFlip: boolean = false;
   protected isTable: boolean = true;
 
   protected Dbs!: GetAllDatabasesResponse[];
@@ -75,21 +87,21 @@ export class MssqlScaffolderComponent {
       this.getSchemas();
       this.scaffoldForm.controls["schema"].enable();
     });
+
     this.scaffoldForm.controls["schema"].valueChanges.subscribe(v => {
       if (v.length == 0)
         return;
       this.scaffoldForm.controls["isTable"].enable();
-      if (this.isTable) {
-        this.scaffoldForm.controls["table"].enable();
+      if (this.isTable)
         this.getTables();
-      } else {
+      else
         this.getSPs();
-        this.scaffoldForm.controls["sp"].enable();
-      }
     });
+
     let c = new FormControl("", { nonNullable: true, validators: [Validators.required] });
     c.disable();
     this.scaffoldForm.addControl("table", c);
+
     this.scaffoldForm.controls["isTable"].valueChanges.subscribe(v => {
       this.isTable = v;
       if (v) {
@@ -102,6 +114,7 @@ export class MssqlScaffolderComponent {
         this.scaffoldForm.addControl("sp", new FormControl("", { nonNullable: true, validators: [Validators.required] }));
       }
     });
+
     this.scaffoldForm.disable();
   }
 
@@ -120,7 +133,6 @@ export class MssqlScaffolderComponent {
           this.status = this.connectionStatus.connected;
           this.connectionError = null;
           this.getDBs();
-          this.scaffoldForm.controls["database"].enable();
         },
         error: (err) => {
           this.status = this.connectionStatus.disconnected;
@@ -147,8 +159,8 @@ export class MssqlScaffolderComponent {
 
   protected getDBs() {
     this.mssql.getAllDatabases(this.connectionID).subscribe((res) => {
-      //this.scaffoldForm.reset();
       this.Dbs = res as GetAllDatabasesResponse[];
+      this.scaffoldForm.controls["database"].enable();
     });
   }
 
@@ -156,13 +168,6 @@ export class MssqlScaffolderComponent {
     this.mssql.getAllSchemas(this.connectionID, this.scaffoldForm.controls["database"].value).subscribe((res) => {
       this.Schemas = res as GetAllSchemasResponse[];
       this.scaffoldForm.controls["schema"].enable();
-      if (this.isTable) {
-        this.scaffoldForm.controls["table"].reset();
-        this.scaffoldForm.controls["table"].disable();
-      } else {
-        this.scaffoldForm.controls["sp"].reset();
-        this.scaffoldForm.controls["sp"].disable();
-      }
     });
   }
 
@@ -188,36 +193,36 @@ export class MssqlScaffolderComponent {
   }
 
   private scaffoldTable() {
-    const tbl = this.scaffoldForm.controls["table"].value;
+    const sc = this.scaffoldForm.getRawValue();
     this.scaffolder.getColumns(
-      this.connectionID, this.scaffoldForm.controls["database"].value, tbl).subscribe(res => {
+      this.connectionID, sc.database, sc.table).subscribe(res => {
         res = res as GetColumnsResponse[];
         this.csCode =
-          `public class ${tbl} {
+          `public class ${sc.table} {
 ${res.map((p) => `\tpublic ${MssqlScaffolderComponent.convertDataType(p.DataType)}${p.IsNullable ? '?' : ''} ${p.ColumnName} { get; set; }\n`).reduce((a, b) => a + b)}}`;
+        this.codeFlip = !this.codeFlip;
       });
   }
 
   private scaffoldSP() {
-    let db = this.scaffoldForm.controls["database"].value;
-    let sch = this.scaffoldForm.controls["schema"].value;
-    let sp = this.scaffoldForm.controls["sp"].value;
-    this.scaffolder.getSPParameters(this.connectionID, db, sch, sp).subscribe(ps => {
+    const sc = this.scaffoldForm.getRawValue();
+    this.scaffolder.getSPParameters(this.connectionID, sc.database, sc.schema, sc.sp).subscribe(ps => {
       ps = ps as GetSPParametersResponse[];
-      this.scaffolder.getSPReturnColumns(this.connectionID, db, sch, sp).subscribe(rs => {
+      this.scaffolder.getSPReturnColumns(this.connectionID, sc.database, sc.schema, sc.sp).subscribe(rs => {
         rs = rs as GetSPReturnColumnsResponse[];
         this.csCode =
-          `public class ${sp}Params {
+          `public class ${sc.sp}Params {
 ${ps.map((p) => `\tpublic ${MssqlScaffolderComponent.convertDataType(p.Type)}${p.Nullable ? '?' : ''} ${p.Parameter_name} { get; set; }\n`).reduce((a, b) => a + b)}}
 
-public class ${sp}Result {
+public class ${sc.sp}Result {
 ${rs.map((p) => `\tpublic ${MssqlScaffolderComponent.convertDataType(p.system_type_name)}${p.Nullable ? '?' : ''} ${p.column} { get; set; }\n`).reduce((a, b) => a + b)}}`;
+        this.codeFlip = !this.codeFlip;
       });
     });
   }
 
   private static convertDataType(type: string): string {
-    type = type.replace(/\(\d+\)/gm,'');
+    type = type.replace(/\(\d+\)/gm, '');
     switch (type.toLowerCase()) {
       case "int":
         return "int";
