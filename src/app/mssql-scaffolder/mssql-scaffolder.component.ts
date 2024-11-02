@@ -8,7 +8,6 @@ import { ConnectRequest, ConnectResponse, ErrorResponse, GetAllDatabasesResponse
 import { MssqlScaffolderService } from './mssql-scaffolder.service';
 import { Meta } from '@angular/platform-browser';
 import { GetColumnsResponse, GetSPParametersResponse, GetSPReturnColumnsResponse } from './mssql-scaffolder.model';
-import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-database-tools',
@@ -78,11 +77,10 @@ export class MssqlScaffoldComponent {
       if (v.length == 0)
         return;
       this.scaffoldForm.controls["isTable"].enable();
-      if (this.scaffoldForm.controls["isTable"].value) {
+      if (this.isTable) {
         this.scaffoldForm.controls["table"].enable();
         this.getTables();
-      }
-      else {
+      } else {
         this.getSPs();
         this.scaffoldForm.controls["sp"].enable();
       }
@@ -146,7 +144,7 @@ export class MssqlScaffoldComponent {
 
   protected getDBs() {
     this.mssql.getAllDatabases(this.connectionID).subscribe((res) => {
-      this.scaffoldForm.reset();
+      //this.scaffoldForm.reset();
       this.Dbs = res as GetAllDatabasesResponse[];
     });
   }
@@ -155,7 +153,7 @@ export class MssqlScaffoldComponent {
     this.mssql.getAllSchemas(this.connectionID, this.scaffoldForm.controls["database"].value).subscribe((res) => {
       this.Schemas = res as GetAllSchemasResponse[];
       this.scaffoldForm.controls["schema"].enable();
-      if (this.scaffoldForm.controls["isTable"]) {
+      if (this.isTable) {
         this.scaffoldForm.controls["table"].reset();
         this.scaffoldForm.controls["table"].disable();
       } else {
@@ -180,7 +178,7 @@ export class MssqlScaffoldComponent {
   }
 
   protected scaffold() {
-    if (this.scaffoldForm.controls["isTable"])
+    if (this.isTable)
       this.scaffoldTable();
     else
       this.scaffoldSP();
@@ -207,15 +205,16 @@ ${res.map((p) => `\tpublic ${MssqlScaffoldComponent.convertDataType(p.DataType)}
         rs = rs as GetSPReturnColumnsResponse[];
         this.csCode =
           `public class ${sp}Params {
-${ps.map((p) => `\tpublic ${MssqlScaffoldComponent.convertDataType(p.Type)}${p.Type ? '?' : ''} ${p.Parameter_name} { get; set; }\n`).reduce((a, b) => a + b)}}
+${ps.map((p) => `\tpublic ${MssqlScaffoldComponent.convertDataType(p.Type)}${p.Nullable ? '?' : ''} ${p.Parameter_name} { get; set; }\n`).reduce((a, b) => a + b)}}
 
 public class ${sp}Result {
-${rs.map((p) => `\tpublic ${MssqlScaffoldComponent.convertDataType(p.system_type_name)}${p.column ? '?' : ''} ${p.column} { get; set; }\n`).reduce((a, b) => a + b)}}`;
+${rs.map((p) => `\tpublic ${MssqlScaffoldComponent.convertDataType(p.system_type_name)}${p.Nullable ? '?' : ''} ${p.column} { get; set; }\n`).reduce((a, b) => a + b)}}`;
       });
     });
   }
 
   private static convertDataType(type: string): string {
+    type = type.replace(/\(\d+\)/gm,'');
     switch (type.toLowerCase()) {
       case "int":
         return "int";

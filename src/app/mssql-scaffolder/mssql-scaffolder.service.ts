@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MssqlService } from '../../services/mssql/mssql.service';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { GetColumnsResponse, GetSPParametersResponse, GetSPReturnColumnsResponse } from './mssql-scaffolder.model';
 import { ErrorResponse } from '../../services/mssql/mssql.model';
 
@@ -35,7 +35,7 @@ export class MssqlScaffolderService {
   getSPParameters(connection_id: string, dbName: string, schemaName: string, spName: string): Observable<GetSPParametersResponse[] | ErrorResponse> {
     const query = `
       SELECT  
-         TRIM(LEADING '@' FROM name) AS 'Parameter_name',  
+         name AS 'Parameter_name',  
          type_name(user_type_id) AS 'Type',  
          max_length AS 'Length',  
          CASE WHEN type_name(system_type_id) = 'uniqueidentifier' 
@@ -45,17 +45,25 @@ export class MssqlScaffolderService {
          parameter_id AS 'Param_order',  
          CONVERT(sysname, 
                  CASE WHEN system_type_id IN (35, 99, 167, 175, 231, 239)  
-                 THEN ServerProperty('collation') END) AS 'Collation'  
+                 THEN ServerProperty('collation') END) AS 'Collation',  
+		     is_nullable as 'Nullable'
       FROM sys.parameters 
       WHERE object_id = OBJECT_ID('${schemaName}.${spName}');
     `;
-    return this.mssql.executeQuery<GetSPParametersResponse>(connection_id, query, dbName);
+    return this.mssql.executeQuery<GetSPParametersResponse>(connection_id, query, dbName).pipe(
+      map(v => {
+        v = v as GetSPParametersResponse[];
+        for(let i =0;i<v.length;i++)
+          v[i].Parameter_name = v[i].Parameter_name.replace('@','');
+        return v;
+      })
+    );
   }
 
   // 7. Get all return columns and their types from an SP
   getSPReturnColumns(connection_id: string, dbName: string, schemaName: string, spName: string): Observable<GetSPReturnColumnsResponse[] | ErrorResponse> {
     const query = `
-      SELECT name AS 'column', system_type_name
+      SELECT name AS 'column', system_type_name, is_nullable as 'Nullable'
       FROM sys.dm_exec_describe_first_result_set_for_object(
         OBJECT_ID('${schemaName}.${spName}'), 
         NULL
