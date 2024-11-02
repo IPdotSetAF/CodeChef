@@ -7,7 +7,8 @@ import { AppComponent } from '../app/app.component';
 import { ConnectRequest, ConnectResponse, ErrorResponse, GetAllDatabasesResponse, GetAllSchemasResponse, GetStoredProceduresResponse, GetTablesResponse } from '../../services/mssql/mssql.model';
 import { MssqlScaffolderService } from './mssql-scaffolder.service';
 import { Meta } from '@angular/platform-browser';
-import { GetColumnsResponse } from './mssql-scaffolder.model';
+import { GetColumnsResponse, GetSPParametersResponse, GetSPReturnColumnsResponse } from './mssql-scaffolder.model';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-database-tools',
@@ -197,13 +198,21 @@ ${res.map((p) => `\tpublic ${MssqlScaffoldComponent.convertDataType(p.DataType)}
   }
 
   private scaffoldSP() {
-    this.scaffolder.getSPParameters(
-      this.connectionID,
-      this.scaffoldForm.controls["database"].value,
-      this.scaffoldForm.controls["schema"].value,
-      this.scaffoldForm.controls["sp"].value).subscribe(res => {
+    let db = this.scaffoldForm.controls["database"].value;
+    let sch = this.scaffoldForm.controls["schema"].value;
+    let sp = this.scaffoldForm.controls["sp"].value;
+    this.scaffolder.getSPParameters(this.connectionID, db, sch, sp).subscribe(ps => {
+      ps = ps as GetSPParametersResponse[];
+      this.scaffolder.getSPReturnColumns(this.connectionID, db, sch, sp).subscribe(rs => {
+        rs = rs as GetSPReturnColumnsResponse[];
+        this.csCode =
+          `public class ${sp}Params {
+${ps.map((p) => `\tpublic ${MssqlScaffoldComponent.convertDataType(p.Type)}${p.Type ? '?' : ''} ${p.Parameter_name} { get; set; }\n`).reduce((a, b) => a + b)}}
 
+public class ${sp}Result {
+${rs.map((p) => `\tpublic ${MssqlScaffoldComponent.convertDataType(p.system_type_name)}${p.column ? '?' : ''} ${p.column} { get; set; }\n`).reduce((a, b) => a + b)}}`;
       });
+    });
   }
 
   private static convertDataType(type: string): string {
