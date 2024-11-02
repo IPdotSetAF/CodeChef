@@ -61,7 +61,7 @@
                 <div class="d-flex justify-content-end">
                     @switch(status){
                     @case (connectionStatus.disconnected) {
-                    <button class="btn btn-success">Connect</button>
+                    <button class="btn btn-success">Connect <i class="bi bi-link-45deg"></i></button>
                     }
                     @case (connectionStatus.connected) {
                     <button class="btn btn-danger">Disconnect</button>
@@ -106,7 +106,7 @@
             <br />
             <div class="row">
                 <div class="col-md-3 d-flex align-items-center">
-                    <div class="bi bi-diagram-3 fs-5 me-1"></div>
+                    <div class="bi bi-crosshair fs-5 me-1"></div>
                     <label class="form-label m-0">Target:</label>
                 </div>
                 <div class="col-md-9 d-flex gap-2">
