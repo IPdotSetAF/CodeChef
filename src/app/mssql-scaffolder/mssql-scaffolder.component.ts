@@ -82,14 +82,13 @@ export class MssqlScaffolderComponent {
 
   private initForm() {
     this.scaffoldForm.controls["database"].valueChanges.subscribe(v => {
-      if (v.length == 0)
+      if (!v || v == '')
         return;
       this.getSchemas();
-      this.scaffoldForm.controls["schema"].enable();
     });
 
     this.scaffoldForm.controls["schema"].valueChanges.subscribe(v => {
-      if (v.length == 0)
+      if (!v || v == '')
         return;
       this.scaffoldForm.controls["isTable"].enable();
       if (this.isTable)
@@ -103,15 +102,20 @@ export class MssqlScaffolderComponent {
     this.scaffoldForm.addControl("table", c);
 
     this.scaffoldForm.controls["isTable"].valueChanges.subscribe(v => {
+      if (this.isTable === v)
+        return;
+      const sc = this.scaffoldForm.getRawValue();
       this.isTable = v;
       if (v) {
-        this.getTables();
         this.scaffoldForm.removeControl("sp");
         this.scaffoldForm.addControl("table", new FormControl("", { nonNullable: true, validators: [Validators.required] }));
+        if (sc.database && sc.database != '' && sc.schema && sc.schema != '')
+          this.getTables();
       } else {
-        this.getSPs();
         this.scaffoldForm.removeControl("table");
         this.scaffoldForm.addControl("sp", new FormControl("", { nonNullable: true, validators: [Validators.required] }));
+        if (sc.database && sc.database != '' && sc.schema && sc.schema != '')
+          this.getSPs();
       }
     });
 
@@ -165,21 +169,24 @@ export class MssqlScaffolderComponent {
   }
 
   protected getSchemas() {
-    this.mssql.getAllSchemas(this.connectionID, this.scaffoldForm.controls["database"].value).subscribe((res) => {
+    const sc = this.scaffoldForm.getRawValue();
+    this.mssql.getAllSchemas(this.connectionID, sc.database).subscribe((res) => {
       this.Schemas = res as GetAllSchemasResponse[];
       this.scaffoldForm.controls["schema"].enable();
     });
   }
 
   protected getTables() {
-    this.mssql.getTables(this.connectionID, this.scaffoldForm.controls["database"].value, this.scaffoldForm.controls["schema"].value).subscribe((res) => {
+    const sc = this.scaffoldForm.getRawValue();
+    this.mssql.getTables(this.connectionID, sc.database, sc.schema).subscribe((res) => {
       this.Tables = res as GetTablesResponse[];
       this.scaffoldForm.controls["table"].enable();
     });
   }
 
   protected getSPs() {
-    this.mssql.getStoredProcedures(this.connectionID, this.scaffoldForm.controls["database"].value, this.scaffoldForm.controls["schema"].value).subscribe((res) => {
+    const sc = this.scaffoldForm.getRawValue();
+    this.mssql.getStoredProcedures(this.connectionID, sc.database, sc.schema).subscribe((res) => {
       this.Sps = res as GetStoredProceduresResponse[];
       this.scaffoldForm.controls["sp"].enable();
     });
