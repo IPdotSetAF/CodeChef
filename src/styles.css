@@ -29,6 +29,14 @@
     animation: gradient-move 30s ease infinite;
 }
 
+.fs-md{
+    font-size: smaller;
+}
+
+.fs-sm{
+    font-size: small;
+}
+
 @keyframes gradient-move {
     0%{background-position:0% 50%}
     50%{background-position:100% 50%}

@@ -1,0 +1,209 @@
+<div class="container-fluid p-4">
+    <div class="row">
+        <h2>MSSQL Scaffolder</h2>
+        <p>Scaffold C# models code based on database tables or stored procedures.</p>
+        <p>This tool needs a proxy server to connect to your SQL server, you should <a [routerLink]="['/downloads']"
+                routerLinkActive="router-link-active">download the proxy server</a> and simply run it.</p>
+    </div>
+    <br />
+    <div class="row">
+        <form class="col-md-6" [formGroup]="dbSettings" (submit)="connect()">
+            <div class="row">
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="bi bi-hdd-network fs-5 me-1"></div>
+                    <label class="form-label m-0" for="proxy">Proxy server:</label>
+                </div>
+                <div class="col-md-9">
+                    <input id="proxy" type="text" class="form-control" formControlName="proxy" [@connection]="status" />
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="bi bi-database fs-5 me-1"></div>
+                    <label class="form-label m-0" for="db-server">Database server:</label>
+                </div>
+                <div class="col-md-9">
+                    <input id="db-server" type="text" class="form-control" formControlName="server"
+                        [@connection]="status" />
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="bi bi-person fs-5 me-1"></div>
+                    <label class="form-label m-0" for="db-username">Username:</label>
+                </div>
+                <div class="col-md-9">
+                    <input id="db-username" type="text" class="form-control" formControlName="username"
+                        [@connection]="status" />
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="bi bi-key fs-5 me-1"></div>
+                    <label class="form-label m-0" for="db-password">Password:</label>
+                </div>
+                <div class="col-md-9">
+                    <input id="db-password" type="password" class="form-control" formControlName="password"
+                        [@connection]="status" />
+                </div>
+            </div>
+            <br />
+            @if(connectionError){
+            <div class="row">
+                <p class="flex-fill text-danger fs-sm">{{connectionError}}</p>
+                <br />
+            </div>
+            }
+            <div class="row">
+                <div class="d-flex justify-content-end">
+                    @switch(status){
+                    @case (connectionStatus.disconnected) {
+                    <button class="btn btn-success">Connect <i class="bi bi-link-45deg"></i></button>
+                    }
+                    @case (connectionStatus.connected) {
+                    <button class="btn btn-danger">Disconnect</button>
+                    }
+                    @case (connectionStatus.connecting) {
+                    <button type="button" class="btn btn-warning">Connecting <i class="spinner-border spinner-border-sm"
+                            role="status"></i></button>
+                    }
+                    }
+                </div>
+            </div>
+            <br />
+        </form>
+        <form class="col-md-6" [formGroup]="scaffoldForm" (submit)="scaffold()">
+            <div class="row">
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="bi bi-database fs-5 me-1"></div>
+                    <label class="form-label m-0" for="sc-database">Catalog:</label>
+                </div>
+                <div class="col-md-9">
+                    <select id="sc-database" class="form-control mt-1" formControlName="database">
+                        @for(item of Dbs;track $index){
+                        <option [ngValue]="item.name">{{item.name}}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="bi bi-diagram-3 fs-5 me-1"></div>
+                    <label class="form-label m-0" for="sc-schema">Schema:</label>
+                </div>
+                <div class="col-md-9">
+                    <select id="sc-schema" class="form-control mt-1" formControlName="schema">
+                        @for(item of Schemas;track $index){
+                        <option [ngValue]="item.SCHEMA_NAME">{{item.SCHEMA_NAME}}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="bi bi-crosshair fs-5 me-1"></div>
+                    <label class="form-label m-0">Target:</label>
+                </div>
+                <div class="col-md-9 d-flex gap-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="isTable" id="sc-rd-table" [value]="true"
+                            formControlName="isTable" />
+                        <label class="form-check-label bi bi-table" for="sc-rd-table"> Table</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="isTable" id="sc-rd-sp" [value]="false"
+                            formControlName="isTable" />
+                        <label class="form-check-label bi bi-bar-chart-steps" for="sc-rd-sp"> Stored Procedure</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-end">
+                <div class="col-md-9">
+                    @if(isTable){
+                    <select id="sc-table" class="form-control mt-1" formControlName="table">
+                        @for(item of Tables;track $index){
+                        <option [ngValue]="item.name">{{item.name}}</option>
+                        }
+                    </select>
+                    }@else {
+                    <select id="sc-sp" class="form-control mt-1" formControlName="sp">
+                        @for(item of Sps;track $index){
+                        <option [ngValue]="item.SPECIFIC_NAME">{{item.SPECIFIC_NAME}}</option>
+                        }
+                    </select>
+                    }
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-success">Scaffold <i class="bi bi-caret-right"></i></button>
+                </div>
+            </div>
+            <br />
+        </form>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <label for="csharp-code" class="form-label">C# Models:</label>
+            <div class="code-border" [@valueChangeAnim]="codeFlip">
+                <code-area innerStyle="min-height:500px;" [(code)]="csCode" language="csharp" readonly="true" />
+            </div>
+            <br />
+        </div>
+    </div>
+
+    <br />
+
+    <div class="row">
+        <div class="col-12">
+            <p>Model scaffolding is a software development technique that automates the generation of foundational code,
+                often based on the structure of an underlying data model. In applications with databases, scaffolding
+                tools create classes, methods, and configurations to bridge the application logic and the database. This
+                approach saves time, reduces human error, and ensures a consistent structure across similar parts of a
+                codebase. Model scaffolding is particularly useful in environments where the database schema changes
+                frequently or the code needs to adapt dynamically to a database&#39;s structure. Developers can then
+                focus on writing custom business logic rather than the repetitive creation of database models and
+                mappings.</p>
+            <p>Database scaffolding tools typically use metadata from the database to dynamically construct these
+                structures, allowing developers to visualize and work with their data as objects without manually coding
+                the intricate details of each entity, relationship, or operation.</p>
+            <p>Automated scaffolding for table models and stored procedures is essential to streamline both backend and
+                frontend development. As database schemas evolve, maintaining consistent input and output models for
+                stored procedures and tables becomes increasingly complex. Automated scaffolding tools help developers
+                by generating these models in a structured way based on the database schema, enforcing consistency and
+                reducing the likelihood of mismatches between database structures and application logic. For example, if
+                a stored procedure has defined inputs and outputs, scaffolding tools can create standardized models for
+                data input and output that are easy to integrate with the application code. This process eliminates the
+                need for repetitive, error-prone manual coding, making it easier to maintain data integrity across the
+                entire system.</p>
+            <p>With this online tool, scaffolding a single table or stored procedure at a time becomes incredibly
+                streamlined, providing a tailored and lightweight approach to managing database models. This tool
+                empowers developers to generate precise data access layers for individual database components without
+                overwhelming the project with excessive code. By targeting one table or stored procedure at a time, your
+                tool brings precision to scaffolding, allowing teams to focus on high-priority elements as they evolve
+                and reducing the complexities associated with massive, bulk-generated codebases.</p>
+            <p>Integrating <strong>Dapper</strong> for data access is an inspired choice in this setup. Known for its
+                high-performance micro-ORM capabilities, Dapper enables direct interaction with the database, offering
+                rapid, efficient query execution. Your scaffolding tool leverages Dapper’s lightweight mapping between
+                tables, stored procedures, and C# models, producing a sleek data access layer that avoids the overhead
+                of traditional ORMs. This approach supports developers in maintaining a lean codebase and enhances code
+                readability and performance, especially in high-throughput applications. Dapper’s ability to handle
+                complex SQL while remaining minimalistic aligns perfectly with your tool&#39;s objective of fast, clear,
+                and effective scaffolding.</p>
+            <p>In today’s fast-paced development environments, having a tool to automatically generate input and output
+                models for stored procedures is essential. Your tool generates standardized models for <strong>stored
+                    procedures’ inputs and outputs</strong>, enhancing consistency across application layers. This is
+                crucial for applications that rely heavily on data integrity and fast query execution, as it minimizes
+                manual effort and guards against mismatches between the application and database structures. By doing
+                so, it not only improves the maintainability of the codebase but also accelerates development cycles,
+                freeing up time for innovation and refinement in other areas of the project.</p>
+        </div>
+    </div>
+</div>

@@ -1,18 +1,29 @@
 <div id="header">
     <div class="d-flex h-100">
         <div class="col-4 h-100">
-            <a class="w-100 h-100 d-flex justify-content-start gap-2 align-items-center ps-2"
-                [routerLink]="['/','home']">
-                <img src="code-chef.svg" />
+            <a class="w-100 h-100 d-flex justify-content-start gap-2 align-items-center ps-2" [routerLink]="['/']">
+                <img class="img-header" src="code-chef.svg" />
                 <h1 class="fs-3 m-0">CodeChef</h1>
             </a>
         </div>
         <div class="col-4 h-100 d-flex justify-content-center">
-
+            <div class="dropdown">
+                <a class="btn btn-header btn-hover dropdown-toggle" role="button" id="dropdownMenuLink"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Tools
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <li><a class="dropdown-item" [routerLink]="['/cs2ts']">C# to TS Converter</a></li>
+                    <li><a class="dropdown-item" [routerLink]="['/md2html']">Markdown to HTML Converter</a></li>
+                    <li><a class="dropdown-item" [routerLink]="['/serialized']">Serialized Tool</a></li>
+                    <li><a class="dropdown-item" [routerLink]="['/mssqlscaffold']">MSSQL Scaffolder</a></li>
+                </ul>
+            </div>
+            <a class="btn btn-header btn-hover" [routerLink]="['/downloads']">Downloads</a>
         </div>
-        <div class="col-4 h-100 d-flex align-items-center justify-content-end pe-2">
+        <div class="col-4 h-100 d-flex align-items-center justify-content-end p-2 gap-2">
             <a class="btn-header-round btn-hover btn-circle" href="https://ipdotsetaf.ir" title="IPdotSetAF">
-                <img id="ipaf" src="ipaf.svg" />
+                <img id="ipaf" class="img-header" src="ipaf.svg" />
             </a>
             <a class="bi bi-github fs-2 btn-header-round btn-hover btn-circle"
                 href="https://github.com/IPdotSetAF/CodeChef" title="CodeChef Github"></a>

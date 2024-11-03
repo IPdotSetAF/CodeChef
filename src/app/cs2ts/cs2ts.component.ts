@@ -110,6 +110,7 @@ export class Cs2tsComponent implements AfterContentInit {
         return "bigint";
       case "char":
       case "string":
+      case "guid":
         return "string";
       case "datetime":
       case "dateonly":

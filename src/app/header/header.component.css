@@ -10,7 +10,7 @@
     z-index: 2;
 }
 
-img {
+.img-header {
     height: 60%;
 }
 
@@ -25,4 +25,31 @@ a {
 
 #ipaf{
     filter: brightness(0%) invert();
+}
+
+.btn-header {
+    text-decoration: none;
+    color: var(--blue);
+    height: 100%;
+    align-content: center;
+    padding: 0 15px;
+    position: relative;
+    border: none !important;
+}
+
+.btn-header::before{
+    content: "";
+    position: absolute;
+    height: 0px;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    transition: height 0.2s ease-in-out;
+    background: linear-gradient(135deg, #ff0340 0%, 57.99%, #163af7 100%);
+    background-size: 500% 500%;
+    animation: gradient-move 30s ease infinite;
+}
+
+.btn-header:hover::before{
+    height: 3px;
 }
