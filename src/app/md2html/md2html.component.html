@@ -1,0 +1,61 @@
+<div class="container-fluid p-4">
+    <div class="row">
+        <h2>Markdown to HTML Converter</h2>
+        <p>Convert Markdown code to HTML code with a click!</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <label class="form-label">Markdown:</label>
+            <div class="code-border">
+                <code-area innerStyle="min-height:500px;" [(code)]="mdCode" (codeChange)="inputDebouncer.next(mdCode)"
+                    language="markdown" />
+            </div>
+            <br />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">HTML:</label>
+            <div class="code-border" [@valueChangeAnim]="status">
+                <code-area innerStyle="min-height:500px;" [(code)]="htmlCode" language="markup" readonly="true" />
+            </div>
+            <br />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center">
+            <button class="btn btn-success" (click)="convert()">Convert <i class="bi bi-caret-right"></i></button>
+        </div>
+    </div>
+
+    <br />
+
+    <div class="row">
+        <div class="col-12">
+            <p><strong>HTML (HyperText Markup Language)</strong> is the foundational language for structuring content on
+                the web. It uses a system of tags and attributes to define elements on a webpage, such as headings,
+                paragraphs, images, links, and more. HTML provides structure and semantics, allowing browsers to
+                interpret and render the content appropriately. For example, using <code>&lt;h1&gt;</code> for headers
+                and <code>&lt;p&gt;</code> for paragraphs helps search engines and assistive technologies understand the
+                content’s hierarchy. HTML is versatile, highly customizable, and well-suited for complex layouts,
+                multimedia, and web application interactivity, making it essential for building modern websites and
+                applications.</p>
+            <p><strong>Markdown</strong>, on the other hand, is a lightweight markup language designed for readability
+                and ease of use. With its simple syntax, Markdown is ideal for writing content in plain text that can be
+                easily converted to formatted HTML or other formats. It was initially created for web writers who wanted
+                a quick, accessible way to structure content without needing to remember extensive HTML syntax.
+                Markdown&#39;s syntax includes elements like <code>#</code> for headings, <code>*</code> for lists, and
+                <code>**</code> for bold text, making it intuitive and fast for creating readable, structured content.
+                Its popularity has grown widely, especially in documentation, blogging, and collaborative platforms like
+                GitHub, where simplicity and clarity are key.</p>
+            <p><strong>Conversion between HTML and Markdown</strong> is common because each serves distinct purposes in
+                different contexts. Converting Markdown to HTML is a straightforward way to take plain text content and
+                render it for the web, making it possible to publish articles, documentation, or blog posts without
+                complex coding. Conversely, converting HTML to Markdown can be helpful when transferring web content to
+                environments where Markdown is preferred, such as in GitHub repositories, certain content management
+                systems, or collaboration tools. The conversion process allows writers and developers to leverage
+                Markdown’s simplicity for writing and editing while utilizing HTML’s formatting flexibility for web
+                display. </p>
+        </div>
+    </div>
+</div>
