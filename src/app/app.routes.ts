@@ -8,7 +8,7 @@ import { DownloadsComponent } from './downloads/downloads.component';
 export const routes: Routes = [
     { path: '', redirectTo: "home", pathMatch: "full" },
 
-    { path: 'home', title: "Home • CodeChef", component: HomeComponent },
+    { path: 'home', title: "Home • CodeChef", component: HomeComponent, data: { header: false } },
     { path: 'cs2ts', title: "C# to TS • CodeChef", component: Cs2tsComponent },
     { path: 'mssqlscaffold', title: "MSSQL Scaffolder • CodeChef", component: MssqlScaffolderComponent },
     { path: 'downloads', title: "Downloads • CodeChef", component: DownloadsComponent },

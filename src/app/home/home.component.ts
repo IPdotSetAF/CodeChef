@@ -6,7 +6,8 @@ import { RouterLink } from '@angular/router';
   selector: 'app-home',
   standalone: true,
   imports: [RouterLink],
-  templateUrl: './home.component.html'
+  templateUrl: './home.component.html',
+  styleUrl: '../header/header.component.css'
 })
 export class HomeComponent {
   constructor(meta:Meta){
