@@ -141,7 +141,10 @@ export class MssqlScaffolderComponent {
         error: (err) => {
           this.status = this.connectionStatus.disconnected;
           this.dbSettings.enable();
-          this.connectionError = (err.error as ErrorResponse).detail;
+          if (err.status != 0)
+            this.connectionError = (err.error as ErrorResponse).detail;
+          else
+            this.connectionError = "Could not connect to the MSSQL proxy server. Make sure the MSSQL proxy server is running and its address is configured properly."
         }
       });
     } else
