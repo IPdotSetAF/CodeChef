@@ -232,7 +232,7 @@ ${rs.map((p) => `\tpublic ${MssqlScaffolderComponent.convertDataType(p.system_ty
   }
 
   private static convertDataType(type: string): string {
-    type = type.replace(/\(\d+\)/gm, '');
+    type = type.replace(/\(.+\)/gm, '');
     switch (type.toLowerCase()) {
       case "int":
         return "int";
