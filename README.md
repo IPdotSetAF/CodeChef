@@ -20,6 +20,10 @@ CodeChef is an online developer tool that aims to eliminate repetitive developer
 
 You can [Go to Live Website](https://codechef.ipdotsetaf.ir) or Run the website locally.
 
+### MSSQL Proxy Server
+
+If you want to use any of the tools that need to communicate with MSSQL database, you need to download and run the proxy server, you can either download the binaries for your machine from the [**Release**](https://github.com/IPdotSetAF/CodeChef/releases) section or download the proxy [**Source Code**](https://github.com/IPdotSetAF/CodeChef/tree/main/CodeChefDatabaseProxy) and run it in your python environment.
+
 ## Running CodeChef Locally
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.9.
@@ -36,6 +40,19 @@ Run `npm run build` or `ng build` to build the project. The build artifacts will
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
+## Running MSSQL Proxy Server
+
+### From precompiled binaries
+Just download the proper version from the release section and run it!!
+
+### From Source Code
+Follow these steps if you want to Run the proxy server from the python source code: 
+1. Download the source code
+   - either clone this repo `git clone https://github.com/IPdotSetAF/CodeChef`
+   - or [Download this Repo as ZIP](https://github.com/IPdotSetAF/CodeChef/archive/refs/heads/master.zip) and extract it.
+2. `cd CodeChefDatabaseProxy`
+3. `pip install -r requirements.txt`
+4. `python proxy.py`
 
 ## TODO:
 - **Markdown preview** in Markdown to HTML Converter
