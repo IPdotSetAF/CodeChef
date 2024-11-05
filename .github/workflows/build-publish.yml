@@ -10,11 +10,13 @@ permissions:
 
 jobs:
   tests:
-    uses: ./.github/workflows/main.yml
+    uses: ./.github/workflows/build-test.yml
+  release:
+    uses: ./.github/workflows/create-release.yml
   binaries:
     uses: ./.github/workflows/build-binaries.yml
   deploy:
-    needs: [tests, binaries]
+    needs: [tests, release, binaries]
     environment:
       name: "github-pages"
       url: ${{ steps.build-publish.outputs.page_url }}
