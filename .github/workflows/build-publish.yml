@@ -1,7 +1,7 @@
+name: Create Publish
+
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_call:
 
 permissions:
   contents: read
@@ -11,12 +11,9 @@ permissions:
 jobs:
   tests:
     uses: ./.github/workflows/build-test.yml
-  release:
-    uses: ./.github/workflows/create-release.yml
-  binaries:
-    uses: ./.github/workflows/build-binaries.yml
+
   deploy:
-    needs: [tests, release, binaries]
+    needs: [tests]
     environment:
       name: "github-pages"
       url: ${{ steps.build-publish.outputs.page_url }}
