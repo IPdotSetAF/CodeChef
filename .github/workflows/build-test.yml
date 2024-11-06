@@ -9,7 +9,6 @@ on:
 
 jobs:
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -17,11 +16,11 @@ jobs:
 
     name: Node ${{ matrix.node }} sample
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Building rules and tests
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
       - run: npm ci
-      - run: npm run build
       - run: npm run test-ci
+      - run: npm run build

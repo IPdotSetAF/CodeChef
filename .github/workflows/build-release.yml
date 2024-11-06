@@ -1,0 +1,70 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  publish:
+    uses: ./.github/workflows/build-publish.yml
+
+  release:
+    needs: [publish, build-linux, build-windows]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - run: tar -czf mssql-proxy-${{ github.ref_name }}-source.tar.gz Tools/mssql-proxy
+    - uses: actions/download-artifact@v4
+      with:
+        pattern: build-*
+        path: ./
+        merge-multiple: true
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+        generate_release_notes: true
+        files: |
+          mssql-proxy-${{ github.ref_name }}-source.tar.gz
+          mssql-proxy-${{ github.ref_name }}-linux.tar.gz
+          mssql-proxy-${{ github.ref_name }}-windows.zip
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: 3.11.4
+    - run: pip install -r Tools/mssql-proxy/requirements.txt pyinstaller
+    - run: pyinstaller --onefile mssql-proxy.py
+      working-directory: Tools/mssql-proxy
+    - run: tar -czf mssql-proxy-${{ github.ref_name }}-linux.tar.gz Tools/mssql-proxy/dist
+    - uses: actions/upload-artifact@v4
+      with:
+        name: build-linux
+        path: mssql-proxy-${{ github.ref_name }}-linux.tar.gz
+   
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: 3.11.4
+    - run: pip install -r Tools/mssql-proxy/requirements.txt pyinstaller
+    - run: pyinstaller --onefile mssql-proxy.py
+      working-directory: Tools/mssql-proxy
+    - run: tar -a -c -f mssql-proxy-${{ github.ref_name }}-windows.zip Tools/mssql-proxy/dist
+    - uses: actions/upload-artifact@v4
+      with:
+        name: build-windows
+        path: mssql-proxy-${{ github.ref_name }}-windows.zip
+
+ # build-macos:

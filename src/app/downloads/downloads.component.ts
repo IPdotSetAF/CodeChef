@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AppComponent } from '../app/app.component';
 
 @Component({
   selector: 'app-downloads',
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
   templateUrl: './downloads.component.html'
 })
 export class DownloadsComponent {
-
+  protected version:string = `v${AppComponent.version}`;
 }
