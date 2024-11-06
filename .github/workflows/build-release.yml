@@ -19,9 +19,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v4.2.2
+      uses: actions/checkout@v4
     - run: tar -czf mssql-proxy-${{ github.ref_name }}-source.tar.gz Tools/mssql-proxy
-    - uses: actions/download-artifact@v4.4.3
+    - uses: actions/download-artifact@v4
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
@@ -34,15 +34,15 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4.2.2
-    - uses: actions/setup-python@v5.3.0
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: 3.11.4
     - run: pip install -r Tools/mssql-proxy/requirements.txt pyinstaller
     - run: pyinstaller --onefile mssql-proxy.py
       working-directory: Tools/mssql-proxy
     - run: tar -czf mssql-proxy-${{ github.ref_name }}-linux.tar.gz Tools/mssql-proxy/dist
-    - uses: actions/upload-artifact@v4.4.3
+    - uses: actions/upload-artifact@v4
       with:
         name: build-linux
         path: mssql-proxy-${{ github.ref_name }}-linux.tar.gz
@@ -50,15 +50,15 @@ jobs:
   build-windows:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v4.2.2
-    - uses: actions/setup-python@v5.3.0
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: 3.11.4
     - run: pip install -r Tools/mssql-proxy/requirements.txt pyinstaller
     - run: pyinstaller --onefile mssql-proxy.py
       working-directory: Tools/mssql-proxy
     - run: tar -a -c -f mssql-proxy-${{ github.ref_name }}-windows.zip Tools/mssql-proxy/dist
-    - uses: actions/upload-artifact@v4.4.3
+    - uses: actions/upload-artifact@v4
       with:
         name: build-windows
         path: mssql-proxy-${{ github.ref_name }}-windows.zip
