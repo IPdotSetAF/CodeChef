@@ -15,32 +15,23 @@ jobs:
     uses: ./.github/workflows/build-publish.yml
 
   release:
-    needs: [publish]
+    needs: [publish, build-linux, build-windows]
     runs-on: ubuntu-latest
-    outputs: 
-      upload_url: ${{ steps.gh_release.outputs.upload_url }}
     steps:
     - name: Checkout
       uses: actions/checkout@v4.2.2
-    
+    - run: tar -czf mssql-proxy-${{ github.ref_name }}-source.tar.gz Tools/mssql-proxy
+    - uses: actions/download-artifact@v4.4.3
     - name: Release
-      id: gh_release
-     uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v2
       with:
         generate_release_notes: true
-
-    - run: tar -czf code.tar.gz Tools/mssql-proxy
-    - uses: actions/upload-release-asset@v1
-      env: 
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.gh_release.outputs.upload_url }}
-        asset_path: code.tar.gz
-        asset_name: mssql-proxy-source.tar.gz
-        asset_content_type: application/tar+gzip
+        files: |
+          mssql-proxy-${{ github.ref_name }}-source.tar.gz
+          mssql-proxy-${{ github.ref_name }}-linux.tar.gz
+          mssql-proxy-${{ github.ref_name }}-windows.zip
 
   build-linux:
-    needs: [release]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4.2.2
@@ -50,18 +41,13 @@ jobs:
     - run: pip install -r Tools/mssql-proxy/requirements.txt pyinstaller
     - run: pyinstaller --onefile mssql-proxy.py
       working-directory: Tools/mssql-proxy
-    - run: tar -czf dist.tar.gz Tools/mssql-proxy/dist
-    - uses: actions/upload-release-asset@v1
-      env: 
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - run: tar -czf mssql-proxy-${{ github.ref_name }}-linux.tar.gz Tools/mssql-proxy/dist
+    - uses: actions/upload-artifact@v4.4.3
       with:
-        upload_url: ${{ needs.release.outputs.upload_url }}
-        asset_path: dist.tar.gz
-        asset_name: mssql-proxy-linux.tar.gz
-        asset_content_type: application/tar+gzip
-
+        name: build-linux
+        path: mssql-proxy-${{ github.ref_name }}-linux.tar.gz
+   
   build-windows:
-    needs: [release]
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4.2.2
@@ -71,14 +57,10 @@ jobs:
     - run: pip install -r Tools/mssql-proxy/requirements.txt pyinstaller
     - run: pyinstaller --onefile mssql-proxy.py
       working-directory: Tools/mssql-proxy
-    - run: tar -a -c -f dist.zip Tools/mssql-proxy/dist
-    - uses: actions/upload-release-asset@v1
-      env: 
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - run: tar -a -c -f mssql-proxy-${{ github.ref_name }}-windows.zip Tools/mssql-proxy/dist
+    - uses: actions/upload-artifact@v4.4.3
       with:
-        upload_url: ${{ needs.release.outputs.upload_url }}
-        asset_path: dist.zip
-        asset_name: mssql-proxy-windows.zip
-        asset_content_type: application/zip
+        name: build-windows
+        path: mssql-proxy-${{ github.ref_name }}-windows.zip
 
  # build-macos:
