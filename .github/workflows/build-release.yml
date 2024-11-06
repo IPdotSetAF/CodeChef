@@ -20,36 +20,38 @@ jobs:
     outputs: 
       upload_url: ${{ steps.gh_release.outputs.upload_url }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4.2.2
-      - name: Release
-        id: gh_release
-        uses: softprops/action-gh-release@v2
-        with:
-          generate_release_notes: true
-              
-  build:
-    needs: [release]
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: ['windows-latest', 'ubuntu-latest']
+    - name: Checkout
+      uses: actions/checkout@v4.2.2
+    
+    - name: Release
+      id: gh_release
+     uses: softprops/action-gh-release@v2
+      with:
+        generate_release_notes: true
 
+    - run: tar -czf code.tar.gz Tools/mssql-proxy
+    - uses: actions/upload-release-asset@v1
+      env: 
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.gh_release.outputs.upload_url }}
+        asset_path: code.tar.gz
+        asset_name: mssql-proxy-source.tar.gz
+        asset_content_type: application/tar+gzip
+
+  build-linux:
+    needs: [release]
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4.2.2
     - uses: actions/setup-python@v5.3.0
       with:
         python-version: 3.11.4
-    - run: pip install -r requirements.txt pyinstaller
-      working-directory: Tools/mssql-proxy
+    - run: pip install -r Tools/mssql-proxy/requirements.txt pyinstaller
     - run: pyinstaller --onefile mssql-proxy.py
       working-directory: Tools/mssql-proxy
-
     - run: tar -czf dist.tar.gz Tools/mssql-proxy/dist
-      if: contains(${{ matrix.os }}, 'linux')
     - uses: actions/upload-release-asset@v1
-      if: contains(${{ matrix.os }}, 'linux')
       env: 
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -58,10 +60,19 @@ jobs:
         asset_name: mssql-proxy-linux.tar.gz
         asset_content_type: application/tar+gzip
 
+  build-windows:
+    needs: [release]
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4.2.2
+    - uses: actions/setup-python@v5.3.0
+      with:
+        python-version: 3.11.4
+    - run: pip install -r Tools/mssql-proxy/requirements.txt pyinstaller
+    - run: pyinstaller --onefile mssql-proxy.py
+      working-directory: Tools/mssql-proxy
     - run: tar -a -c -f dist.zip Tools/mssql-proxy/dist
-      if: contains(${{ matrix.os }}, 'windows')
     - uses: actions/upload-release-asset@v1
-      if: contains(${{ matrix.os }}, 'windows')
       env: 
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -69,3 +80,5 @@ jobs:
         asset_path: dist.zip
         asset_name: mssql-proxy-windows.zip
         asset_content_type: application/zip
+
+ # build-macos:
