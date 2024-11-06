@@ -41,19 +41,31 @@ jobs:
     - uses: actions/setup-python@v5.3.0
       with:
         python-version: 3.11.4
-    - run: pip install -r CodeChefDatabaseProxy/requirements.txt pyinstaller
-    - run: pyinstaller --onefile proxy.py
-      working-directory: CodeChefDatabaseProxy
-    - uses: montudor/action-zip@v1.0.0
-      with:
-        args: zip -qq -r proxy.zip CodeChefDatabaseProxy/dist
+    - run: pip install -r requirements.txt pyinstaller
+      working-directory: Tools/mssql-proxy
+    - run: pyinstaller --onefile mssql-proxy.py
+      working-directory: Tools/mssql-proxy
+
+    - run: tar -czf dist.tar.gz Tools/mssql-proxy/dist
+      if: contains(${{ matrix.os }}, 'linux')
     - uses: actions/upload-release-asset@v1
+      if: contains(${{ matrix.os }}, 'linux')
       env: 
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ needs.release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: proxy.zip
-        asset_name: proxy-${{ matrix.os }}.zip
+        upload_url: ${{ needs.release.outputs.upload_url }}
+        asset_path: dist.tar.gz
+        asset_name: proxy-linux.tar.gz
+        asset_content_type: application/tar+gzip
+
+    - run: tar -a -c -f dist.zip Tools/mssql-proxy/dist
+      if: contains(${{ matrix.os }}, 'windows')
+    - uses: actions/upload-release-asset@v1
+      if: contains(${{ matrix.os }}, 'windows')
+      env: 
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.release.outputs.upload_url }}
+        asset_path: dist.zip
+        asset_name: proxy-windows.zip
         asset_content_type: application/zip
-
-
