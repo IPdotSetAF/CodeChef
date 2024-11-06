@@ -8,5 +8,5 @@ import { AppComponent } from '../app/app.component';
   templateUrl: './downloads.component.html'
 })
 export class DownloadsComponent {
-  protected version:string = AppComponent.version;
+  protected version:string = `v${AppComponent.version}`;
 }
