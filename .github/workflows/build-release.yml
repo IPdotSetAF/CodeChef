@@ -55,7 +55,7 @@ jobs:
       with:
         upload_url: ${{ needs.release.outputs.upload_url }}
         asset_path: dist.tar.gz
-        asset_name: proxy-linux.tar.gz
+        asset_name: mssql-proxy-linux.tar.gz
         asset_content_type: application/tar+gzip
 
     - run: tar -a -c -f dist.zip Tools/mssql-proxy/dist
@@ -67,5 +67,5 @@ jobs:
       with:
         upload_url: ${{ needs.release.outputs.upload_url }}
         asset_path: dist.zip
-        asset_name: proxy-windows.zip
+        asset_name: mssql-proxy-windows.zip
         asset_content_type: application/zip
