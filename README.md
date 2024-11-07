@@ -18,7 +18,7 @@ CodeChef is an online developer tool that aims to eliminate repetitive developer
 
 ## Usage
 
-You can [Go to Live Website](https://codechef.ipdotsetaf.ir) or Run the website locally.
+You can [**Go to Live Website**](https://codechef.ipdotsetaf.ir) or Run the website locally.
 
 ### MSSQL Proxy Server
 
@@ -55,6 +55,7 @@ Follow these steps if you want to Run the proxy server from the Python source co
 - **Markdown preview** in Markdown to HTML Converter
 - MSSQL **Diff Tool**
 - MSSQL **Search Tool**
+- MSSQL **Bulk Scaffolder**
 
 ## Contribution
 - You can open Issues for any bug report or feature request.
