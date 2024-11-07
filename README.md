@@ -38,19 +38,16 @@ Run `npm run build` or `ng build` to build the project. The build artifacts will
 
 ### Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run `npm run test` or `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
 ## Running MSSQL Proxy Server
 
 ### From precompiled binaries
-Just download the proper version from the release section and run it!!
+Just download the proper version from the [release section](https://github.com/IPdotSetAF/CodeChef/releases) and run it!!
 
 ### From Source Code
-Follow these steps if you want to Run the proxy server from the python source code: 
-1. Download the source code
-   - either clone this repo `git clone https://github.com/IPdotSetAF/CodeChef`
-   - or [Download this Repo as ZIP](https://github.com/IPdotSetAF/CodeChef/archive/refs/heads/master.zip) and extract it.
-2. `cd CodeChefDatabaseProxy`
+Follow these steps if you want to Run the proxy server from the Python source code: 
+1. Download the proxy server Python source code from the [release section](https://github.com/IPdotSetAF/CodeChef/releases).
 3. `pip install -r requirements.txt`
 4. `python proxy.py`
 
