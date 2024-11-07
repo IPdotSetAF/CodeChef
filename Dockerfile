@@ -2,7 +2,9 @@ FROM node:20-alpine AS node-builder
 
 WORKDIR /app
 
-COPY public src .editorconfig angular.json package.json package-lock.json server.ts tsconfig.app.json tsconfig.json tsconfig.spec.json .
+COPY public public
+COPY src src
+COPY .editorconfig angular.json package.json package-lock.json server.ts tsconfig.app.json tsconfig.json tsconfig.spec.json ./
 
 RUN npm install
 RUN npm run build
@@ -11,7 +13,8 @@ FROM python:3.11-alpine AS python-builder
 
 WORKDIR /app
 
-RUN apk add --no-cache gcc python3-dev musl-dev libffi-dev libc-dev openssl-dev
+RUN apk add --no-cache --update alpine-sdk
+RUN apk add --no-cache gcc python3-dev musl-dev libffi-dev libc-dev unixodbc unixodbc-dev
 
 COPY Tools/mssql-proxy .
 RUN pip install --no-cache-dir -r requirements.txt pyinstaller
