@@ -40,7 +40,7 @@ import { RouterLink } from '@angular/router';
 export class MssqlScaffolderComponent {
   protected dbSettings: FormGroup = new FormGroup<DbSetting>(
     {
-      proxy: new FormControl('localhost:50505', { nonNullable: true, validators: [Validators.required] }),
+      proxy: new FormControl('http://localhost:50505', { nonNullable: true, validators: [Validators.required] }),
       server: new FormControl('.', { nonNullable: true, validators: [Validators.required] }),
       username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
       password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -129,7 +129,7 @@ export class MssqlScaffolderComponent {
     if (this.status == this.connectionStatus.disconnected) {
       this.status = this.connectionStatus.connecting;
       this.dbSettings.disable();
-      MssqlService.apiUrl = `http://${this.dbSettings.controls["proxy"].value}`;
+      MssqlService.apiUrl = this.dbSettings.controls["proxy"].value;
       this.mssql.connect(this.dbSettings.getRawValue() as ConnectRequest).subscribe({
         next: (res) => {
           res = res as ConnectResponse;
