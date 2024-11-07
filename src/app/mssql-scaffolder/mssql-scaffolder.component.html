@@ -204,6 +204,31 @@
                 manual effort and guards against mismatches between the application and database structures. By doing
                 so, it not only improves the maintainability of the codebase but also accelerates development cycles,
                 freeing up time for innovation and refinement in other areas of the project.</p>
+            <h3>Is it safe to enter my database credentials on a website?</h3>
+            <p><strong>Generally NO</strong>, but CodeChef is made to be operatable as a <strong>database management
+                    application</strong>,
+                to achieve it, it must connect to your database server. </p>
+            <h4>How can I trust CodeChef with my DB Credentials?</h4>
+            <ul>
+                <li>CodeChef is <strong>serverless</strong>, which means that it runs only in your browser like a
+                    desktop application.
+                    if you can trust a DB management application, you can also trust CodeChef</li>
+                <li>CodeChef is <strong>open source</strong> and is built and deployed using automatic jobs.
+                    you can read the code and ensure we are not stealing any credentials.</li>
+                <li>Database servers are usually only available/accessible on local networks,
+                    so even with the credentials, it is impossible to access your database from outside your
+                    network.<br />
+                    <em><strong>IMPORTANT</strong></em>: If your database remote connection is open to the internet, you
+                    <strong>must</strong> be more
+                    cautious about your credentials, although CodeChef does not abuse this information.
+                </li>
+                <li>The connection to your database is made from a proxy server that you need to download and execute on
+                    your machine(open source),
+                    and it logs any query sent to your database engine. if you kill it when you are done using it,
+                    there is no way for CodeChef to connect to your database without your permission
+                    (applications that run in the browser cannot connect to a database engine directly, that is why the
+                    proxy server is needed in the first place)</li>
+            </ul>
         </div>
     </div>
 </div>
