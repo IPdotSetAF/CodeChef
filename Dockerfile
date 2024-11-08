@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY public public
 COPY src src
-COPY .editorconfig angular.json package.json package-lock.json server.ts tsconfig.app.json tsconfig.json tsconfig.spec.json ./
+COPY angular.json package.json package-lock.json server.ts tsconfig.app.json tsconfig.json tsconfig.spec.json ./
 
 RUN npm install
 RUN npm run build
