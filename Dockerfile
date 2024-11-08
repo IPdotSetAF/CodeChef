@@ -29,6 +29,6 @@ COPY nginx.conf /etc/nginx/nginx.conf
 
 RUN mkdir -p /run/nginx /var/log/api
 
-EXPOSE 80 50505
+EXPOSE 8080 50505
 
 CMD ["sh", "-c", "nginx && /usr/local/bin/mssql-proxy"]
