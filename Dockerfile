@@ -2,9 +2,7 @@ FROM node:20-alpine AS node-builder
 
 WORKDIR /app
 
-COPY public public
-COPY src src
-COPY angular.json package.json package-lock.json server.ts tsconfig.app.json tsconfig.json tsconfig.spec.json ./
+COPY Frontend .
 
 RUN npm install
 RUN npm run build

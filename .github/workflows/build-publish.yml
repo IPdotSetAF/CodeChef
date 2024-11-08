@@ -10,18 +10,26 @@ permissions:
   id-token: write
 
 jobs:
-  tests:
+  build:
     uses: ./.github/workflows/build-test.yml
 
-  deploy:
-    needs: [tests]
+  publish:
+    needs: [build]
     environment:
       name: "github-pages"
-      url: ${{ steps.build-publish.outputs.page_url }}
+      url: ${{ steps.deploy.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-    - id: build-publish
-      uses: bitovi/github-actions-angular-to-github-pages@v1.0.0
+    - name: 'download build'
+      uses: actions/download-artifact@v4
       with:
-        path: dist/code-chef/browser
-        build_command: npm run build
+        name: codechef-build
+    - name: 'upload pages'
+      uses: actions/upload-pages-artifact@v3
+      with: 
+        path: code-chef/browser
+    - name: Deploy to GitHub Pages
+      id: deploy
+      uses: actions/deploy-pages@v4
+      with:
+        token: ${{ github.token }}
