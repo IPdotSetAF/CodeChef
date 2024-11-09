@@ -29,6 +29,8 @@ COPY nginx.conf /etc/nginx/nginx.conf
 
 RUN mkdir -p /run/nginx /var/log/api
 
-EXPOSE 8080 50505
+EXPOSE 4200 50505
+ENV proxy-port="50505"
+ENV allowed-origin="http://localhost:4200"
 
-CMD ["sh", "-c", "nginx && /usr/local/bin/mssql-proxy"]
+CMD ["sh", "-c", "nginx && /usr/local/bin/mssql-proxy -p ${proxy-port} -o ${allowed-origin}"]
