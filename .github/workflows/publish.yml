@@ -1,4 +1,4 @@
-name: Create Publish
+name: Publish
 
 on:
   workflow_call:
