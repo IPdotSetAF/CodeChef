@@ -9,6 +9,7 @@ permissions:
   contents: write
   pages: write
   id-token: write
+  packages: write
 
 env:
   REGISTRY: ghcr.io
@@ -24,20 +25,6 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-    - run: tar -czf mssql-proxy-${{ github.ref_name }}-source.tar.gz Tools/mssql-proxy
-    - uses: actions/download-artifact@v4
-      with:
-        pattern: build-*
-        path: ./
-        merge-multiple: true
-    - name: Release
-      uses: softprops/action-gh-release@v2
-      with:
-        generate_release_notes: true
-        files: |
-          mssql-proxy-${{ github.ref_name }}-source.tar.gz
-          mssql-proxy-${{ github.ref_name }}-linux.tar.gz
-          mssql-proxy-${{ github.ref_name }}-windows.zip
 
     # publish docker
     - name: Install cosign
@@ -69,6 +56,22 @@ jobs:
         TAGS: ${{ needs.build-docker.outputs.tags }}
         DIGEST: ${{ needs.build-docker.outputs.digest }}
       run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+
+      # create release
+    - run: tar -czf mssql-proxy-${{ github.ref_name }}-source.tar.gz Tools/mssql-proxy
+    - uses: actions/download-artifact@v4
+      with:
+        pattern: build-*
+        path: ./
+        merge-multiple: true
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+        generate_release_notes: true
+        files: |
+          mssql-proxy-${{ github.ref_name }}-source.tar.gz
+          mssql-proxy-${{ github.ref_name }}-linux.tar.gz
+          mssql-proxy-${{ github.ref_name }}-windows.zip
 
   build-linux:
     runs-on: ubuntu-latest
@@ -105,7 +108,7 @@ jobs:
   # build-macos:
 
   build-docker:
-    runs-on: linux-latest
+    runs-on: ubuntu-latest
     outputs:
       tags: ${{ steps.meta.outputs.tags }}
       labels: ${{ steps.meta.outputs.labels }}
