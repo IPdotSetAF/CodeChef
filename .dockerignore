@@ -1,0 +1,17 @@
+.git
+.github
+.gitignore
+LICENSE
+README.md
+
+Tools/mssql-proxy/build
+Tools/mssql-proxy/dist
+Tools/mssql-proxy/.gitignore
+Tools/mssql-proxy/*.spec
+
+Frontend/.angular
+Frontend/.vscode
+Frontend/dist
+Frontend/node_modules
+Frontend/.gitignore
+Frontend/.editorconfig

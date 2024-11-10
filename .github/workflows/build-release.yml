@@ -1,4 +1,4 @@
-name: Create Release
+name: Build Release
 
 on:
   push:
@@ -10,12 +10,16 @@ permissions:
   pages: write
   id-token: write
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
 jobs:
   publish:
-    uses: ./.github/workflows/build-publish.yml
+    uses: ./.github/workflows/publish.yml
 
   release:
-    needs: [publish, build-linux, build-windows]
+    needs: [publish, build-linux, build-windows, build-docker]
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -34,6 +38,37 @@ jobs:
           mssql-proxy-${{ github.ref_name }}-source.tar.gz
           mssql-proxy-${{ github.ref_name }}-linux.tar.gz
           mssql-proxy-${{ github.ref_name }}-windows.zip
+
+    # publish docker
+    - name: Install cosign
+      uses: sigstore/cosign-installer@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      
+    - name: Log into registry ${{ env.REGISTRY }}
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push Docker image
+      id: build-and-push
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        push: true
+        tags: ${{ needs.build-docker.outputs.tags }}
+        labels: ${{ needs.build-docker.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Sign the published Docker image
+      env:
+        TAGS: ${{ needs.build-docker.outputs.tags }}
+        DIGEST: ${{ needs.build-docker.outputs.digest }}
+      run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
 
   build-linux:
     runs-on: ubuntu-latest
@@ -67,4 +102,33 @@ jobs:
         name: build-windows
         path: mssql-proxy-${{ github.ref_name }}-windows.zip
 
- # build-macos:
+  # build-macos:
+
+  build-docker:
+    runs-on: linux-latest
+    outputs:
+      tags: ${{ steps.meta.outputs.tags }}
+      labels: ${{ steps.meta.outputs.labels }}
+      digest: ${{ steps.build-and-push.outputs.digest }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Extract Docker metadata
+        uses: docker/metadata-action@v5
+        id: meta
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

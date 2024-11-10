@@ -1,0 +1,35 @@
+name: Publish
+
+on:
+  workflow_call:
+  workflow_dispatch: 
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-test.yml
+
+  publish:
+    needs: [build]
+    environment:
+      name: "github-pages"
+      url: ${{ steps.deploy.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'download build'
+      uses: actions/download-artifact@v4
+      with:
+        name: codechef-build
+    - name: 'upload pages'
+      uses: actions/upload-pages-artifact@v3
+      with: 
+        path: code-chef/browser
+    - name: Deploy to GitHub Pages
+      id: deploy
+      uses: actions/deploy-pages@v4
+      with:
+        token: ${{ github.token }}

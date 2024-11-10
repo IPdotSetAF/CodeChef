@@ -16,4 +16,5 @@ export const routes: Routes = [
     { path: 'downloads', title: "Downloads • CodeChef", component: DownloadsComponent },
 
     { path: '**', title: "Not Found • CodeChef", component: NotFoundComponent },
+    { path: '404', title: "Not Found • CodeChef", component: NotFoundComponent },
 ];

@@ -6,7 +6,7 @@
     <img src="https://img.shields.io/github/license/IPdotSetAF/CodeChef"/>
 </p>
 
-# <img src="public/code-chef.svg" height="30"> CodeChef
+# <img src="Frontend/public/code-chef.svg" height="30"> CodeChef
 
 CodeChef is an online developer tool that aims to eliminate repetitive developer tasks and automate what could be automated.
 
@@ -16,15 +16,9 @@ CodeChef is an online developer tool that aims to eliminate repetitive developer
 - **Serialized tool**<br/>Converts serialized objects between different formats(JSON, XML, YAML, TOML).
 - **MSSQL Scaffolder**<br/>Scaffolds C# Models from MSSQL Tables and Stored Procedures.
 
-## Usage
-
 You can [**Go to Live Website**](https://codechef.ipdotsetaf.ir) or Run the website locally.
 
-### MSSQL Proxy Server
-
-If you want to use any of the tools that need to communicate with MSSQL database, you need to download and run the proxy server, you can either download the binaries for your machine from the [**Release**](https://github.com/IPdotSetAF/CodeChef/releases) section or download the proxy [**Source Code**](https://github.com/IPdotSetAF/CodeChef/tree/main/CodeChefDatabaseProxy) and run it in your python environment.
-
-## Running CodeChef Locally
+## Running CodeChef Frontend Locally
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.9.
 
@@ -40,16 +34,56 @@ Run `npm run build` or `ng build` to build the project. The build artifacts will
 
 Run `npm run test` or `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running MSSQL Proxy Server
+## MSSQL Proxy Server
 
-### From precompiled binaries
+If you want to use any of the tools that need to communicate with MSSQL database, you need to download and run the proxy server, you can either download the binaries for your machine from the [**Release**](https://github.com/IPdotSetAF/CodeChef/releases) section or download the proxy [**Source Code**](https://github.com/IPdotSetAF/CodeChef/tree/main/CodeChefDatabaseProxy) and run it in your python environment.
+
+### Running MSSQL Proxy Server
+
 Just download the proper version from the [release section](https://github.com/IPdotSetAF/CodeChef/releases) and run it!!
 
-### From Source Code
-Follow these steps if you want to Run the proxy server from the Python source code: 
-1. Download the proxy server Python source code from the [release section](https://github.com/IPdotSetAF/CodeChef/releases).
+#### Args
+```
+-p --port <proxy port>
+-o --allowed-origin <allowed origin (ex. http://localhost:4200)>
+```
+
+#### From Source Code
+Follow these steps if you want to Run the mssql-proxy from the Python source code: 
+1. Download the mssql-proxy Python source code from the [release section](https://github.com/IPdotSetAF/CodeChef/releases).
 3. `pip install -r requirements.txt`
 4. `python proxy.py`
+
+## Docker
+
+CodeChef docker image contains both the **Frontend** and **mssql-proxy**. 
+
+### Pulling the image
+```bash
+docker pull ghcr.io/ipdotsetaf/codechef:latest
+```
+
+### Running the container
+```bash
+docker run --name codechef -d -p 4200:4200 -p 50505:50505 ghcr.io/ipdotsetaf/codechef:latest
+```
+
+#### Changing the Frontend port
+```bash
+docker run --name codechef -d -e ALLOWED_ORIGIN="http://localhost:<FRONTEND_PORT>" -p <FRONTEND_PORT>:4200 -p 50505:50505 ghcr.io/ipdotsetaf/codechef:latest
+``` 
+The allowed origin will be the url that will serve the Fronend and the browser access it with.
+
+#### Changing the proxy
+```bash
+docker run --name codechef -d -p 4200:4200 -p <PROXY_PORT>:50505 ghcr.io/ipdotsetaf/codechef:latest
+```
+
+### Exposing database to mssql-proxy
+> [!IMPORTANT]
+> you need to make sure that codechef container and you mssql-server is on the same network and know the mssql-server ip address exposed on that network. that will be the ip address you use on CodeChef website.
+#### Instructions
+TBD...
 
 ## TODO:
 - **Markdown preview** in Markdown to HTML Converter

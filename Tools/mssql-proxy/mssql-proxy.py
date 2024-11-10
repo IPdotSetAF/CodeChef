@@ -1,3 +1,4 @@
+import argparse
 import pyodbc
 import uuid
 from fastapi import FastAPI, HTTPException
@@ -9,16 +10,20 @@ from colorama import Fore, Style, init
 # Initialize colorama
 init(autoreset=True)
 
-from fastapi.middleware.cors import CORSMiddleware
+# Argument parsing for port and allowed origin
+parser = argparse.ArgumentParser(description="Run the proxy server with customizable port and allowed origin.")
+parser.add_argument("--port", "-p", type=int, default=50505, help="Port to run the server on (default: 50505)")
+parser.add_argument("--allowed-origin", "-o", type=str, default="http://localhost:4200", help="Allowed CORS origin (default: http://localhost:4200)")
+args = parser.parse_args()
 
 # Initialize FastAPI app
 app = FastAPI()
 
+# Set allowed origins
 origins = [
     "https://codechef.ipdotsetaf.ir",
     "https://ipdotsetaf.github.ir",
-    "http://localhost:4200"
-]
+    args.allowed_origin]
 
 app.add_middleware(
     CORSMiddleware,
@@ -150,4 +155,7 @@ async def disconnect(request: DisconnectRequest):
 
 # Run the FastAPI server
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=50505, access_log=False)
+    portTxt = f"{Fore.BLUE}{args.port}{Style.RESET_ALL}"
+    originTxt = f"{Fore.BLUE}{args.allowed_origin}{Style.RESET_ALL}"
+    print(f"Starting server on port {portTxt} with allowed origin: {originTxt}")
+    uvicorn.run(app, host="0.0.0.0", port=args.port, access_log=False)
