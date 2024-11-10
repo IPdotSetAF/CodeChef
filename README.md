@@ -45,6 +45,18 @@ Run `npm run test` or `ng test` to execute the unit tests via [Karma](https://ka
 ### From precompiled binaries
 Just download the proper version from the [release section](https://github.com/IPdotSetAF/CodeChef/releases) and run it!!
 
+#### windows
+```batch
+mssql-proxy.exe 
+```
+custom port: `-p <port>`
+custom allowed origin: `-o <origin>`
+
+example:
+```
+mssql-proxy.exe -p 50505 -o http://localhost:4200
+```
+
 ### From Source Code
 Follow these steps if you want to Run the proxy server from the Python source code: 
 1. Download the proxy server Python source code from the [release section](https://github.com/IPdotSetAF/CodeChef/releases).
