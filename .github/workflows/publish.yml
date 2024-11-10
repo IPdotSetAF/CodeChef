@@ -27,7 +27,7 @@ jobs:
     - name: 'upload pages'
       uses: actions/upload-pages-artifact@v3
       with: 
-        path: code-chef/browser
+        path: browser
     - name: Deploy to GitHub Pages
       id: deploy
       uses: actions/deploy-pages@v4
