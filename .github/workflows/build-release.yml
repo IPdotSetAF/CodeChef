@@ -19,7 +19,7 @@ jobs:
     uses: ./.github/workflows/publish.yml
 
   release:
-    needs: [publish, build-linux, build-windows]
+    needs: [publish, build-linux, build-windows, build-docker]
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -73,7 +73,7 @@ jobs:
 
   # build-macos:
 
-  build-docker-image:
+  build-docker:
     runs-on: linux-latest
     steps:
       - uses: actions/checkout@v4
@@ -99,7 +99,7 @@ jobs:
 
       - name: Build and push Docker image
         id: build-and-push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
