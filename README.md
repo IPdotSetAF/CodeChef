@@ -36,11 +36,11 @@ Run `npm run test` or `ng test` to execute the unit tests via [Karma](https://ka
 
 ## MSSQL Proxy Server
 
-If you want to use any of the tools that need to communicate with MSSQL database, you need to download and run the proxy server, you can either download the binaries for your machine from the [**Release**](https://github.com/IPdotSetAF/CodeChef/releases) section or download the proxy [**Source Code**](https://github.com/IPdotSetAF/CodeChef/tree/main/CodeChefDatabaseProxy) and run it in your python environment.
+If you want to use any of the tools that need to communicate with the MSSQL database, you need to download and run the proxy server, you can either download the binaries for your machine from the [**Release**](https://github.com/IPdotSetAF/CodeChef/releases) section or download the proxy [**Source Code**](https://github.com/IPdotSetAF/CodeChef/tree/main/CodeChefDatabaseProxy) and run it in your python environment.
 
 ### Running MSSQL Proxy Server
 
-Just download the proper version from the [release section](https://github.com/IPdotSetAF/CodeChef/releases) and run it!!
+Download the proper version from the [release section](https://github.com/IPdotSetAF/CodeChef/releases) and run it!!
 
 #### Args
 ```
@@ -72,7 +72,7 @@ docker run --name codechef -d -p 4200:4200 -p 50505:50505 ghcr.io/ipdotsetaf/cod
 ```bash
 docker run --name codechef -d -e ALLOWED_ORIGIN="http://localhost:<FRONTEND_PORT>" -p <FRONTEND_PORT>:4200 -p 50505:50505 ghcr.io/ipdotsetaf/codechef:latest
 ``` 
-The allowed origin will be the url that will serve the Fronend and the browser access it with.
+The allowed origin will be the URL that will serve the Fronend and the browser access it with.
 
 #### Changing the proxy
 ```bash
@@ -81,7 +81,7 @@ docker run --name codechef -d -p 4200:4200 -p <PROXY_PORT>:50505 ghcr.io/ipdotse
 
 ### Exposing database to mssql-proxy
 > [!IMPORTANT]
-> you need to make sure that codechef container and you mssql-server is on the same network and know the mssql-server ip address exposed on that network. that will be the ip address you use on CodeChef website.
+> You need to make sure that the CodeChef container and your mssql-server are on the same network and know the mssql-server IP address exposed on that network. that will be the IP address you use on the CodeChef website.
 #### Instructions
 TBD...
 
