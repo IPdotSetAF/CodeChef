@@ -1,7 +1,6 @@
 # Compiled output
 /dist
 /build
-*.spec
 
 # IDEs and editors
 .idea/

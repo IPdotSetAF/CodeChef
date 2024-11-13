@@ -1,0 +1,15 @@
+FROM python:3.11-alpine AS python-builder
+
+WORKDIR /app
+
+RUN apk add --no-cache --update alpine-sdk
+RUN apk add --no-cache gcc python3-dev musl-dev libffi-dev libc-dev
+
+COPY Tools/mssql-proxy .
+
+RUN sh -c ./odbc-driver-installer.sh
+RUN pip install --no-cache-dir -r requirements.txt pyinstaller
+
+RUN pyinstaller --onefile mssql-proxy.linux.spec --name mssql-proxy
+
+CMD [ "sh", "-c", "echo 'Hello World'; sleep infinity" ]

@@ -7,7 +7,6 @@ README.md
 Tools/mssql-proxy/build
 Tools/mssql-proxy/dist
 Tools/mssql-proxy/.gitignore
-Tools/mssql-proxy/*.spec
 
 Frontend/.angular
 Frontend/.vscode
