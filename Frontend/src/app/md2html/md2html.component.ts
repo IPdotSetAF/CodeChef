@@ -30,6 +30,7 @@ export class Md2htmlComponent implements AfterContentInit {
 this is an example :p`;
   protected htmlCode !: string;
   protected status: boolean = false;
+  protected to: string = "preview";
 
   protected inputDebouncer = new Subject<string>();
 
