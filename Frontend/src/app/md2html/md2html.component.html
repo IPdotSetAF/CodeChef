@@ -14,9 +14,30 @@
             <br />
         </div>
         <div class="col-md-6">
-            <label class="form-label">HTML:</label>
+            <div class="d-flex gap-2">
+                <label class="form-label">To:</label>
+                <div class="form-check ">
+                    <input class="form-check-input" type="radio" name="toRadio" id="toPreview" value="preview"
+                        [(ngModel)]="to" (change)="convert()">
+                    <label class="form-check-label" for="toPreview">
+                        Preview
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="toRadio" id="toHtml" value="html"
+                        [(ngModel)]="to" (change)="convert()">
+                    <label class="form-check-label" for="toHtml">
+                        HTML
+                    </label>
+                </div>
+            </div>
             <div class="code-border" [@valueChangeAnim]="status">
+                @if(to==="html"){
                 <code-area innerStyle="min-height:500px;" [(code)]="htmlCode" language="markup" readonly="true" />
+                }
+                @else{
+                <div style="min-height:500px;" [innerHTML]="htmlCode"></div>
+                }
             </div>
             <br />
         </div>
@@ -47,7 +68,8 @@
                 Markdown&#39;s syntax includes elements like <code>#</code> for headings, <code>*</code> for lists, and
                 <code>**</code> for bold text, making it intuitive and fast for creating readable, structured content.
                 Its popularity has grown widely, especially in documentation, blogging, and collaborative platforms like
-                GitHub, where simplicity and clarity are key.</p>
+                GitHub, where simplicity and clarity are key.
+            </p>
             <p><strong>Conversion between HTML and Markdown</strong> is common because each serves distinct purposes in
                 different contexts. Converting Markdown to HTML is a straightforward way to take plain text content and
                 render it for the web, making it possible to publish articles, documentation, or blog posts without
