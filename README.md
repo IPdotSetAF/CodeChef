@@ -87,7 +87,6 @@ docker run --name codechef -d -p 4200:4200 -p <PROXY_PORT>:50505 ghcr.io/ipdotse
 TBD...
 
 ## TODO:
-- **Markdown preview** in Markdown to HTML Converter
 - MSSQL **Diff Tool**
 - MSSQL **Search Tool**
 - MSSQL **Bulk Scaffolder**
