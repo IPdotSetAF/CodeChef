@@ -28,7 +28,7 @@ if [ "$os" == "alpine" ]; then
     fi
 elif [ "$os" == "ubuntu" ]; then
     echo "Installing packages for Ubuntu..."
-    if ! apt-get update || ! apt-get install -y unixodbc unixodbc-dev curl gnupg; then
+    if ! sudo apt-get update || ! sudo apt-get install -y unixodbc unixodbc-dev curl gnupg; then
         echo "Installation of packages failed on Ubuntu." >&2
         exit 1
     fi
@@ -52,7 +52,7 @@ elif [ "$os" == "ubuntu" ]; then
     curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
     curl https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list > /etc/apt/sources.list.d/mssql-release.list
     apt-get update
-    ACCEPT_EULA=Y apt-get install -y msodbcsql18
+    ACCEPT_EULA=Y sudo apt-get install -y msodbcsql18
 else
     echo "Failed to handle msodbcsql18 installation for $os."
     exit 1
