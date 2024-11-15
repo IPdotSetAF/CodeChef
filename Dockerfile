@@ -17,7 +17,7 @@ RUN apk add --no-cache gcc python3-dev musl-dev libffi-dev libc-dev
 
 COPY Tools/mssql-proxy/odbc-driver-installer.sh Tools/mssql-proxy/requirements.txt ./
 
-RUN ./odbc-driver-installer.sh 
+RUN ./odbc-driver-installer.sh
 RUN pip install --no-cache-dir -r requirements.txt pyinstaller
 
 COPY Tools/mssql-proxy .
