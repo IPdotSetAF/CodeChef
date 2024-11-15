@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch: 
   
 permissions:
   contents: write
@@ -18,10 +19,12 @@ env:
 jobs:
   publish:
     uses: ./.github/workflows/publish.yml
+    if: github.ref_type == 'tag'
 
   release:
-    needs: [publish, build-linux, build-windows, build-docker]
     runs-on: ubuntu-latest
+    if: github.ref_type == 'tag'
+    needs: [publish, build-linux, build-windows, build-docker]
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -81,7 +84,8 @@ jobs:
       with:
         python-version: 3.11.4
     - run: pip install -r Tools/mssql-proxy/requirements.txt pyinstaller
-    - run: pyinstaller --onefile mssql-proxy.py
+    - run: ./Tools/mssql-proxy/odbc-driver-installer.sh
+    - run: pyinstaller mssql-proxy.linux.spec
       working-directory: Tools/mssql-proxy
     - run: tar -czf mssql-proxy-${{ github.ref_name }}-linux.tar.gz Tools/mssql-proxy/dist
     - uses: actions/upload-artifact@v4
@@ -97,7 +101,7 @@ jobs:
       with:
         python-version: 3.11.4
     - run: pip install -r Tools/mssql-proxy/requirements.txt pyinstaller
-    - run: pyinstaller --onefile mssql-proxy.py
+    - run: pyinstaller mssql-proxy.win.spec
       working-directory: Tools/mssql-proxy
     - run: tar -a -c -f mssql-proxy-${{ github.ref_name }}-windows.zip Tools/mssql-proxy/dist
     - uses: actions/upload-artifact@v4
