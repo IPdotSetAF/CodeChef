@@ -6,8 +6,7 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=[
-        ('/etc/odbcinst.ini', '.'),
-        ('/opt/microsoft/msodbcsql18', './drivers')
+        ('/opt/microsoft/msodbcsql18', 'drivers/msodbcsql18')
     ],
     hiddenimports=[],
     hookspath=[],

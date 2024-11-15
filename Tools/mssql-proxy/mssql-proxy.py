@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
 from colorama import Fore, Style, init
+import sys
 
 # Initialize colorama
 init(autoreset=True)
@@ -76,11 +77,17 @@ def log_query(index, query):
 @app.post("/connect")
 async def connect(request: ConnectRequest):
     global connection_index_counter
-    connection_string = f"Driver={{SQL Server}};Server={request.server};UID={request.username};PWD={request.password};"
     try:
         # Attempt to connect to the database
-        connection = pyodbc.connect(connection_string, timeout=5)
-        
+        try: 
+            connection = pyodbc.connect(f"Driver={{SQL Server}};Server={request.server};UID={request.username};PWD={request.password};", timeout=5)
+        except:
+            try:
+                base_path = sys._MEIPASS
+                connection = pyodbc.connect(f"Driver={base_path}/drivers/msodbcsql18/lib64/libmsodbcsql-18.4.so.1.1;Server={request.server};UID={request.username};PWD={request.password};", timeout=5)
+            except:
+                raise
+
         # Generate a unique ID and index for the connection
         connection_id = str(uuid.uuid4())
         index = connection_index_counter
