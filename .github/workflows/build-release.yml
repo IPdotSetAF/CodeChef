@@ -51,6 +51,7 @@ jobs:
         push: true
         tags: ${{ needs.build-docker.outputs.tags }}
         labels: ${{ needs.build-docker.outputs.labels }}
+        platforms: linux/amd64, linux/arm64
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
@@ -145,5 +146,6 @@ jobs:
           push: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64, linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
