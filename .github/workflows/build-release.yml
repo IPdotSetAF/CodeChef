@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch: 
   
 permissions:
   contents: write
@@ -18,10 +19,12 @@ env:
 jobs:
   publish:
     uses: ./.github/workflows/publish.yml
+    if: github.ref_type == 'tag'
 
   release:
-    needs: [publish, build-linux, build-windows, build-docker]
     runs-on: ubuntu-latest
+    if: github.ref_type == 'tag'
+    needs: [publish, build-linux, build-windows, build-docker]
     steps:
     - name: Checkout
       uses: actions/checkout@v4
