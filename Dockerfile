@@ -2,9 +2,10 @@ FROM node:20-alpine AS node-builder
 
 WORKDIR /app
 
-COPY Frontend .
-
+COPY Frontend/package.json Frontend/package-lock.json ./
 RUN npm install
+
+COPY Frontend .
 RUN npm run build
 
 FROM python:3.11-alpine AS python-builder
@@ -14,10 +15,12 @@ WORKDIR /app
 RUN apk add --no-cache --update alpine-sdk
 RUN apk add --no-cache gcc python3-dev musl-dev libffi-dev libc-dev
 
-COPY Tools/mssql-proxy .
+COPY Tools/mssql-proxy/odbc-driver-installer.sh Tools/mssql-proxy/requirements.txt ./
 
-RUN sh -c ./odbc-driver-installer.sh 
+RUN ./odbc-driver-installer.sh 
 RUN pip install --no-cache-dir -r requirements.txt pyinstaller
+
+COPY Tools/mssql-proxy .
 
 RUN pyinstaller mssql-proxy.linux.spec
 
