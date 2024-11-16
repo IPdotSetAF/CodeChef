@@ -33,6 +33,9 @@ jobs:
     - name: Install cosign
       uses: sigstore/cosign-installer@v3
 
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
       
@@ -51,6 +54,7 @@ jobs:
         push: true
         tags: ${{ needs.build-docker.outputs.tags }}
         labels: ${{ needs.build-docker.outputs.labels }}
+        platforms: linux/amd64, linux/arm64
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
@@ -70,14 +74,21 @@ jobs:
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
+        prerelease: true
         generate_release_notes: true
         files: |
           mssql-proxy-${{ github.ref_name }}-source.tar.gz
-          mssql-proxy-${{ github.ref_name }}-linux.tar.gz
           mssql-proxy-${{ github.ref_name }}-windows.zip
+          mssql-proxy-${{ github.ref_name }}-linux-amd64.tar.gz
+          mssql-proxy-${{ github.ref_name }}-linux-arm64.tar.gz
 
   build-linux:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-python@v5
@@ -87,11 +98,13 @@ jobs:
     - run: ./Tools/mssql-proxy/odbc-driver-installer.sh
     - run: pyinstaller mssql-proxy.linux.spec
       working-directory: Tools/mssql-proxy
-    - run: tar -czf mssql-proxy-${{ github.ref_name }}-linux.tar.gz Tools/mssql-proxy/dist
+    - id: name 
+      run: echo "platform_name=$(echo ${{ matrix.platform }} | sed 's:/:-:g')" >> $GITHUB_OUTPUT
+    - run: tar -czf mssql-proxy-${{ github.ref_name }}-${{ steps.name.outputs.platform_name }}.tar.gz Tools/mssql-proxy/dist
     - uses: actions/upload-artifact@v4
       with:
-        name: build-linux
-        path: mssql-proxy-${{ github.ref_name }}-linux.tar.gz
+        name: build-${{ steps.name.outputs.platform_name }}
+        path: mssql-proxy-${{ github.ref_name }}-${{ steps.name.outputs.platform_name }}.tar.gz
    
   build-windows:
     runs-on: windows-latest
@@ -119,6 +132,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       
@@ -128,7 +144,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      - name: Build and push Docker image
+      - name: Build Docker images
         id: build-and-push
         uses: docker/build-push-action@v6
         with:
@@ -136,5 +152,6 @@ jobs:
           push: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64, linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
