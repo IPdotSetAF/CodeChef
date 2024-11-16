@@ -1,4 +1,4 @@
-<div class="container-fluid p-4">
+<div class="container-fluid page p-4">
     <div class="row">
         <h2>Serialized Tool</h2>
         <p>Convert JSON, XML, YAML or TOML serialized objects/data to each other.</p>
@@ -6,7 +6,7 @@
 
     <div class="row">
         <div class="col-md-6">
-            <div class="d-flex gap-2">
+            <div class="d-flex flex-wrap gap-2">
                 <label class="form-label">From</label>
                 <div class="form-check ">
                     <input class="form-check-input" type="radio" name="fromRadio" id="fromJson" value="json" [(ngModel)]="fromLang" (change)="convert()">
@@ -40,7 +40,7 @@
             <br />
         </div>
         <div class="col-md-6">
-            <div class="d-flex gap-2">
+            <div class="d-flex flex-wrap gap-2">
                 <label class="form-label">To</label>
                 <div class="form-check ">
                     <input class="form-check-input" type="radio" name="toRadio" id="toJson" value="json" [(ngModel)]="toLang" (change)="convert()">
