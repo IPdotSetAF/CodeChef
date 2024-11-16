@@ -1,37 +1,47 @@
 <div id="header">
-    <div class="d-flex h-100">
+    <div class="position-relative">
 
-        <div class="col-4 h-100">
-            <a class="w-100 h-100 d-flex justify-content-start gap-2 align-items-center ps-2" [routerLink]="['/']">
-                <img class="img-header" src="code-chef.svg" />
-                <h1 class="fs-3 m-0">CodeChef</h1>
-            </a>
-        </div>
-
-        <div class="col-4 h-100 d-flex justify-content-center">
-            <div class="dropdown">
-                <a role="button" class="btn btn-header btn-hover dropdown-toggle rounded-0" role="button" id="dropdownMenuLink"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-tools"></i> Tools
+        <div class="position-absolute h-100 w-100 row">
+            <div class="col-6 header-section d-flex justify-content-start">
+                <a class="h-100 d-flex justify-content-start gap-2 align-items-center ps-2" [routerLink]="['/']">
+                    <img class="img-header" src="code-chef.svg" />
+                    <h1 class="fs-3 m-0">CodeChef</h1>
                 </a>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <li><a role="button" class="dropdown-item" [routerLink]="['/cs2ts']">C# to TS Converter</a></li>
-                    <li><a role="button" class="dropdown-item" [routerLink]="['/md2html']">Markdown to HTML Converter</a></li>
-                    <li><a role="button" class="dropdown-item" [routerLink]="['/serialized']">Serialized Tool</a></li>
-                    <li><a role="button" class="dropdown-item" [routerLink]="['/mssqlscaffold']">MSSQL Scaffolder</a></li>
-                </ul>
             </div>
-            <a role="button" class="btn-header btn-hover" [routerLink]="['/downloads']"><i class="bi bi-download"></i> Downloads</a>
+
+            <div class="col-6 header-section d-flex align-items-center justify-content-end p-2 gap-2">
+                <a role="button" class="btn-header-round btn-hover btn-circle" href="https://ipdotsetaf.ir"
+                    title="IPdotSetAF">
+                    <img id="ipaf" class="img-header" src="ipaf.svg" />
+                </a>
+                <a role="button" class="bi bi-github fs-2 btn-header-round btn-hover btn-circle"
+                    href="https://github.com/IPdotSetAF/CodeChef" title="CodeChef Github"></a>
+            </div>
         </div>
 
-        <div class="col-4 h-100 d-flex align-items-center justify-content-end p-2 gap-2">
-            <a role="button" class="btn-header-round btn-hover btn-circle" href="https://ipdotsetaf.ir" title="IPdotSetAF">
-                <img id="ipaf" class="img-header" src="ipaf.svg" />
-            </a>
-            <a role="button" class="bi bi-github fs-2 btn-header-round btn-hover btn-circle"
-                href="https://github.com/IPdotSetAF/CodeChef" title="CodeChef Github"></a>
+        <div class="row h-100 w-100">            
+            <div class="col-sm-4 header-section "></div>
+
+            <div class="col-sm-4 h-100 header-section d-flex justify-content-center">
+                <div class="dropdown">
+                    <a role="button" class="btn btn-header btn-hover dropdown-toggle rounded-0" role="button"
+                        id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-tools"></i> Tools
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><a role="button" class="dropdown-item" [routerLink]="['/cs2ts']">C# to TS Converter</a></li>
+                        <li><a role="button" class="dropdown-item" [routerLink]="['/md2html']">Markdown to HTML
+                                Converter</a></li>
+                        <li><a role="button" class="dropdown-item" [routerLink]="['/serialized']">Serialized Tool</a></li>
+                        <li><a role="button" class="dropdown-item" [routerLink]="['/mssqlscaffold']">MSSQL Scaffolder</a>
+                        </li>
+                    </ul>
+                </div>
+                <a role="button" class="btn-header btn-hover" [routerLink]="['/downloads']"><i class="bi bi-download"></i>
+                    Downloads</a>
+            </div>
+            
         </div>
-        
     </div>
     <div class="col-12 divider"></div>
 </div>

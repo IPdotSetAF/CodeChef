@@ -4,10 +4,13 @@
     top: 0;
     left: 0;
     right: 0;
-    height: var(--height);
     background-color: #212529b0;
     backdrop-filter: blur(2px);
     z-index: 2;
+}
+
+.header-section{
+    height: var(--height);
 }
 
 .img-header {
@@ -30,7 +33,7 @@ a {
 .btn-header {
     text-decoration: none;
     color: var(--blue);
-    height: 100%;
+    height: var(--height);
     align-content: center;
     padding: 0 15px;
     position: relative;
@@ -54,3 +57,9 @@ a {
 .btn-header:hover::before{
     height: 3px;
 }
+
+@media only screen and (max-width: 600px) {
+    #header{
+        --height: 35px;
+    }
+} 
