@@ -71,6 +71,7 @@ jobs:
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
+        prerelease: true
         generate_release_notes: true
         files: |
           mssql-proxy-${{ github.ref_name }}-source.tar.gz
