@@ -23,7 +23,7 @@ a {
 }
 
 .btn-header-round {
-    --btn-size: calc(var(--height) - 10px) !important;
+    --btn-size: calc(var(--height) * 7 / 10) !important;
 }
 
 #ipaf{
@@ -60,6 +60,6 @@ a {
 
 @media only screen and (max-width: 600px) {
     #header{
-        --height: 35px;
+        --height: 40px;
     }
 } 
