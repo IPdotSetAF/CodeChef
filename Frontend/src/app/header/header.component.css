@@ -35,6 +35,7 @@ a {
     padding: 0 15px;
     position: relative;
     border: none !important;
+    text-wrap: nowrap;
 }
 
 .btn-header::before{
