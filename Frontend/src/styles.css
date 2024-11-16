@@ -37,6 +37,10 @@
     font-size: small;
 }
 
+.page{
+    min-height: 100vh;
+}
+
 @keyframes gradient-move {
     0%{background-position:0% 50%}
     50%{background-position:100% 50%}
