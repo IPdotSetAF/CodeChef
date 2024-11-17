@@ -1,0 +1,24 @@
+name: Build MacOS
+
+on:
+  workflow_call:
+  workflow_dispatch: 
+  
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: 3.11.4
+    - run: pip install -r Tools/mssql-proxy/requirements.txt pyinstaller
+    - run: ./Tools/mssql-proxy/odbc-driver-installer.sh
+    - run: pyinstaller mssql-proxy.mac.spec
+      working-directory: Tools/mssql-proxy
+    - run: tar -czf mssql-proxy-${{ github.ref_name }}-macos.tar.gz Tools/mssql-proxy/dist
+    - uses: actions/upload-artifact@v4
+      with:
+        name: build-macos
+        path: mssql-proxy-${{ github.ref_name }}-macos.tar.gz
+   
