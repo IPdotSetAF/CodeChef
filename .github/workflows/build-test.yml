@@ -10,17 +10,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [ 20 ]
-
     name: Node ${{ matrix.node }} sample
     steps:
       - uses: actions/checkout@v4
       - name: Building rules and tests
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 20
       - run: npm ci
         working-directory: Frontend
       - run: npm run test-ci
