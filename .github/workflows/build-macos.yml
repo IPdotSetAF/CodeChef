@@ -13,7 +13,7 @@ jobs:
       with:
         python-version: 3.11.4
     - run: pip install -r Tools/mssql-proxy/requirements.txt pyinstaller
-    - run: ./Tools/mssql-proxy/odbc-driver-installer.sh
+    # - run: ./Tools/mssql-proxy/odbc-driver-installer.sh
     - run: pyinstaller mssql-proxy.mac.spec
       working-directory: Tools/mssql-proxy
     - run: tar -czf mssql-proxy-${{ github.ref_name }}-macos.tar.gz Tools/mssql-proxy/dist
