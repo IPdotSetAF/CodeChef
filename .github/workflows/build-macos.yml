@@ -19,7 +19,7 @@ jobs:
 
     - name: Install UnixODBC and MSODBCSQL18
       run: |
-        brew install unixodbc unixodbc-dev msodbcsql18
+        brew install unixodbc msodbcsql18
 
     - run: pip install -r Tools/mssql-proxy/requirements.txt pyinstaller
     - run: pyinstaller mssql-proxy.mac.spec
