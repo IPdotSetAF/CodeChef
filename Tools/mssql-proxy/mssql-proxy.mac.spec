@@ -5,7 +5,9 @@ a = Analysis(
     ['mssql-proxy.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[
+        ('/usr/local/share/msodbcsql18', 'drivers/msodbcsql18')
+    ],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
