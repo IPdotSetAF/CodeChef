@@ -6,7 +6,7 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=[
-        ('/usr/local/share/msodbcsql18', 'drivers/msodbcsql18')
+        ('/opt/homebrew/Cellar/msodbcsql18', 'drivers/msodbcsql18')
     ],
     hiddenimports=[],
     hookspath=[],
