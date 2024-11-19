@@ -90,6 +90,8 @@ TBD...
 - MSSQL **Diff Tool**
 - MSSQL **Search Tool**
 - MSSQL **Bulk Scaffolder**
+- MSSQL Scaffolder **string search for inputs**
+- MSSQL Scaffolder **file export**
 
 ## Contribution
 - You can open Issues for any bug report or feature request.
