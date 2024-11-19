@@ -24,6 +24,7 @@ jobs:
         brew tap microsoft/mssql-release https://github.com/Microsoft/homebrew-mssql-release
         brew update
         HOMEBREW_SANDBOX=1 HOMEBREW_ACCEPT_EULA=Y brew install msodbcsql18 mssql-tools18
+        ls /opt/homebrew/Cellar/msodbcsql18
 
     - run: pip install -r Tools/mssql-proxy/requirements.txt pyinstaller
     - run: pyinstaller mssql-proxy.mac.spec
