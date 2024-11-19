@@ -13,19 +13,14 @@ jobs:
       with:
         python-version: 3.11.4
     
-    - name: Install Homebrew
-      run: |
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"   
-
     - name: Install UnixODBC and MSODBCSQL18
       run: |
-        brew install unixodbc
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
         brew tap microsoft/mssql-release https://github.com/Microsoft/homebrew-mssql-release
-        brew update
-        HOMEBREW_SANDBOX=1 HOMEBREW_ACCEPT_EULA=Y brew install msodbcsql18 mssql-tools18
-        ls /opt/homebrew/Cellar/msodbcsql18
-
+        HOMEBREW_SANDBOX=1 HOMEBREW_ACCEPT_EULA=Y brew install unixodbc msodbcsql18 tree
+        tree /opt/homebrew/Cellar/msodbcsql18/
+        cat /opt/homebrew/Cellar/msodbcsql18/18.4.1.1/odbcinst.ini
+        
     - run: pip install -r Tools/mssql-proxy/requirements.txt pyinstaller
     - run: pyinstaller mssql-proxy.mac.spec
       working-directory: Tools/mssql-proxy
