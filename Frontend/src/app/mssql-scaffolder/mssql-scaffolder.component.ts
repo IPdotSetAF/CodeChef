@@ -220,12 +220,18 @@ ${res.map((p) => `\tpublic ${MssqlScaffolderComponent.convertDataType(p.DataType
       ps = ps as GetSPParametersResponse[];
       this.scaffolder.getSPReturnColumns(this.connectionID, sc.database, sc.schema, sc.sp).subscribe(rs => {
         rs = rs as GetSPReturnColumnsResponse[];
-        this.csCode =
-          `public class ${sc.sp}Params {
-${ps.map((p) => `\tpublic ${MssqlScaffolderComponent.convertDataType(p.Type)}${p.Nullable ? '?' : ''} ${p.Parameter_name} { get; set; }\n`).reduce((a, b) => a + b)}}
+        
+        const psc = ps.map((p) => `\tpublic ${MssqlScaffolderComponent.convertDataType(p.Type)}${p.Nullable ? '?' : ''} ${p.Parameter_name} { get; set; }`);
+        const rsc = rs.map((p) => `\tpublic ${MssqlScaffolderComponent.convertDataType(p.system_type_name)}${p.Nullable ? '?' : ''} ${p.column} { get; set; }`);
 
-public class ${sc.sp}Result {
-${rs.map((p) => `\tpublic ${MssqlScaffolderComponent.convertDataType(p.system_type_name)}${p.Nullable ? '?' : ''} ${p.column} { get; set; }\n`).reduce((a, b) => a + b)}}`;
+        this.csCode =
+`${psc.length > 0 ? `public class ${sc.sp}Params {`:'' }
+${psc.join("\n")}
+${psc.length > 0 ? '}':'' }
+
+${rsc.length>0? `public class ${sc.sp}Result {`:'' }
+${rsc.join("\n")}
+${rsc.length > 0 ? '}':'' }`;
         this.codeFlip = !this.codeFlip;
       });
     });
