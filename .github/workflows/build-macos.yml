@@ -17,9 +17,7 @@ jobs:
       run: |
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
         brew tap microsoft/mssql-release https://github.com/Microsoft/homebrew-mssql-release
-        HOMEBREW_SANDBOX=1 HOMEBREW_ACCEPT_EULA=Y brew install unixodbc msodbcsql18 tree
-        tree /opt/homebrew/Cellar/msodbcsql18/
-        cat /opt/homebrew/Cellar/msodbcsql18/18.4.1.1/odbcinst.ini
+        HOMEBREW_SANDBOX=1 HOMEBREW_ACCEPT_EULA=Y brew install unixodbc msodbcsql18
         
     - run: pip install -r Tools/mssql-proxy/requirements.txt pyinstaller
     - run: pyinstaller mssql-proxy.mac.spec

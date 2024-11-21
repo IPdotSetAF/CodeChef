@@ -17,23 +17,23 @@ jobs:
     uses: ./.github/workflows/publish.yml
     if: github.ref_type == 'tag'
 
-#  build-linux:
-#    uses: ./.github/workflows/build-linux.yml
+  build-linux:
+    uses: ./.github/workflows/build-linux.yml
     
-#  build-windows:
-#    uses: ./.github/workflows/build-windows.yml
+  build-windows:
+    uses: ./.github/workflows/build-windows.yml
     
   build-macos:
     uses: ./.github/workflows/build-macos.yml
 
-#  build-publish-docker:
-#    uses: ./.github/workflows/build-publish-docker.yml
-#    needs: [publish, build-linux, build-windows, build-macos]
+  build-publish-docker:
+    uses: ./.github/workflows/build-publish-docker.yml
+    needs: [publish, build-linux, build-windows, build-macos]
 
   release:
     runs-on: ubuntu-latest
     if: github.ref_type == 'tag'
-#    needs: [build-publish-docker]
+    needs: [build-publish-docker]
     steps:
     - name: Checkout
       uses: actions/checkout@v4

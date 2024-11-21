@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
 from colorama import Fore, Style, init
-import sys
+import sys, os
 
 # Initialize colorama
 init(autoreset=True)
@@ -73,20 +73,35 @@ def log_query(index, query):
     endpoint_text = f"{Fore.GREEN}execute-query{Style.RESET_ALL}"
     print(f"{index_text} {endpoint_text}: Executed query: {query}")
 
+def find_file_path(file_name):
+    base_path = sys._MEIPASS
+    for root, _, files in os.walk(f"{base_path}/drivers"):
+        if file_name in files:
+            return os.path.join(root, file_name)
+    raise f"{file_name} NotFound."
+    
+def find_odbc_driver_path():
+    try:
+        with open(find_file_path("odbcinst.ini"), 'r') as file:
+            for line in file:
+                line = line.strip()
+                if line.startswith("Driver="):
+                    driver_name = line.split("/")[-1].strip()
+                    break
+
+        return find_file_path(driver_name)
+    except:
+        print("Could not fild odbc driver internally...")
+        return "{SQL Server}"
+
 # Establish a database connection and return a unique connection ID
 @app.post("/connect")
 async def connect(request: ConnectRequest):
     global connection_index_counter
     try:
         # Attempt to connect to the database
-        try: 
-            connection = pyodbc.connect(f"Driver={{SQL Server}};Server={request.server};UID={request.username};PWD={request.password};", timeout=5)
-        except:
-            try:
-                base_path = sys._MEIPASS
-                connection = pyodbc.connect(f"Driver={base_path}/drivers/msodbcsql18/lib64/libmsodbcsql-18.4.so.1.1;Server={request.server};UID={request.username};PWD={request.password};", timeout=5)
-            except:
-                raise
+        driver_path = find_odbc_driver_path()
+        connection = pyodbc.connect(f"Driver={driver_path};Server={request.server};UID={request.username};PWD={request.password};", timeout=5)
 
         # Generate a unique ID and index for the connection
         connection_id = str(uuid.uuid4())
