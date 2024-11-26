@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MssqlService } from '../../services/mssql/mssql.service';
 import { map, Observable } from 'rxjs';
-import { GetColumnsResponse, GetSPParametersResponse, GetSPReturnColumnsResponse } from './mssql-scaffolder.model';
+import { GetColumnsResponse, GetSPParametersResponse, GetSPReturnColumnsResponse, SPDefinition } from './mssql-scaffolder.model';
 import { ErrorResponse } from '../../services/mssql/mssql.model';
 
 @Injectable({
@@ -60,7 +60,13 @@ export class MssqlScaffolderService {
     );
   }
 
-  // 7. Get all return columns and their types from an SP
+  // 7. Get SP definition lines
+  getSPDefinition(connection_id: string, dbName: string, schemaName: string, spName: string): Observable<SPDefinition[] | ErrorResponse>{
+    const query = `SELECT object_definition(object_id('${schemaName}.${spName}')) AS definition;`;
+    return this.mssql.executeQuery<SPDefinition>(connection_id, query, dbName);
+  }
+
+  // 8. Get all return columns and their types from an SP
   getSPReturnColumns(connection_id: string, dbName: string, schemaName: string, spName: string): Observable<GetSPReturnColumnsResponse[] | ErrorResponse> {
     const query = `
       SELECT name AS 'column', system_type_name, is_nullable as 'Nullable'

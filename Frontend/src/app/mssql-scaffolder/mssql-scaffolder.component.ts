@@ -7,8 +7,9 @@ import { AppComponent } from '../app/app.component';
 import { ConnectRequest, ConnectResponse, ErrorResponse, GetAllDatabasesResponse, GetAllSchemasResponse, GetStoredProceduresResponse, GetTablesResponse } from '../../services/mssql/mssql.model';
 import { MssqlScaffolderService } from './mssql-scaffolder.service';
 import { Meta } from '@angular/platform-browser';
-import { GetColumnsResponse, GetSPParametersResponse, GetSPReturnColumnsResponse } from './mssql-scaffolder.model';
+import { GetColumnsResponse, GetSPReturnColumnsResponse, SPDefinition, SPParam } from './mssql-scaffolder.model';
 import { RouterLink } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-mssql-scaffolder',
@@ -216,24 +217,38 @@ ${res.map((p) => `\tpublic ${MssqlScaffolderComponent.convertDataType(p.DataType
 
   private scaffoldSP() {
     const sc = this.scaffoldForm.getRawValue();
-    this.scaffolder.getSPParameters(this.connectionID, sc.database, sc.schema, sc.sp).subscribe(ps => {
-      ps = ps as GetSPParametersResponse[];
-      this.scaffolder.getSPReturnColumns(this.connectionID, sc.database, sc.schema, sc.sp).subscribe(rs => {
-        rs = rs as GetSPReturnColumnsResponse[];
-        
-        const psc = ps.map((p) => `\tpublic ${MssqlScaffolderComponent.convertDataType(p.Type)}${p.Nullable ? '?' : ''} ${p.Parameter_name} { get; set; }`);
-        const rsc = rs.map((p) => `\tpublic ${MssqlScaffolderComponent.convertDataType(p.system_type_name)}${p.Nullable ? '?' : ''} ${p.column} { get; set; }`);
 
-        this.csCode =
-`${psc.length > 0 ? `public class ${sc.sp}Params {`:'' }
+    forkJoin({
+      params: this.scaffolder.getSPDefinition(this.connectionID, sc.database, sc.schema, sc.sp),
+      result: this.scaffolder.getSPReturnColumns(this.connectionID, sc.database, sc.schema, sc.sp)
+    }).subscribe(vals => {
+      const spDef = (vals.params as SPDefinition[])[0].definition;
+      const spUpper = spDef.toUpperCase();
+
+      const ps = [...(spDef.substring(spUpper.indexOf("CREATE PROCEDURE"), spUpper.indexOf("AS"))
+        .matchAll(/@(?<name>\w+) +(?<type>\w+(\(.*\)){0,1}) *=* *(?<nul>(NULL){0,1})/gmi))].map(match => {
+          if (match.groups)
+            return {
+              Parameter_name: match.groups['name'],
+              Type: match.groups['type'],
+              Nullable: match.groups['nul'] && match.groups['nul'].length > 0 ? true : false
+            } as SPParam;
+          return undefined;
+        }).filter(v => v) as SPParam[];
+      const rs = vals.result as GetSPReturnColumnsResponse[];
+
+      const psc = ps.map((p) => `\tpublic ${MssqlScaffolderComponent.convertDataType(p.Type)}${p.Nullable ? '?' : ''} ${p.Parameter_name} { get; set; }`);
+      const rsc = rs.map((p) => `\tpublic ${MssqlScaffolderComponent.convertDataType(p.system_type_name)}${p.Nullable ? '?' : ''} ${p.column} { get; set; }`);
+
+      this.csCode =
+        `${psc.length > 0 ? `public class ${sc.sp}Params {` : ''}
 ${psc.join("\n")}
-${psc.length > 0 ? '}':'' }
+${psc.length > 0 ? '}' : ''}
 
-${rsc.length>0? `public class ${sc.sp}Result {`:'' }
+${rsc.length > 0 ? `public class ${sc.sp}Result {` : ''}
 ${rsc.join("\n")}
-${rsc.length > 0 ? '}':'' }`;
-        this.codeFlip = !this.codeFlip;
-      });
+${rsc.length > 0 ? '}' : ''}`;
+      this.codeFlip = !this.codeFlip;
     });
   }
 

@@ -24,3 +24,13 @@ export interface GetColumnsResponse {
     system_type_name: string;
     Nullable: boolean;
   }
+
+  export interface SPDefinition{
+    definition: string;
+  }
+
+  export interface SPParam{
+    Parameter_name: string;
+    Type: string;
+    Nullable: boolean;
+  }
