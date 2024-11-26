@@ -7,6 +7,7 @@ import { Meta } from '@angular/platform-browser';
 import { parse as tomlParse, stringify as tomlStringify } from 'smol-toml';
 import { XMLParser as xmlParse, XMLBuilder as xmlStringify } from 'fast-xml-parser';
 import YAML from 'yamljs';
+import { valueChangeAnim } from '../../animations/common-animations';
 
 @Component({
   selector: 'app-serialized-tool',
@@ -14,12 +15,7 @@ import YAML from 'yamljs';
   imports: [FormsModule, CodeAreaComponent],
   templateUrl: './serialized-tool.component.html',
   animations: [
-    trigger('valueChangeAnim', [
-      transition('* <=> *', [
-        animate('0.07s ease-out', style({ "border-color": "limegreen" })),
-        animate('0.07s ease-in', style({ "border-color": "var(--bs-border-color)" }))
-      ]),
-    ]),
+    valueChangeAnim,
     trigger('hasError', [
       state('true', style({ "border-color": "red" })),
       state('false', style({ "border-color": "var(--bs-border-color)" })),
@@ -27,12 +23,7 @@ import YAML from 'yamljs';
         animate('0.2s ease-in-out')
       ]),
     ]),
-  ],
-  styles: `
-  .code-border{
-    border: 3px solid var(--bs-border-color);
-  }
-  `
+  ]
 })
 export class SerializedToolComponent implements AfterContentInit {
   protected fromCode: string = `{

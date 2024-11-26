@@ -9,6 +9,7 @@ import { MssqlScaffolderService } from './mssql-scaffolder.service';
 import { Meta } from '@angular/platform-browser';
 import { GetColumnsResponse, GetSPReturnColumnsResponse, SPDefinition, SPParam } from './mssql-scaffolder.model';
 import { RouterLink } from '@angular/router';
+import { valueChangeAnim } from '../../animations/common-animations';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -17,6 +18,7 @@ import { forkJoin } from 'rxjs';
   imports: [FormsModule, ReactiveFormsModule, CodeAreaComponent, RouterLink],
   templateUrl: './mssql-scaffolder.component.html',
   animations: [
+    valueChangeAnim,
     trigger('connection', [
       state("0", style({ "border-width": "3px", "border-color": "var(--bs-border-color)" })),
       state("1", style({ "border-width": "3px", "border-color": "var(--bs-warning)" })),
@@ -24,19 +26,8 @@ import { forkJoin } from 'rxjs';
       transition('* <=> *', [
         animate('0.1s ease-in-out'),
       ]),
-    ]),
-    trigger('valueChangeAnim', [
-      transition('* <=> *', [
-        animate('0.07s ease-out', style({ "border-color": "limegreen" })),
-        animate('0.07s ease-in', style({ "border-color": "var(--bs-border-color)" }))
-      ]),
     ])
-  ],
-  styles: `
-  .code-border{
-    border: 3px solid var(--bs-border-color);
-  }
-  `
+  ]
 })
 export class MssqlScaffolderComponent {
   protected dbSettings: FormGroup = new FormGroup<DbSetting>(
@@ -248,6 +239,7 @@ ${psc.length > 0 ? '}' : ''}
 ${rsc.length > 0 ? `public class ${sc.sp}Result {` : ''}
 ${rsc.join("\n")}
 ${rsc.length > 0 ? '}' : ''}`;
+
       this.codeFlip = !this.codeFlip;
     });
   }
