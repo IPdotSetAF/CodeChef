@@ -41,6 +41,10 @@
     min-height: 100vh;
 }
 
+.code-border{
+    border: 3px solid var(--bs-border-color);
+}
+
 @keyframes gradient-move {
     0%{background-position:0% 50%}
     50%{background-position:100% 50%}

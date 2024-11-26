@@ -27,12 +27,7 @@ import YAML from 'yamljs';
         animate('0.2s ease-in-out')
       ]),
     ]),
-  ],
-  styles: `
-  .code-border{
-    border: 3px solid var(--bs-border-color);
-  }
-  `
+  ]
 })
 export class SerializedToolComponent implements AfterContentInit {
   protected fromCode: string = `{

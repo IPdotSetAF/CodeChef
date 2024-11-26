@@ -30,12 +30,7 @@ import { RouterLink } from '@angular/router';
         animate('0.07s ease-in', style({ "border-color": "var(--bs-border-color)" }))
       ]),
     ])
-  ],
-  styles: `
-  .code-border{
-    border: 3px solid var(--bs-border-color);
-  }
-  `
+  ]
 })
 export class MssqlScaffolderComponent {
   protected dbSettings: FormGroup = new FormGroup<DbSetting>(

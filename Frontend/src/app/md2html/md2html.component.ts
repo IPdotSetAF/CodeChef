@@ -18,12 +18,7 @@ import { parse } from 'marked';
         animate('0.07s ease-in', style({ "border-color": "var(--bs-border-color)" }))
       ]),
     ])
-  ],
-  styles: `
-  .code-border{
-    border: 3px solid var(--bs-border-color);
-  }
-  `
+  ]
 })
 export class Md2htmlComponent implements AfterContentInit {
   protected mdCode: string = `# Hello world

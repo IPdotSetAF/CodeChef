@@ -17,12 +17,7 @@ import { Meta } from '@angular/platform-browser';
         animate('0.07s ease-in', style({ "border-color": "var(--bs-border-color)" }))
       ]),
     ])
-  ],
-  styles: `
-  .code-border{
-    border: 3px solid var(--bs-border-color);
-  }
-  `
+  ]
 })
 export class Cs2tsComponent implements AfterContentInit {
   protected csCode: string = `public class a : b {
