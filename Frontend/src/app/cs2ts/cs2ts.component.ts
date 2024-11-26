@@ -2,22 +2,15 @@ import { AfterContentInit, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, Subject, takeLast, tap } from 'rxjs';
 import { CodeAreaComponent } from '../code-area/code-area.component';
-import { animate, style, transition, trigger } from '@angular/animations';
 import { Meta } from '@angular/platform-browser';
+import { valueChangeAnim } from '../../animations/common-animations';
 
 @Component({
   selector: 'app-cs2ts',
   standalone: true,
   imports: [FormsModule, CodeAreaComponent],
   templateUrl: './cs2ts.component.html',
-  animations: [
-    trigger('valueChangeAnim', [
-      transition('* <=> *', [
-        animate('0.07s ease-out', style({ "border-color": "limegreen" })),
-        animate('0.07s ease-in', style({ "border-color": "var(--bs-border-color)" }))
-      ]),
-    ])
-  ]
+  animations: [valueChangeAnim]
 })
 export class Cs2tsComponent implements AfterContentInit {
   protected csCode: string = `public class a : b {

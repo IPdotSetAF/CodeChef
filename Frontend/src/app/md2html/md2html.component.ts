@@ -2,23 +2,16 @@ import { AfterContentInit, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, Subject, takeLast, tap } from 'rxjs';
 import { CodeAreaComponent } from '../code-area/code-area.component';
-import { animate, style, transition, trigger } from '@angular/animations';
 import { Meta } from '@angular/platform-browser';
 import { parse } from 'marked';
+import { valueChangeAnim } from '../../animations/common-animations';
 
 @Component({
   selector: 'app-md2html',
   standalone: true,
   imports: [FormsModule, CodeAreaComponent],
   templateUrl: './md2html.component.html',
-  animations: [
-    trigger('valueChangeAnim', [
-      transition('* <=> *', [
-        animate('0.07s ease-out', style({ "border-color": "limegreen" })),
-        animate('0.07s ease-in', style({ "border-color": "var(--bs-border-color)" }))
-      ]),
-    ])
-  ]
+  animations: [valueChangeAnim]
 })
 export class Md2htmlComponent implements AfterContentInit {
   protected mdCode: string = `# Hello world

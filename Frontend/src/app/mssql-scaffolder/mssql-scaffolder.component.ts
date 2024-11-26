@@ -9,6 +9,7 @@ import { MssqlScaffolderService } from './mssql-scaffolder.service';
 import { Meta } from '@angular/platform-browser';
 import { GetColumnsResponse, GetSPParametersResponse, GetSPReturnColumnsResponse } from './mssql-scaffolder.model';
 import { RouterLink } from '@angular/router';
+import { valueChangeAnim } from '../../animations/common-animations';
 
 @Component({
   selector: 'app-mssql-scaffolder',
@@ -16,18 +17,13 @@ import { RouterLink } from '@angular/router';
   imports: [FormsModule, ReactiveFormsModule, CodeAreaComponent, RouterLink],
   templateUrl: './mssql-scaffolder.component.html',
   animations: [
+    valueChangeAnim,
     trigger('connection', [
       state("0", style({ "border-width": "3px", "border-color": "var(--bs-border-color)" })),
       state("1", style({ "border-width": "3px", "border-color": "var(--bs-warning)" })),
       state("2", style({ "border-width": "3px", "border-color": "limegreen" })),
       transition('* <=> *', [
         animate('0.1s ease-in-out'),
-      ]),
-    ]),
-    trigger('valueChangeAnim', [
-      transition('* <=> *', [
-        animate('0.07s ease-out', style({ "border-color": "limegreen" })),
-        animate('0.07s ease-in', style({ "border-color": "var(--bs-border-color)" }))
       ]),
     ])
   ]
@@ -215,18 +211,18 @@ ${res.map((p) => `\tpublic ${MssqlScaffolderComponent.convertDataType(p.DataType
       ps = ps as GetSPParametersResponse[];
       this.scaffolder.getSPReturnColumns(this.connectionID, sc.database, sc.schema, sc.sp).subscribe(rs => {
         rs = rs as GetSPReturnColumnsResponse[];
-        
+
         const psc = ps.map((p) => `\tpublic ${MssqlScaffolderComponent.convertDataType(p.Type)}${p.Nullable ? '?' : ''} ${p.Parameter_name} { get; set; }`);
         const rsc = rs.map((p) => `\tpublic ${MssqlScaffolderComponent.convertDataType(p.system_type_name)}${p.Nullable ? '?' : ''} ${p.column} { get; set; }`);
 
         this.csCode =
-`${psc.length > 0 ? `public class ${sc.sp}Params {`:'' }
+          `${psc.length > 0 ? `public class ${sc.sp}Params {` : ''}
 ${psc.join("\n")}
-${psc.length > 0 ? '}':'' }
+${psc.length > 0 ? '}' : ''}
 
-${rsc.length>0? `public class ${sc.sp}Result {`:'' }
+${rsc.length > 0 ? `public class ${sc.sp}Result {` : ''}
 ${rsc.join("\n")}
-${rsc.length > 0 ? '}':'' }`;
+${rsc.length > 0 ? '}' : ''}`;
         this.codeFlip = !this.codeFlip;
       });
     });
