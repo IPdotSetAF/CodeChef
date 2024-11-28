@@ -1,15 +1,15 @@
 <div id="header">
     <div class="position-relative">
 
-        <div class="position-absolute h-100 w-100 row">
+        <div class="position-absolute w-100 row m-0 ps-1 pe-2">
             <div class="col-6 header-section d-flex justify-content-start">
-                <a class="h-100 d-flex justify-content-start gap-2 align-items-center ps-2" [routerLink]="['/']">
+                <a class="h-100 d-flex justify-content-start gap-2 align-items-center" [routerLink]="['/']">
                     <img class="img-header" src="code-chef.svg" />
                     <h1 class="fs-3 m-0">CodeChef</h1>
                 </a>
             </div>
 
-            <div class="col-6 header-section d-flex align-items-center justify-content-end p-2 gap-2">
+            <div class="col-6 header-section d-flex align-items-center justify-content-end p-0 gap-2">
                 <a role="button" class="btn-header-round btn-hover btn-circle" href="https://ipdotsetaf.ir"
                     title="IPdotSetAF">
                     <img id="ipaf" class="img-header" src="ipaf.svg" />
@@ -19,8 +19,8 @@
             </div>
         </div>
 
-        <div class="row h-100 w-100">            
-            <div class="col-sm-4 header-section "></div>
+        <div class="row h-100 w-100 m-0">            
+            <div class="col-sm-4 header-section"></div>
 
             <div class="col-sm-4 h-100 header-section d-flex justify-content-center">
                 <div class="dropdown">
@@ -40,7 +40,6 @@
                 <a role="button" class="btn-header btn-hover" [routerLink]="['/downloads']"><i class="bi bi-download"></i>
                     Downloads</a>
             </div>
-            
         </div>
     </div>
     <div class="col-12 divider"></div>
