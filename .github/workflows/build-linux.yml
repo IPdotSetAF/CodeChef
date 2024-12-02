@@ -1,0 +1,31 @@
+name: Build Linux
+
+on:
+  workflow_call:
+  workflow_dispatch: 
+  
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: 3.11.4
+    - run: ./Tools/mssql-proxy/odbc-driver-installer.sh
+    - run: pip install -r Tools/mssql-proxy/requirements.txt pyinstaller
+    - run: pyinstaller mssql-proxy.linux.spec
+      working-directory: Tools/mssql-proxy
+    - id: name 
+      run: echo "platform_name=$(echo ${{ matrix.platform }} | sed 's:/:-:g')" >> $GITHUB_OUTPUT
+    - run: tar -czf mssql-proxy-${{ github.ref_name }}-${{ steps.name.outputs.platform_name }}.tar.gz Tools/mssql-proxy/dist
+    - uses: actions/upload-artifact@v4
+      with:
+        name: build-${{ steps.name.outputs.platform_name }}
+        path: mssql-proxy-${{ github.ref_name }}-${{ steps.name.outputs.platform_name }}.tar.gz
+   

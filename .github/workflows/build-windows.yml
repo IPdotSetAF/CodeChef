@@ -1,0 +1,22 @@
+name: Build Windows
+
+on:
+  workflow_call:
+  workflow_dispatch: 
+  
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: 3.11.4
+    - run: pip install -r Tools/mssql-proxy/requirements.txt pyinstaller
+    - run: pyinstaller mssql-proxy.win.spec
+      working-directory: Tools/mssql-proxy
+    - run: tar -a -c -f mssql-proxy-${{ github.ref_name }}-windows.zip Tools/mssql-proxy/dist
+    - uses: actions/upload-artifact@v4
+      with:
+        name: build-windows
+        path: mssql-proxy-${{ github.ref_name }}-windows.zip

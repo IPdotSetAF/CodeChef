@@ -1,0 +1,85 @@
+name: Build And Publish Docker
+
+on:
+  workflow_call:
+  workflow_dispatch: 
+  
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  publish-docker:
+    runs-on: ubuntu-latest
+    if: github.ref_type == 'tag'
+    needs: [build-docker]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Install cosign
+      uses: sigstore/cosign-installer@v3
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      
+    - name: Log into registry ${{ env.REGISTRY }}
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push Docker image
+      id: build-and-push
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        push: true
+        tags: ${{ needs.build-docker.outputs.tags }}
+        labels: ${{ needs.build-docker.outputs.labels }}
+        platforms: linux/amd64, linux/arm64
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Sign the published Docker image
+      env:
+        TAGS: ${{ needs.build-docker.outputs.tags }}
+        DIGEST: ${{ steps.build-and-push.outputs.digest }}
+      run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+
+  build-docker:
+    runs-on: ubuntu-latest
+    outputs:
+      tags: ${{ steps.meta.outputs.tags }}
+      labels: ${{ steps.meta.outputs.labels }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Extract Docker metadata
+        uses: docker/metadata-action@v5
+        id: meta
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Build Docker images
+        id: build-and-push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64, linux/arm64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          
