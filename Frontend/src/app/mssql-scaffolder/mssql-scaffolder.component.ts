@@ -334,3 +334,46 @@ enum ConnectionStatus {
   connecting,
   connected
 }
+
+interface DbSetting {
+  /**
+   * The proxy server address/control for the MSSQL proxy.
+   */
+  proxy: AbstractControl<string>;
+
+  /**
+   * The database server address/control.
+   */
+  server: AbstractControl<string>;
+
+  /**
+   * The database username/control.
+   */
+  username: AbstractControl<string>;
+
+  /**
+   * The database password/control.
+   */
+  password: AbstractControl<string>;
+}
+
+/**
+ * Interface representing the form controls for the scaffolding form.
+ * It defines the fields required for selecting the database, schema, and target object type.
+ */
+interface ScaffoldForm {
+  /**
+   * The selected database (catalog) name/control.
+   */
+  database: AbstractControl<string>;
+
+  /**
+   * The selected schema name/control.
+   */
+  schema: AbstractControl<string>;
+
+  /**
+   * A boolean control indicating whether the target is a table (true) or a stored procedure (false).
+   */
+  isTable: AbstractControl<boolean>;
+}
