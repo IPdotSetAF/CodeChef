@@ -30,21 +30,8 @@ import { forkJoin } from 'rxjs';
   ]
 })
 export class MssqlScaffolderComponent {
-  protected dbSettings: FormGroup = new FormGroup<DbSetting>(
-    {
-      proxy: new FormControl('http://localhost:50505', { nonNullable: true, validators: [Validators.required] }),
-      server: new FormControl('.', { nonNullable: true, validators: [Validators.required] }),
-      username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-      password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    }
-  );
-  protected scaffoldForm: FormGroup = new FormGroup<ScaffoldForm>(
-    {
-      database: new FormControl("", { nonNullable: true, validators: [Validators.required] }),
-      schema: new FormControl("", { nonNullable: true, validators: [Validators.required] }),
-      isTable: new FormControl(true, { nonNullable: true })
-    }
-  );
+  protected dbSettings: FormGroup;
+  protected scaffoldForm: FormGroup;
   protected status: ConnectionStatus = ConnectionStatus.disconnected;
   protected connectionStatus = ConnectionStatus;
   protected connectionError!: string | null;
@@ -57,6 +44,10 @@ export class MssqlScaffolderComponent {
   protected Tables!: GetTablesResponse[];
   protected Sps!: GetStoredProceduresResponse[];
 
+  // Add these two properties
+  protected FilteredTables: GetTablesResponse[] = [];
+  protected FilteredSps: GetStoredProceduresResponse[] = [];
+
   private connectionID !: string;
 
   constructor(
@@ -68,6 +59,19 @@ export class MssqlScaffolderComponent {
       { name: "description", content: "Scaffolds MSSQL table models and stored procedures input and output models to C# classes." },
       { name: "keywords", content: "C#, MSSQL, CSharp, microsoft, scaffold, db-first, database, model, DTO, class, table, schema, stored procedure, SQL server, code generator" },
     ]);
+
+    this.dbSettings = new FormGroup({
+      proxy: new FormControl('http://localhost:50505', { nonNullable: true, validators: [Validators.required] }),
+      server: new FormControl('.', { nonNullable: true, validators: [Validators.required] }),
+      username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    });
+
+    this.scaffoldForm = new FormGroup({
+      database: new FormControl("", { nonNullable: true, validators: [Validators.required] }),
+      schema: new FormControl("", { nonNullable: true, validators: [Validators.required] }),
+      isTable: new FormControl(true, { nonNullable: true }),
+    });
 
     this.initForm();
   }
@@ -89,9 +93,9 @@ export class MssqlScaffolderComponent {
         this.getSPs();
     });
 
-    let c = new FormControl("", { nonNullable: true, validators: [Validators.required] });
-    c.disable();
-    this.scaffoldForm.addControl("table", c);
+    let tableControl = new FormControl("", { nonNullable: true, validators: [Validators.required] });
+    tableControl.disable();
+    this.scaffoldForm.addControl("table", tableControl);
 
     this.scaffoldForm.controls["isTable"].valueChanges.subscribe(v => {
       if (this.isTable === v)
@@ -109,6 +113,27 @@ export class MssqlScaffolderComponent {
         if (sc.database && sc.database != '' && sc.schema && sc.schema != '')
           this.getSPs();
       }
+    });
+
+    // Add filter form controls
+    const tableFilter = new FormControl('', { nonNullable: true });
+    const spFilter = new FormControl('', { nonNullable: true });
+
+    this.scaffoldForm.addControl("tableFilter", tableFilter);
+    this.scaffoldForm.addControl("spFilter", spFilter);
+
+    // Whenever tableFilter changes, filter Tables
+    tableFilter.valueChanges.subscribe(value => {
+      this.FilteredTables = this.Tables
+        ? this.Tables.filter(t => t.name.toLowerCase().includes(value.toLowerCase()))
+        : [];
+    });
+
+    // Whenever spFilter changes, filter Sps
+    spFilter.valueChanges.subscribe(value => {
+      this.FilteredSps = this.Sps
+        ? this.Sps.filter(s => s.SPECIFIC_NAME.toLowerCase().includes(value.toLowerCase()))
+        : [];
     });
 
     this.scaffoldForm.disable();
@@ -175,7 +200,9 @@ export class MssqlScaffolderComponent {
     const sc = this.scaffoldForm.getRawValue();
     this.mssql.getTables(this.connectionID, sc.database, sc.schema).subscribe((res) => {
       this.Tables = res as GetTablesResponse[];
+      this.FilteredTables = this.Tables;
       this.scaffoldForm.controls["table"].enable();
+      this.scaffoldForm.controls["tableFilter"].setValue('', { emitEvent: true });
     });
   }
 
@@ -183,7 +210,9 @@ export class MssqlScaffolderComponent {
     const sc = this.scaffoldForm.getRawValue();
     this.mssql.getStoredProcedures(this.connectionID, sc.database, sc.schema).subscribe((res) => {
       this.Sps = res as GetStoredProceduresResponse[];
+      this.FilteredSps = this.Sps;
       this.scaffoldForm.controls["sp"].enable();
+      this.scaffoldForm.controls["spFilter"].setValue('', { emitEvent: true });
     });
   }
 
@@ -304,17 +333,4 @@ enum ConnectionStatus {
   disconnected,
   connecting,
   connected
-}
-
-interface DbSetting {
-  proxy: AbstractControl<string>;
-  server: AbstractControl<string>;
-  username: AbstractControl<string>;
-  password: AbstractControl<string>;
-}
-
-interface ScaffoldForm {
-  database: AbstractControl<string>;
-  schema: AbstractControl<string>;
-  isTable: AbstractControl<boolean>;
 }
