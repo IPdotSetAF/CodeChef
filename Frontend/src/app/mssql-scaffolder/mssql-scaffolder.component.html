@@ -158,6 +158,46 @@
             <br />
         </div>
     </div>
+    <div class="row justify-content-end">
+        <div class="col-md-9">
+            @if(isTable){
+                <!-- Add a small search box here -->
+                <div class="input-group mb-1">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Search tables..."
+                           formControlName="tableFilter" />
+                    <span class="input-group-text" id="basic-addon1">
+                        <i class="bi bi-search"></i>
+                    </span>
+                </div>
+                <select id="sc-table" class="form-control mt-1" formControlName="table">
+                    <!-- Notice we now loop over FilteredTables instead of Tables -->
+                    @for(item of FilteredTables;track $index){
+                        <option [ngValue]="item.name">{{item.name}}</option>
+                    }
+                </select>
+            }@else {
+                <!-- Similarly for SPs -->
+                <div class="input-group mb-1">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Search stored procedures..."
+                           formControlName="spFilter" />
+                    <span class="input-group-text" id="basic-addon2">
+                        <i class="bi bi-search"></i>
+                    </span>
+                </div>
+                <select id="sc-sp" class="form-control mt-1" formControlName="sp">
+                    <!-- Now we loop over FilteredSps instead of Sps -->
+                    @for(item of FilteredSps;track $index){
+                        <option [ngValue]="item.SPECIFIC_NAME">{{item.SPECIFIC_NAME}}</option>
+                    }
+                </select>
+            }
+        </div>
+    </div>
+
 
     <br />
 
