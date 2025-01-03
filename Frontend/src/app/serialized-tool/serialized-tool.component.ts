@@ -34,6 +34,7 @@ export class SerializedToolComponent implements AfterContentInit {
   protected toLang: string = "xml";
   protected status: boolean = false;
   protected hasError: boolean = false;
+  protected beautify: boolean = true;
 
   protected inputDebouncer = new Subject<string>();
 
@@ -77,10 +78,10 @@ export class SerializedToolComponent implements AfterContentInit {
 
       switch (this.toLang) {
         case "json":
-          this.toCode = JSON.stringify(obj);
+          this.toCode = this.beautify ? JSON.stringify(obj, null, 2) : JSON.stringify(obj);
           break;
         case "xml":
-          this.toCode = new xmlStringify().build(obj);
+          this.toCode = this.beautify ? new xmlStringify({ format: true }).build(obj) : new xmlStringify().build(obj);
           break;
         case "yaml":
           this.toCode = YAML.stringify(obj);
