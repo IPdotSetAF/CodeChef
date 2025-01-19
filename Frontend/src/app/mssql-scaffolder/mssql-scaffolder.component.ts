@@ -215,8 +215,7 @@ ${res.map((p) => `\tpublic ${MssqlScaffolderComponent.convertDataType(p.DataType
     }).subscribe(vals => {
       const spDef = (vals.params as SPDefinition[])[0].definition;
       const spUpper = spDef.toUpperCase();
-
-      const ps = [...(spDef.substring(spUpper.indexOf("CREATE PROCEDURE"), spUpper.indexOf("AS"))
+      const ps = [...(spDef.substring(spUpper.indexOf("CREATE PROCEDURE"), spUpper.search(/^ *AS *\r\n/gmi))
         .matchAll(/@(?<name>\w+) +(?<type>\w+(\(.*\)){0,1}) *=* *(?<nul>(NULL){0,1})/gmi))].map(match => {
           if (match.groups)
             return {
