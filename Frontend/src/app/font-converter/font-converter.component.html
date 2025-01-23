@@ -1,0 +1,79 @@
+<div class="container-fluid page p-4">
+    <div class="row">
+        <h2>Font Converter</h2>
+        <p>Convert fonts to different formats.</p>
+    </div>
+
+    <div class="card row">
+        <div class="card-header">
+            <h3 for="fileInput" class="form-label"><i class="bi bi-file-earmark-font"></i> Select or Drag And Drop Font
+                Files</h3>
+        </div>
+
+        <div class="card-body drop-zone d-flex align-items-center" (dragover)="onDragOver($event)"
+            (dragleave)="onDragLeave($event)" (drop)="onDrop($event)" [class.drag-over]="isDragOver">
+            <div class="w-100">
+
+                <!-- File Input -->
+                <div class="mb-3">
+                    <input type="file" class="form-control" id="fileInput" (change)="onFileSelected($event)" multiple
+                        accept=".{{fromExtensions | join: ', .'}}" />
+                    <small class="text-muted">Allowed formats: .{{fromExtensions | join: ', .'}}</small>
+                </div>
+
+                <!-- Selected Files List -->
+                <div>
+                    <ul class="list-group">
+                        @for (file of files; track file.originalFile.name ; let i = $index) {
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <button class="btn btn-outline-danger border-0 btn-sm bi bi-x-lg" (click)="removeFile(i)"></button>
+
+                                    <span>
+                                        {{ file.originalFile.name }} ({{ file.originalFile.size | bytes }})
+                                        @if (file.convertedFile) {
+                                        <span class="text-success">
+                                            → Converted to {{ file.convertedFile.name }} ({{ file.convertedFile.size | bytes }})
+                                        </span>
+                                        }
+                                    </span>
+                                </div>
+
+                                @if (file.convertedFile) {
+                                <button class="btn btn-success btn-sm bi bi-download"
+                                    (click)="downloadFile(file.convertedFile)"></button>
+                                }
+                            </div>
+                        </li>
+                        }
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card-footer container">
+            <div class="col-12 d-flex justify-content-center align-items-center gap-2">
+                <label for="convertFormat" class="form-label text-nowrap">Convert to:</label>
+                <select id="convertFormat" class="form-select" [(ngModel)]="selectedFormat"
+                    (change)="onFormatChanged()">
+                    @for (format of toExtensions; track format) {
+                    <option [value]="format">{{ format }}</option>
+                    }
+                </select>
+            </div>
+
+        </div>
+    </div>
+
+    <br />
+
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center gap-2">
+            <button class="btn btn-success" (click)="convert()">Convert <i class="bi bi-caret-right"></i></button>
+            <button class="btn btn-success" [disabled]="!isConverted" (click)="downloadAll()">Download All <i
+                    class="bi bi-download"></i></button>
+        </div>
+    </div>
+</div>
