@@ -4,13 +4,13 @@ import { Font, woff2 } from 'fonteditor-core';
 import { BytesPipe } from '../../pipes/bytes/bytes.pipe';
 import { JoinPipe } from '../../pipes/join/join.pipe';
 import { downloadFile, downloadFilesAsZip } from '../../utils/download';
+import { Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-font-converter',
   standalone: true,
   imports: [FormsModule, BytesPipe, JoinPipe],
-  templateUrl: './font-converter.component.html',
-  styleUrl: './font-converter.component.css'
+  templateUrl: './font-converter.component.html'
 })
 export class FontConverterComponent {
   protected files: FontFile[] = [];
@@ -21,6 +21,13 @@ export class FontConverterComponent {
   protected isConverted: boolean = false;
 
   protected downloadFile = downloadFile;
+
+  constructor(meta: Meta) {
+    meta.addTags([
+      { name: "description", content: `Converts Fonts from one format to another, supports ${this.fromExtensions.join(', ')} formats, bulk/batch conversion and zip/indevidual download.` },
+      { name: "keywords", content: `Font, Converter, Convert, Extension, File, Format, ${this.fromExtensions.join(', ')}, Download, Free, Online, Batch, Bulk, Zip, From, ${this.fromExtensions.map(f => this.fromExtensions.map(t => `${f} to ${t}`).join(', ')).join(', ')}` },
+    ]);
+  }
 
   protected onFileSelected(event: any): void {
     const selectedFiles = event.target.files;

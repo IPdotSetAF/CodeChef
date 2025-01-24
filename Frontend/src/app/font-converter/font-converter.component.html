@@ -10,7 +10,7 @@
                 Files</h3>
         </div>
 
-        <div class="card-body drop-zone d-flex align-items-center" (dragover)="onDragOver($event)"
+        <div class="card-body drop-zone d-flex align-items-center" style="min-height: 300px;" (dragover)="onDragOver($event)"
             (dragleave)="onDragLeave($event)" (drop)="onDrop($event)" [class.drag-over]="isDragOver">
             <div class="w-100">
 
