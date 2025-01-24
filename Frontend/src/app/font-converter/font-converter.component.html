@@ -14,14 +14,16 @@
             (dragleave)="onDragLeave($event)" (drop)="onDrop($event)" [class.drag-over]="isDragOver">
             <div class="w-100">
 
-                <!-- File Input -->
-                <div class="mb-3">
-                    <input type="file" class="form-control" id="fileInput" (change)="onFileSelected($event)" multiple
-                        accept=".{{fromExtensions | join: ', .'}}" />
+                @if (files.length === 0) {
+                <div class="mb-3 d-flex flex-column align-items-center">
+                    <input #fileInput type="file" class="form-control d-none" id="fileInput"
+                        (change)="onFileSelected($event)" multiple accept=".{{fromExtensions | join: ', .'}}" />
+                    <button class="btn btn-primary" (click)="fileInput.click()">Select Files <i
+                            class="bi bi-file-earmark-plus"></i></button>
                     <small class="text-muted">Allowed formats: .{{fromExtensions | join: ', .'}}</small>
                 </div>
-
-                <!-- Selected Files List -->
+                }
+                
                 <div>
                     <ul class="list-group">
                         @for (file of files; track file.originalFile.name ; let i = $index) {
@@ -30,7 +32,7 @@
                                 <div>
                                     <button class="btn btn-outline-danger border-0 btn-sm bi bi-x-lg"
                                         (click)="removeFile(i)"></button>
-
+                                    <span class="text-info">{{i+1}}.</span>
                                     <span>
                                         {{ file.originalFile.name }} ({{ file.originalFile.size | bytes }})
                                         @if (file.convertedFile) {
@@ -75,34 +77,53 @@
         <div class="col-12 d-flex justify-content-center gap-2">
             <button class="btn btn-success" (click)="convert()">Convert <i class="bi bi-caret-right"></i></button>
             <button class="btn btn-success" [disabled]="!isConverted" (click)="downloadAll()">Download All <i
-                    class="bi bi-download"></i></button>
+                    class="bi bi-file-earmark-zip"></i></button>
         </div>
     </div>
 
     <br />
 
-    <p><strong>.TTF (TrueType Font):</strong><br>TTF is a widely used font format that works on both Windows and macOS.
-        It supports high-quality scaling, making it suitable for both screen and print. TTF is commonly used in
-        applications like word processors, graphic design software, and websites. However, it lacks some advanced
-        typographic features compared to newer formats.</p>
-    <p><strong>.OTF (OpenType Font):</strong><br>OTF is an extension of TTF, offering additional features like
-        ligatures, alternate characters, and multilingual support. It’s ideal for professional design work, such as
-        branding and print materials, due to its advanced typographic capabilities. OTF is also cross-platform and works
-        well for both screen and print.</p>
-    <p><strong>.WOFF (Web Open Font Format):</strong><br>WOFF is specifically designed for web use. It compresses TTF or
-        OTF fonts, reducing file size for faster loading on websites. WOFF is supported by most modern browsers and is a
-        popular choice for web designers who need efficient, high-quality fonts for online content.</p>
-    <p><strong>.WOFF2:</strong><br>WOFF2 is an improved version of WOFF, offering even better compression and faster
-        loading times. It’s ideal for modern web design, especially when performance and speed are critical. WOFF2 is
-        supported by most up-to-date browsers.</p>
-    <p><strong>.EOT (Embedded OpenType):</strong><br>EOT is a legacy font format designed for web use, primarily for
-        older versions of Internet Explorer. It’s less commonly used today due to limited browser support and the rise
-        of more efficient formats like WOFF and WOFF2.</p>
-    <p><strong>.SVG (Scalable Vector Graphics):</strong><br>SVG fonts use vector graphics to render text, making them
-        highly scalable and ideal for high-resolution displays. They were historically used for web icons and simple
-        text but have largely been replaced by WOFF and WOFF2 for web typography.</p>
-    <p>Each format serves specific purposes, from print and professional design (OTF, TTF) to web optimization (WOFF,
-        WOFF2) and legacy support (EOT, SVG). Choosing the right format depends on the intended use and platform.</p>
-    <p>With this tool, you can easily convert different font formats to each other and in batches! Simply select your font files, choose the desired output format, and click the "Convert" button. You can then
-        download the converted files individually or all at once.</p>
+    <div class="row">
+        <div class="col-12">
+            <p><strong>.TTF (TrueType Font):</strong><br>TTF is a widely used font format that works on both Windows and
+                macOS.
+                It supports high-quality scaling, making it suitable for both screen and print. TTF is commonly used in
+                applications like word processors, graphic design software, and websites. However, it lacks some
+                advanced
+                typographic features compared to newer formats.</p>
+            <p><strong>.OTF (OpenType Font):</strong><br>OTF is an extension of TTF, offering additional features like
+                ligatures, alternate characters, and multilingual support. It’s ideal for professional design work, such
+                as
+                branding and print materials, due to its advanced typographic capabilities. OTF is also cross-platform
+                and works
+                well for both screen and print.</p>
+            <p><strong>.WOFF (Web Open Font Format):</strong><br>WOFF is specifically designed for web use. It
+                compresses TTF or
+                OTF fonts, reducing file size for faster loading on websites. WOFF is supported by most modern browsers
+                and is a
+                popular choice for web designers who need efficient, high-quality fonts for online content.</p>
+            <p><strong>.WOFF2:</strong><br>WOFF2 is an improved version of WOFF, offering even better compression and
+                faster
+                loading times. It’s ideal for modern web design, especially when performance and speed are critical.
+                WOFF2 is
+                supported by most up-to-date browsers.</p>
+            <p><strong>.EOT (Embedded OpenType):</strong><br>EOT is a legacy font format designed for web use, primarily
+                for
+                older versions of Internet Explorer. It’s less commonly used today due to limited browser support and
+                the rise
+                of more efficient formats like WOFF and WOFF2.</p>
+            <p><strong>.SVG (Scalable Vector Graphics):</strong><br>SVG fonts use vector graphics to render text, making
+                them
+                highly scalable and ideal for high-resolution displays. They were historically used for web icons and
+                simple
+                text but have largely been replaced by WOFF and WOFF2 for web typography.</p>
+            <p>Each format serves specific purposes, from print and professional design (OTF, TTF) to web optimization
+                (WOFF,
+                WOFF2) and legacy support (EOT, SVG). Choosing the right format depends on the intended use and
+                platform.</p>
+            <p>With this tool, you can easily convert different font formats to each other and in batches! Simply select
+                your font files, choose the desired output format, and click the "Convert" button. You can then
+                download the converted files individually or all at once.</p>
+        </div>
+    </div>
 </div>
