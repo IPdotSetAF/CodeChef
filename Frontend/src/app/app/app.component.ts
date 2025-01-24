@@ -19,15 +19,15 @@ export class AppComponent {
   protected header: boolean = true;
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: any,
+    @Inject(PLATFORM_ID) platformId: any,
     meta: Meta,
-    private activatedRoute: ActivatedRoute,
-    private router: Router
+    activatedRoute: ActivatedRoute,
+    router: Router
   ) {
-    AppComponent.isBrowser = isPlatformBrowser(this.platformId);
+    AppComponent.isBrowser = isPlatformBrowser(platformId);
     meta.addTag({ name: "author", content: "IPdotSetAF" });
 
-    this.router.events.pipe(
+    router.events.pipe(
       filter(e => e instanceof NavigationEnd),
       map(() => activatedRoute),
       map(route => {
