@@ -21,11 +21,13 @@
         <div class="col-sm-6 d-flex gap-2">
             <label class="form-label d-block me-2">Options:</label>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="hyphens" [disabled]="!isGuid" [(ngModel)]="hyphen" (change)="generate()" />
+                <input class="form-check-input" type="checkbox" id="hyphens" [disabled]="!isGuid" [(ngModel)]="hyphen"
+                    (change)="generate()" />
                 <label class="form-check-label" for="hyphens">Hyphens</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="uppercase" [(ngModel)]="uppercase" (change)="generate()" />
+                <input class="form-check-input" type="checkbox" id="uppercase" [(ngModel)]="uppercase"
+                    (change)="generate()" />
                 <label class="form-check-label" for="uppercase">Uppercase</label>
             </div>
         </div>
@@ -50,7 +52,8 @@
         <div class="col d-flex gap-2">
             <label class="form-label d-block me-2">Encoding:</label>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="base64" [(ngModel)]="base64" (change)="generate()" />
+                <input class="form-check-input" type="checkbox" id="base64" [(ngModel)]="base64"
+                    (change)="generate()" />
                 <label class="form-check-label" for="base64">Base64</label>
             </div>
             <!-- <div class="form-check">
@@ -58,7 +61,8 @@
                 <label class="form-check-label" for="rfc7515">RFC7515</label>
             </div> -->
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="urlEncode" [disabled]="!base64" [(ngModel)]="urlEncode" (change)="generate()" />
+                <input class="form-check-input" type="checkbox" id="urlEncode" [disabled]="!base64"
+                    [(ngModel)]="urlEncode" (change)="generate()" />
                 <label class="form-check-label" for="urlEncode">URL Encode</label>
             </div>
         </div>
@@ -85,7 +89,17 @@
 
     <div class="row">
         <div class="col-12">
-
+            <p><strong>GUID &amp; UUID</strong><br>GUID (Globally Unique Identifier) and UUID (Universally Unique
+                Identifier) are 128-bit unique IDs widely used in databases, distributed systems, and APIs. These
+                alphanumeric strings (like <code>550e8400-e29b-41d4-a716-446655440000</code>) ensure uniqueness across
+                systems. UUIDs follow the <strong>RFC 4122</strong> standard and come in versions like <strong>v1
+                    (time-based)</strong> or <strong>v4 (random)</strong>, making them perfect for decentralized setups
+                where collisions must be avoided.</p>
+            <p><strong>NanoID</strong><br>NanoID is the sleek, modern alternative to UUIDs. It’s
+                <strong>faster</strong>, <strong>customizable</strong>, and <strong>shorter</strong>—ideal for use cases
+                like short URLs, user sessions, or SPAs. With adjustable lengths and character sets, NanoID gives
+                developers full control while staying efficient and secure. Need a compact, unique ID that’s easy to
+                work with? NanoID has you covered.</p>
         </div>
     </div>
 </div>

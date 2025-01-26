@@ -35,7 +35,6 @@ export class IdGeneratorComponent  {
     this.generate();
   }
 
-
   protected generate() {
     this.idsCode = "";
     for (let i = 0; i < this.count; i++) {
