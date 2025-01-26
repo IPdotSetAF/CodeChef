@@ -15,6 +15,7 @@ CodeChef is an online developer tool that aims to eliminate repetitive developer
 - **Markdown to HTML converter**<br/>Converts Markdown code to HTML code.
 - **Serialized tool**<br/>Converts serialized objects between different formats(JSON, XML, YAML, TOML).
 - **MSSQL Scaffolder**<br/>Scaffolds C# Models from MSSQL Tables and Stored Procedures.
+- **ID Generator**<br/>Generates GUID/UUID and NanoIDs with code formating and encoding.
 - **Need more tools?**<br/><a href="#Contribution">Open issue/pull request</a>, Everyone is welcome for contribution.
 
 You can [**Go to Live Website**](https://codechef.ipdotsetaf.ir) or Run the website locally.
