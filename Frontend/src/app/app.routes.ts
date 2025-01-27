@@ -7,6 +7,7 @@ import { SerializedToolComponent } from './serialized-tool/serialized-tool.compo
 import { MssqlScaffolderComponent } from './mssql-scaffolder/mssql-scaffolder.component';
 import { DownloadsComponent } from './downloads/downloads.component';
 import { FontConverterComponent } from './font-converter/font-converter.component';
+import { IdGeneratorComponent } from './id-generator/id-generator.component';
 
 export const routes: Routes = [
     { path: '', title: "CodeChef", component: HomeComponent, data: { header: false } },
@@ -15,6 +16,7 @@ export const routes: Routes = [
     { path: 'serialized', title: "Serialized Tool • CodeChef", component: SerializedToolComponent },
     { path: 'mssqlscaffold', title: "MSSQL Scaffolder • CodeChef", component: MssqlScaffolderComponent },
     { path: 'fonts', title: "Font Converter • CodeChef", component: FontConverterComponent },
+    { path: 'id', title: "ID Generator • CodeChef", component: IdGeneratorComponent },
     { path: 'downloads', title: "Downloads • CodeChef", component: DownloadsComponent },
 
     { path: '**', title: "Not Found • CodeChef", component: NotFoundComponent },
