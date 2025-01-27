@@ -41,7 +41,9 @@
             ],
             "allowedCommonJsDependencies": [
               "fast-xml-parser",
-              "yamljs"
+              "yamljs",
+              "jszip",
+              "@xmldom/xmldom"
             ],
             "server": "src/main.server.ts",
             "prerender": true,
