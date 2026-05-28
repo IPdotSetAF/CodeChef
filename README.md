@@ -4,11 +4,16 @@
     <img src="https://img.shields.io/github/release-date/IPdotSetAF/CodeChef"/>
     <img src="https://img.shields.io/github/last-commit/IPdotSetAF/CodeChef"/>
     <img src="https://img.shields.io/github/license/IPdotSetAF/CodeChef"/>
+    <img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/IPdotSetAF/CodeChef/total">
 </p>
 
 # <img src="Frontend/public/code-chef.svg" height="30"> CodeChef
 
 CodeChef is an online developer tool that aims to eliminate repetitive developer tasks and automate what could be automated.
+
+> [!IMPORTANT]
+> This project is rebranded and development moved to [Devin'Duck](https://devinduck.ip-af.ir) (not open source anymore due to lack of community support).
+> You can still engage and support ❤️ this project by starring ⭐ this repo or opening pull requests in here, I will personally add changes to the [Devin'Duck](https://devinduck.ip-af.ir) Project (If any!!)
 
 ## Tools
 - **C# to TypeScript converter**<br/>Converts C# classes and fields to typescript interfaces and fields.
